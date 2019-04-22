@@ -1,0 +1,121 @@
+.button-edit-table {
+    color: #333333;
+    background-color: #e4e4e4;
+    border-color: #bebebe;
+    font-size: 12px;
+    margin: 0 -1px 0 -1px;
+    border-radius: 0;
+    padding: 5px 10px;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+}
+
+.button-edit-table:hover {
+    color: #333333;
+    background-color: #cecece;
+    border-color: #bebebe;
+}
+
+.btn-group{
+    display: inline-flex;
+}
+
+.button-restore {
+    color: #ffffff;
+    background-color: #aca546;
+    border-color: #9a9900;
+}
+
+.button-restore:hover{
+    color: #ffffff;
+    background-color: #8b843c;
+    border-color: #9a9900;
+}
+
+.button-save {
+    color: #ffffff;
+    background-color: #43ac6a;
+    border-color: #3c9a5f;
+}
+
+.button-save:hover {
+    background-color: #358753;
+    border-color: #2b6e44;
+}
+
+.button-delete {
+    color: #ffffff;
+    background: #ce5c5c;
+    border-color: #b1240c;
+}
+
+.button-delete:hover {
+    background: #b75757;
+    border-color: #9c210c;
+}
+
+#table-container .input_green {
+    height: 29px !important;
+    line-height: 29px !important;
+    box-sizing: border-box;
+    font-size: 14px !important;
+    padding: 5px !important;
+    margin: 0 !important;
+}
+
+#table-container{
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#table-container table {
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid #c3c3c3;
+    border-collapse: collapse;
+}
+
+#table-container tr {
+    height: 51px;
+}
+
+#table-container td {
+    padding: 5px;
+
+    border: 1px solid #c3c3c3;
+    border-collapse: collapse;
+}
+
+#table-container th{
+    font-weight: 500;
+    padding: 5px;
+
+    border: 1px solid #c3c3c3;
+    border-collapse: collapse;
+}
+
+.active{
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    background-color: #cecece;
+}
+
+#table-container table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#table-container table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.danger{
+    background-color: #ebcccc !important;
+}
+
+.warning{
+    background-color: #e6f5dc !important;
+}

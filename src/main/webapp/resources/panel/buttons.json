@@ -1,0 +1,36 @@
+[
+   {
+      "type": "empty",
+      "class": "empty"
+   },
+   {
+      "type": "logout",
+      "class": "navigationBarButton red",
+      "text": "Выход",
+      "onclick": "logout()"
+   },
+   {
+      "type": "back",
+      "class": "navigationBarButton blue",
+      "text": "Назад",
+      "onclick": "back()"
+   },
+   {
+      "type": "help",
+      "class": "navigationBarButton blue",
+      "text": "?",
+      "onclick": "help()"
+   },
+   {
+      "type": "site",
+      "class": "navigationBarButton grey",
+      "text": "Сайт",
+      "onclick": "site()"
+   },
+   {
+      "type": "add",
+      "class": "navigationBarButton grey",
+      "text": "<span class=\"glyphicon glyphicon-edit\"></span>",
+      "onclick": "add()"
+   }
+]

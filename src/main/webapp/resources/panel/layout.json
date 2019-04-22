@@ -1,0 +1,39 @@
+{
+  "title": "Панель администратора",
+  "rightButton": "logout",
+  "leftButton": "site",
+  "url": "/admin",
+  "hasContent": false,
+  "menu": [
+    {
+      "title": "Викторины",
+      "rightButton": "add",
+      "leftButton": "back",
+      "url": "/admin/boards/quiz-list",
+      "hasContent": true,
+      "menu" : [
+        {
+          "title": "Добавить викторину",
+          "rightButton": "logout",
+          "leftButton": "back",
+          "url": "/admin/boards/quiz-list/add",
+          "hasContent": true
+        }
+      ]
+    },
+    {
+      "title": "Результаты",
+      "rightButton": "add",
+      "leftButton": "back",
+      "url": "/admin/boards/rate",
+      "hasContent": true
+    },
+    {
+      "title": "Участники",
+      "rightButton": "empty",
+      "leftButton": "back",
+      "url": "/admin/boards/users",
+      "hasContent": true
+    }
+  ]
+}

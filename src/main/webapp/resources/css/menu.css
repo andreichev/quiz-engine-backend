@@ -1,0 +1,26 @@
+.menu-container{
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    float: left;
+    display: block;
+}
+
+.button-menu{
+    display: block;
+    text-align: left;
+    color: #d6d6d6;
+    padding: 9px;
+
+    background: #545556;
+    width: 200px;
+    font-size: 16px;
+}
+
+.button-menu:hover{
+    background: #666768;
+    cursor: pointer;
+}
+
+.selected {
+    background: #868788!important;
+}
