@@ -5,6 +5,7 @@
         <tr>
             <td>Название</td>
             <td>Кол-во вопросов</td>
+            <td>Кол-во участинков</td>
         </tr>
         </thead>
         <tbody>
@@ -12,6 +13,7 @@
     <tr class="pathItem" onclick="loadRateForQuiz(${quiz.id})">
         <td>${quiz.title}</td>
         <td>${quiz.questions?size}</td>
+        <td>${quiz.participants?size}</td>
     </tr>
     </#foreach>
         </tbody>

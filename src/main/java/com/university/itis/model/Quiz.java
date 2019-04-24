@@ -33,12 +33,12 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
 
     @SortNatural
     @OrderBy
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SortedSet<Question> questions;
 
     @SortNatural
     @OrderBy
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SortedSet<QuizParticipant> participants;
 
     public Quiz() {

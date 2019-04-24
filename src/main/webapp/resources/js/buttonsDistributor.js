@@ -22,21 +22,20 @@ function init(layoutUrl, buttonsUrl) {
 
             var urlAfterRoot = getUrlAfterRoot();
 
-            if (urlAfterRoot == null) {
-                reload();
-            } else {
+            if (urlAfterRoot !== finder.getCurrentMenu().url) {
                 finder.setFolderWithUrl(urlAfterRoot);
-                reload();
             }
+
+            reload(false);
         });
     });
 }
 
-function reload() {
-    buildInterface(finder.getCurrentMenu(), finder.getFoldersArray());
+function reload(pushToHistory) {
+    buildInterface(finder.getCurrentMenu(), finder.getFoldersArray(), pushToHistory);
 }
 
-function buildInterface(menu, path) {
+function buildInterface(menu, path, pushToHistory) {
     var title = titleContainer;
     title.fadeTo(130, 0.3, function () {
         title.html(menu.title);
@@ -48,7 +47,7 @@ function buildInterface(menu, path) {
     var i;
     var pathItemClass = 'pathItem';
     for (i = 0; i < path.length; i++) {
-        if (i == path.length - 1) pathItemClass += ' bold';
+        if (i === path.length - 1) pathItemClass += ' bold';
 
         var pathItem = $('<a/>', {
             'text': path[i],
@@ -61,7 +60,7 @@ function buildInterface(menu, path) {
     }
 
     buttonsContainer.html('');
-    if (menu.menu != undefined) {
+    if (menu.menu !== undefined) {
         buttonsContainer.hide();
         for (i = 0; i < menu.menu.length; i++) {
             var button = $('<a/>', {
@@ -81,7 +80,9 @@ function buildInterface(menu, path) {
     rightButtonContainer.html(getButtonWIthType(menu.rightButton).addClass('right'));
     leftButtonContainer.html(getButtonWIthType(menu.leftButton).addClass('left'));
 
-    window.history.pushState(null, null, menu.url);
+    if (pushToHistory) {
+        window.history.pushState(null, null, menu.url);
+    }
 
     contentContainer.html('');
     if (menu.hasContent) {
@@ -90,26 +91,29 @@ function buildInterface(menu, path) {
 }
 
 function loadContent(url) {
-    lastLoadedUrl = url;
-    if (url != undefined) {
-        var request = $.ajax({
-            url: url,
-            type: "GET"
-        });
 
-        request.done(function (data) {
-            contentContainer.html(data);
-        });
-
-        request.fail(function (data) {
-            showDialog('Ошибка с сервера', data.responseJSON.errors);
-        });
+    if (url === undefined) {
+        return
     }
+    lastLoadedUrl = url;
+
+    var request = $.ajax({
+        url: url,
+        type: "GET"
+    });
+
+    request.done(function (data) {
+        contentContainer.html(data);
+    });
+
+    request.fail(function (data) {
+        showDialog('Ошибка с сервера', data.responseJSON.errors);
+    });
 }
 
 function getButtonWIthType(type) {
     for (var i = 0; i < buttons.length; i++) {
-        if (type == buttons[i].type) {
+        if (type === buttons[i].type) {
             var btn = $('<a/>', {
                 'class': buttons[i].class,
                 'onclick': buttons[i].onclick
@@ -126,22 +130,7 @@ function getButtonWIthType(type) {
 }
 
 function getUrlAfterRoot() {
-    var rootUrlEndIndex = window.location.href.indexOf(finder.getCurrentMenu().url);
-    rootUrlEndIndex += finder.getCurrentMenu().url.length;
-
-    if (rootUrlEndIndex == window.location.href.length) {
-        return null;
-    } else {
-        var nextUrl = '';
-        var currentFullUrl = decodeURIComponent(window.location.href);
-
-        for (var i = rootUrlEndIndex; i < currentFullUrl.length; i++) {
-            nextUrl += currentFullUrl[i];
-        }
-
-        //console.log('/admin' + nextUrl);
-        return '/admin' + nextUrl;
-    }
+    return window.location.pathname;
 }
 
 $(document).ready(function () {
@@ -152,3 +141,13 @@ $(document).ready(function () {
     titleContainer = $('#title');
     pathContainer = $('#pathContainer');
 });
+
+window.onpopstate = function () {
+    var urlAfterRoot = getUrlAfterRoot();
+    if (finder.getCurrentMenu().url === urlAfterRoot) {
+        return
+    }
+
+    finder.setFolderWithUrl(urlAfterRoot);
+    reload(false);
+};

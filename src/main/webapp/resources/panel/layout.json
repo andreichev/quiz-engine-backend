@@ -23,7 +23,7 @@
     },
     {
       "title": "Результаты",
-      "rightButton": "add",
+      "rightButton": "empty",
       "leftButton": "back",
       "url": "/admin/boards/rate",
       "hasContent": true

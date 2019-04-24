@@ -46,7 +46,7 @@
         if (typeof onBoardDestroy != 'undefined') {
             onBoardDestroy();
         }
-        reload();
+        reload(true);
     }
 
     function goDeeper(pos) {
@@ -54,7 +54,7 @@
         if (typeof onBoardDestroy != 'undefined') {
             onBoardDestroy();
         }
-        reload();
+        reload(true);
     }
 
     function setDepth(depth) {
@@ -62,7 +62,7 @@
         if (typeof onBoardDestroy != 'undefined') {
             onBoardDestroy();
         }
-        reload();
+        reload(true);
     }
 
     $(document).on('keyup', function (event) {
