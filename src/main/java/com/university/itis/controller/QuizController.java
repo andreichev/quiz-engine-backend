@@ -1,13 +1,7 @@
 package com.university.itis.controller;
 
-import com.university.itis.model.Question;
-import com.university.itis.model.QuestionAnswer;
-import com.university.itis.model.Quiz;
-import com.university.itis.model.QuizParticipant;
-import com.university.itis.repository.QuestionAnswerRepository;
-import com.university.itis.repository.QuestionRepository;
-import com.university.itis.repository.QuizParticipantRepository;
-import com.university.itis.repository.QuizRepository;
+import com.university.itis.model.*;
+import com.university.itis.repository.*;
 import com.university.itis.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +29,9 @@ public class QuizController {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    QuestionOptionRepository questionOptionRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest request, ModelMap modelMap) {
@@ -167,6 +164,12 @@ public class QuizController {
                   @PathVariable Long questionId,
                   @ModelAttribute QuestionAnswer questionAnswer) throws Exception {
 
+        Optional<Question> currentQuestion = questionRepository.findById(questionId);
+
+        if (!currentQuestion.isPresent()) {
+            throw new Exception("Question doesnt exist.");
+        }
+
         Optional<QuestionAnswer> oldAnswer =
                 questionAnswerRepository.findByParticipantIdAndQuestionId(
                         questionAnswer.getParticipant().getId(),
@@ -186,8 +189,8 @@ public class QuizController {
         }
 
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        Long nextQuestionId = -1L;
 
+        Long nextQuestionId = -1L;
         for (int i = 0; i < questions.size(); i++) {
             if (questions.get(i).getId().equals(questionId)) {
                 if (i < questions.size() - 1) {
@@ -196,6 +199,13 @@ public class QuizController {
             }
         }
 
+        //for (int i = 0; )
+        Optional<QuestionOption> correctAnswer = questionOptionRepository.findByIsCorrectAndQuestionId(true, questionId);
+
+        correctAnswer.ifPresent(questionOption -> {
+            map.put("correctOptionId", questionOption.getId());
+            map.put("correctOptionText", questionOption.getText());
+        });
         map.put("status", "ok");
         map.put("nextQuestionId", nextQuestionId);
 

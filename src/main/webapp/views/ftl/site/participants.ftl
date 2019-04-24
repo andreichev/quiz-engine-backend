@@ -1,6 +1,6 @@
 <form id="new_participant" action="/quiz/${quiz.id}/participant" method="post">
-    <label>Введите ваше имя
-        <input class="input_green" name="name">
+    <label>Введите ваше имя и группу
+        <input id="participant-name" class="input_green" name="name">
     </label>
 
     <input type="hidden" name="${_csrf.parameterName}"
@@ -26,6 +26,11 @@
     var form = $('#new_participant');
 
     form.submit(function () {
+
+        if($('#participant-name').val() == '') {
+            showDialog('Ошибка', 'Введите имя пользователя и группу через пробел');
+            return false
+        }
 
         loadingIndicator.show();
         contentContainer.hide();

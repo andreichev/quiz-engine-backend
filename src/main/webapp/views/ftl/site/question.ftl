@@ -1,5 +1,5 @@
 <div style="font-weight: 400; background-color: lightgray; padding: 7px 0 7px 7px;">Вопрос:</div>
-<div id="questionText" class="variant">${question.text}</div>
+<div id="questionText" style="font-size: 22px; margin: 10px 0 7px 7px;">${question.text}</div>
 <div style="padding: 0 0 20px 30px;">
     <div style="font-weight: 400; background-color: lightgray; padding: 7px 0 7px 7px;">Варианты:</div>
 
@@ -15,6 +15,9 @@
            value="${_csrf.token}"/>
 
 <script type="text/javascript">
+
+    $('.variant').shuffle();
+
     function answer(optionId) {
         loadingIndicator.show();
         contentContainer.hide();
@@ -37,11 +40,7 @@
 
         request.done(function (data) {
             if (data.status === 'ok') {
-                if(data.nextQuestionId !== -1) {
-                    loadContent('/quiz/${quiz.id}/participant/${participant.id}/question/' + data.nextQuestionId, 'Викторина', true)
-                } else {
-                    loadContent('/quiz/${quiz.id}/participant/${participant.id}/results', 'Результаты', true)
-                }
+                showCorrectAnswerAndLoadNextQuestion('${quiz.title}', ${quiz.id}, ${participant.id}, data.nextQuestionId, optionId, data.correctOptionId, data.correctOptionText);
             }
         });
 

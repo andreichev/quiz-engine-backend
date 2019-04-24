@@ -68,6 +68,54 @@
         });
     }
 
+    function showCorrectAnswerAndLoadNextQuestion(title,
+                                                  quizId,
+                                                  participantId,
+                                                  nextQuestionId,
+                                                  optionId,
+                                                  correctOptionId,
+                                                  correctOptionText) {
+
+        var htmlMessage = "";
+        if (optionId === correctOptionId) {
+            htmlMessage += "Верно.";
+        } else {
+            htmlMessage += "Верный ответ: " + correctOptionText + ".";
+        }
+
+        var dialogMessage = $("<div/>");
+        var messageContainer = $('<p/>', {
+            html: htmlMessage
+        });
+
+        dialogMessage.append(messageContainer);
+
+        var close = false;
+        dialogMessage.dialog({
+            title: title,
+            modal: true,
+            beforeClose: function(){
+                return close;
+            },
+            open: function(event, ui) {
+                $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+            },
+            buttons: {
+                "Далее": function () {
+                    close = true;
+                    $(this).dialog("close");
+
+                    if (nextQuestionId !== -1) {
+                        loadContent('/quiz/' + quizId + '/participant/' + participantId + '/question/' + nextQuestionId, 'Викторина', true);
+                    } else {
+                        loadContent('/quiz/' + quizId + '/participant/' + participantId + '/results', 'Результаты', true);
+                    }
+
+                }
+            }
+        });
+    }
+
 </script>
 </#macro>
 
@@ -76,6 +124,7 @@
 <script src="/resources/js/jquery.min.js"></script>
 <script src="/resources/js/jquery-ui.min.js"></script>
 <script src="/resources/js/datepicker-ru.js"></script>
+<script src="/resources/js/shuffle.js"></script>
 
 <div class="center-content">
     <h2>Quiz Engine</h2>

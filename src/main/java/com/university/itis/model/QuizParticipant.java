@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "quiz_participant")
-public class QuizParticipant extends AbstractEntity {
+public class QuizParticipant extends AbstractEntity implements Comparable<QuizParticipant> {
 
     @Column
     private String name;
@@ -40,4 +40,10 @@ public class QuizParticipant extends AbstractEntity {
     public void setQuestionAnswers(List<QuestionAnswer> questionAnswers) {
         this.questionAnswers = questionAnswers;
     }
+
+    @Override
+    public int compareTo(QuizParticipant o) {
+        return (int) (this.getId() - o.getId());
+    }
+
 }
