@@ -37,8 +37,6 @@
 
         form.submit(function () {
 
-            console.log(form.serialize());
-
             loadingIndicator.show();
             contentContainer.hide();
 

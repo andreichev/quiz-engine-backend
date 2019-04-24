@@ -7,15 +7,15 @@
 <script type="text/javascript">
 
     function createQuestionAutomatically() {
-
+        loadContent('/admin/quiz/${quiz.id}/add-question-by-subject', 'Автоматически');
     }
     
     function createQuestionByType() {
-        
+
     }
     
     function createQuestionManually() {
-
+        loadContent('/admin/quiz/${quiz.id}/add-question-manually', 'Вручную');
     }
 
 </script>

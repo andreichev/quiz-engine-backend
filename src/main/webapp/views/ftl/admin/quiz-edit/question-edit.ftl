@@ -8,6 +8,9 @@
            value="${_csrf.token}"/>
 
     <input type="submit" class="button" value="Сохранить"/>
+    <button type="button" style="background: #ce5c5c;" class="button"
+            onclick="deleteQuestion(${question.id})">Удалить
+    </button>
 
 </form>
 
@@ -90,6 +93,30 @@
             if (data.status === 'ok') {
                 $('#questionOption' + id).hide(200);
             }
+        });
+
+        request.fail(function (data) {
+            showDialog('Ошибка с сервера', data);
+        });
+    }
+
+    function deleteQuestion() {
+
+        loadingIndicator.show();
+        contentContainer.hide();
+
+        var request = $.ajax({
+            url: '/admin/quiz/${quiz.id}/question/${question.id}?${_csrf.parameterName}=${_csrf.token}',
+            type: 'delete'
+        });
+
+        request.always(function () {
+            loadingIndicator.hide();
+            contentContainer.show();
+        });
+
+        request.done(function (data) {
+            location.href='/admin/quiz/${quiz.id}'
         });
 
         request.fail(function (data) {

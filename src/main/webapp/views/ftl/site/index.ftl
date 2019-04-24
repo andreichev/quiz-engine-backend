@@ -12,10 +12,6 @@
 </#macro>
 
 <#macro javascripts>
-<script src="/resources/js/jquery.min.js"></script>
-<script src="/resources/js/jquery-ui.min.js"></script>
-<script src="/resources/js/datepicker-ru.js"></script>
-
 <script type="text/javascript">
 
     var contentContainer;
@@ -77,8 +73,12 @@
 
 <#macro body>
 
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/datepicker-ru.js"></script>
+
 <div class="center-content">
-    <h2 style="margin: 20px 0 20px 7px">Quiz Engine</h2>
+    <h2>Quiz Engine</h2>
 
     <div id="circleG" style="margin-top: 12%; margin-bottom: 12%">
         <div class="title center" style="color: #575757">Загрузка</div>
@@ -90,7 +90,15 @@
     <div id="content">
 
     <#if content=='main'>
-        <#include 'step_one.ftl'>
+        <#include 'main.ftl'>
+    <#elseif content=='quiz-list'>
+        <#include 'quiz-list.ftl'>
+    <#elseif content=='participants'>
+        <#include 'participants.ftl'>
+    <#elseif  content=='participant-status'>
+        <#include 'participant-status.ftl'>
+    <#elseif  content=='question'>
+        <#include 'question.ftl'>
     <#elseif content=='registration'>
         <#include 'registration.ftl'>
     <script type="text/javascript">

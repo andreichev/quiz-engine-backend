@@ -58,21 +58,21 @@ public class QuestionController {
         }
     }
 
-    @RequestMapping(value = "/quiz/{quizId}/add-question/", method = RequestMethod.POST)
+    @RequestMapping(value = "/quiz/{quizId}/question/{questionId}", method = RequestMethod.DELETE)
     public @ResponseBody
-    Map addQuestion(@PathVariable Long quizId, @ModelAttribute Question question, Authentication authentication) throws Exception {
+    Map deleteQuestionOption(@PathVariable Long questionId, @PathVariable Long quizId, Authentication authentication) throws Exception {
 
         Optional<Quiz> quiz = quizRepository.findById(quizId);
 
         if (!quiz.isPresent()) {
-            throw new Exception("Quiz not exists");
+            throw new Exception("Quiz not exists.");
         }
 
         if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
-            throw new Exception("Access is denied");
+            throw new Exception("Access is denied.");
         }
 
-        questionRepository.save(question);
+        questionRepository.deleteById(questionId);
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         map.put("status", "ok");

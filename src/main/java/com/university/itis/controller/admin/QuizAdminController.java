@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin")
-public class QuizController {
+public class QuizAdminController {
 
     @Autowired
     QuizRepository quizRepository;

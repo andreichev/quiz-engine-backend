@@ -104,7 +104,7 @@ a{
 
 .center {
     display: block;
-    margin: 10px auto 20px auto !important;
+    margin: 10px auto 20px auto;
     text-align: center;
 }
 
@@ -153,7 +153,7 @@ a{
         width: 90%;
     }
 
-    .button-primary {
+    .button-primary-2 {
         display: block !important;
         width: 150px !important;
         margin: 10px auto 10px !important;
@@ -187,6 +187,25 @@ a{
     display: inline-block;
 }
 
+.button-primary-2{
+    position: relative;
+    color: white;
+    background-color: #139E95;
+    border-radius: 10px;
+    text-decoration: none;
+    /*padding: 10px;*/
+    width: 20%;
+    padding: 1.5%;
+    text-align: center;
+    vertical-align: middle;
+    border: 0;
+    font-size: 18px;
+    font-weight: 300;
+    /*margin: 10px auto 10px;*/
+    margin: 1% 2% 2% 0;
+    cursor: pointer;
+}
+
 .button-primary{
     display:block;
     position: relative;
@@ -206,6 +225,13 @@ a{
 }
 
 .button-primary:hover{
+     background-color: #137b72;
+
+     left: 1px;
+     top: 1px;
+ }
+
+.button-primary-2:hover{
     background-color: #137b72;
 
     left: 1px;

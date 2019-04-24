@@ -3,6 +3,7 @@ package com.university.itis.model;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.SortedSet;
 
 @Entity
@@ -12,12 +13,12 @@ public class Question extends AbstractEntity implements Comparable<Question> {
     @Column
     private String text;
 
-    @Column(name = "order_num")
-    private Integer order;
-
     @ManyToOne
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<QuestionAnswer> questionAnswers;
 
     @SortNatural
     @OrderBy
@@ -36,14 +37,6 @@ public class Question extends AbstractEntity implements Comparable<Question> {
         this.text = text;
     }
 
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
     public Quiz getQuiz() {
         return quiz;
     }
@@ -54,20 +47,7 @@ public class Question extends AbstractEntity implements Comparable<Question> {
 
     @Override
     public int compareTo(Question o) {
-        final int BEFORE = -1;
-        final int AFTER = 1;
-        if (o == null) {
-            return BEFORE;
-        }
-        Comparable<Integer> thisQuestionOptionOrder = this.getOrder();
-        Comparable<Integer> oQuestionOptionOrder = o.getOrder();
-        if (thisQuestionOptionOrder == null) {
-            return AFTER;
-        } else if (oQuestionOptionOrder == null) {
-            return BEFORE;
-        } else {
-            return thisQuestionOptionOrder.compareTo(o.getOrder());
-        }
+        return (int) (this.getId() - o.getId());
     }
 
     public SortedSet<QuestionOption> getQuestionOptions() {
@@ -76,5 +56,13 @@ public class Question extends AbstractEntity implements Comparable<Question> {
 
     public void setQuestionOptions(SortedSet<QuestionOption> questionOptions) {
         this.questionOptions = questionOptions;
+    }
+
+    public List<QuestionAnswer> getQuestionAnswers() {
+        return questionAnswers;
+    }
+
+    public void setQuestionAnswers(List<QuestionAnswer> questionAnswers) {
+        this.questionAnswers = questionAnswers;
     }
 }

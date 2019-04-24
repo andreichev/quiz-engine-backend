@@ -158,6 +158,14 @@
 
                     <#include 'question-add.ftl'>
 
+                <#elseif content=='question-add-manually'>
+
+                    <#include 'question-add-manually.ftl'>
+
+                <#elseif content=='question-add-by-subject'>
+
+                    <#include 'question-add-by-subject.ftl'>
+
                 <#else>
 
                 <div class="text">
