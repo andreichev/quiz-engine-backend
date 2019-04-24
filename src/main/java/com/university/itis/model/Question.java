@@ -17,12 +17,12 @@ public class Question extends AbstractEntity implements Comparable<Question> {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<QuestionAnswer> questionAnswers;
 
     @SortNatural
     @OrderBy
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private SortedSet<QuestionOption> questionOptions;
 
 

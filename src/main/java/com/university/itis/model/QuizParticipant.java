@@ -1,10 +1,7 @@
 package com.university.itis.model;
 
-import org.hibernate.annotations.SortNatural;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.SortedSet;
 
 @Entity
 @Table(name = "quiz_participant")
@@ -17,7 +14,7 @@ public class QuizParticipant extends AbstractEntity {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "participant")
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.REMOVE)
     private List<QuestionAnswer> questionAnswers;
 
     public String getName() {

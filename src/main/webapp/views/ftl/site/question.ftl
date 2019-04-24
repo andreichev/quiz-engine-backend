@@ -37,7 +37,11 @@
 
         request.done(function (data) {
             if (data.status === 'ok') {
-                loadContent('/quiz/${quiz.id}/participant/' + data.participantId, 'Викторина', true)
+                if(data.nextQuestionId !== -1) {
+                    loadContent('/quiz/${quiz.id}/participant/${participant.id}/question/' + data.nextQuestionId, 'Викторина', true)
+                } else {
+                    loadContent('/quiz/${quiz.id}/participant/${participant.id}/results', 'Результаты', true)
+                }
             }
         });
 

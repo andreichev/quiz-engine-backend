@@ -44,7 +44,7 @@ public class QuizController {
         modelMap.put("content", "quiz-list");
         modelMap.put("quizList", quizList);
 
-        if(Utils.isAjax(request)) {
+        if (Utils.isAjax(request)) {
             return "site/quiz-list";
         } else {
             return "site/index";
@@ -67,14 +67,14 @@ public class QuizController {
         modelMap.put("quiz", quiz.get());
         modelMap.put("participants", quizParticipants);
 
-        if(Utils.isAjax(request)) {
+        if (Utils.isAjax(request)) {
             return "site/participants";
         } else {
             return "site/index";
         }
     }
 
-    @RequestMapping(value = "/{quizId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{quizId}/participant", method = RequestMethod.POST)
     public @ResponseBody
     Map addQuestion(@PathVariable Long quizId, @ModelAttribute QuizParticipant quizParticipant) throws Exception {
 
@@ -102,8 +102,13 @@ public class QuizController {
         List<QuestionAnswer> questionAnswers = questionAnswerRepository.findByParticipantId(participantId);
         List<Question> questions = questionRepository.findAllByQuizId(quizId);
         Optional<QuizParticipant> participant = quizParticipantRepository.findById(participantId);
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
 
-        if(!participant.isPresent()) {
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!participant.isPresent()) {
             throw new Exception("Participant doesnt exist.");
         }
 
@@ -111,8 +116,9 @@ public class QuizController {
         modelMap.put("participant", participant.get());
         modelMap.put("answers", questionAnswers);
         modelMap.put("questions", questions);
+        modelMap.put("quiz", quiz.get());
 
-        if(Utils.isAjax(request)) {
+        if (Utils.isAjax(request)) {
             return "site/participant-status";
         } else {
             return "site/index";
@@ -128,20 +134,26 @@ public class QuizController {
 
         Optional<Question> currentQuestion = questionRepository.findById(questionId);
         Optional<QuizParticipant> participant = quizParticipantRepository.findById(participantId);
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
 
-        if(!participant.isPresent()) {
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!participant.isPresent()) {
             throw new Exception("Participant doesnt exist.");
         }
 
-        if(!currentQuestion.isPresent()) {
+        if (!currentQuestion.isPresent()) {
             throw new Exception("Question doesnt exist.");
         }
 
         modelMap.put("content", "question");
         modelMap.put("participant", participant.get());
         modelMap.put("question", currentQuestion.get());
+        modelMap.put("quiz", quiz.get());
 
-        if(Utils.isAjax(request)) {
+        if (Utils.isAjax(request)) {
             return "site/question";
         } else {
             return "site/index";
@@ -155,20 +167,28 @@ public class QuizController {
                   @PathVariable Long questionId,
                   @ModelAttribute QuestionAnswer questionAnswer) throws Exception {
 
+        Optional<QuestionAnswer> oldAnswer =
+                questionAnswerRepository.findByParticipantIdAndQuestionId(
+                        questionAnswer.getParticipant().getId(),
+                        questionAnswer.getQuestion().getId()
+                );
+
+        oldAnswer.ifPresent(questionAnswer1 -> questionAnswerRepository.delete(questionAnswer1));
+
         questionAnswerRepository.save(questionAnswer);
 
         List<Question> questions = questionRepository.findAllByQuizId(quizId);
 
         Optional<QuizParticipant> participant = quizParticipantRepository.findById(participantId);
 
-        if(!participant.isPresent()) {
+        if (!participant.isPresent()) {
             throw new Exception("Participant doesnt exist.");
         }
 
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         Long nextQuestionId = -1L;
 
-        for(int i = 0; i < questions.size(); i++) {
+        for (int i = 0; i < questions.size(); i++) {
             if (questions.get(i).getId().equals(questionId)) {
                 if (i < questions.size() - 1) {
                     nextQuestionId = questions.get(i + 1).getId();
@@ -185,22 +205,29 @@ public class QuizController {
 
     @RequestMapping(value = "/{quizId}/participant/{participantId}/results", method = RequestMethod.GET)
     public String getResults(HttpServletRequest request,
-                           ModelMap modelMap,
-                           @PathVariable Long participantId,
-                           @PathVariable Long quizId) throws Exception {
+                             ModelMap modelMap,
+                             @PathVariable Long participantId,
+                             @PathVariable Long quizId) throws Exception {
+
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
+
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
 
         List<QuestionAnswer> questionAnswers = questionAnswerRepository.findByParticipantId(participantId);
         Optional<QuizParticipant> participant = quizParticipantRepository.findById(participantId);
 
-        if(!participant.isPresent()) {
+        if (!participant.isPresent()) {
             throw new Exception("Participant doesnt exist.");
         }
 
         modelMap.put("content", "results");
         modelMap.put("participant", participant.get());
         modelMap.put("answers", questionAnswers);
+        modelMap.put("quiz", quiz.get());
 
-        if(Utils.isAjax(request)) {
+        if (Utils.isAjax(request)) {
             return "site/results";
         } else {
             return "site/index";

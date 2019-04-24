@@ -99,6 +99,8 @@
         <#include 'participant-status.ftl'>
     <#elseif  content=='question'>
         <#include 'question.ftl'>
+    <#elseif  content=='results'>
+        <#include 'question.ftl'>
     <#elseif content=='registration'>
         <#include 'registration.ftl'>
     <script type="text/javascript">
