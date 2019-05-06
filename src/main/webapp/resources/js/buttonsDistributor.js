@@ -23,10 +23,16 @@ function init(layoutUrl, buttonsUrl) {
             var urlAfterRoot = getUrlAfterRoot();
 
             if (urlAfterRoot !== finder.getCurrentMenu().url) {
-                finder.setFolderWithUrl(urlAfterRoot);
+                if(finder.setFolderWithUrl(urlAfterRoot)) {
+                    reload(false);
+                } else {
+                    reload(false);
+                    buttonsContainer.html('');
+                    loadContent(window.location.href);
+                }
+            } else {
+                reload(false);
             }
-
-            reload(false);
         });
     });
 }

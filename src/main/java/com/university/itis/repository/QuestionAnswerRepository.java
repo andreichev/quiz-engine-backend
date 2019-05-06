@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {
     List<QuestionAnswer> findByParticipantId(Long participantId);
     Optional<QuestionAnswer> findByParticipantIdAndQuestionId(Long participantId, Long questionId);
+    int countByAndQuestionIdAndQuestionOptionIsCorrect(Long questionId, boolean isCorrect);
 }

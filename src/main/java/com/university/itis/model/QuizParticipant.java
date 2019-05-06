@@ -14,7 +14,7 @@ public class QuizParticipant extends AbstractEntity implements Comparable<QuizPa
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<QuestionAnswer> questionAnswers;
 
     public String getName() {

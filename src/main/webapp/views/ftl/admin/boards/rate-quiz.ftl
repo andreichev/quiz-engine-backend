@@ -1,30 +1,25 @@
-<div>Выберите пользователя:</div>
+<div class="title">${quiz.title}</div>
 <div id="table-container">
     <table>
         <thead>
         <tr>
             <td>Номер (не Id)</td>
-            <td>Имя</td>
-            <td>Кол-во ответов</td>
+            <td>Кол-во верных</td>
         </tr>
         </thead>
         <tbody>
-    <#foreach participant in quiz.participants>
-    <tr class="pathItem" onclick="loadParticipant(${quiz.id})">
-        <td>${participant?counter}</td>
-        <td>${participant.name}</td>
-        <td>${participant.questionAnswers?size}</td>
-    </tr>
-    </#foreach>
+            <#foreach participant in participantResults>
+            <tr>
+                <td>${participant?counter}</td>
+                <td>${participant}</td>
+            </tr>
+            </#foreach>
         </tbody>
     </table>
 </div>
 
 <script type="text/javascript">
-    function loadParticipant(id) {
-        var url = '/admin/boards/rate/${quiz.id}/participant' + id;
-        loadContent(url);
-        window.history.pushState(null, null, url);
-
-    }
+    finder.depth = 2;
+    finder.folderIndexes = [0, 1, 0];
+    finder.folderNames = ["Панель администратора", "Результаты", "Викторина 1"];
 </script>

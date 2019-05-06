@@ -6,58 +6,59 @@ function Finder() { //класc, в котором хранится наша т�
     this.depth = 0; //сколько папок мы прошли
     this.layout = null; //дерево менюшек
     this.currentLayout = null; //ссылка на узел в котором мы находимся
-    this.folderIndexes = []; //путь до текущей позиции
-    this.folderNames = []; //путь до текущей позиции
+    this.folderIndexes = []; //путь до текущей позиции (индексы)
+    this.folderNames = []; //путь до текущей позиции (названия)
+    this.folderUrls = []; //путь до текущей позиции (адреса)
 }
 
 Finder.prototype.upFolders = function (count) {
     if (this.depth - count < 0) return;
 
     this.depth -= count;
-
-    for (var i = 0; i < count; i++) {
+    var i;
+    for (i = 0; i < count; i++) {
         this.folderNames.pop();
         this.folderIndexes.pop();
     }
 
     this.currentLayout = this.layout;
-    for (var i = 1; i <= this.depth; i++) {
+    for (i = 1; i <= this.depth; i++) {
         this.currentLayout = this.currentLayout.menu[this.folderIndexes[i]];
     }
 };
 
+//Возвращает: нашелся ли путь
 Finder.prototype.setFolderWithUrl = function (url) {
     var pos = [];
     pos[0] = 0;
 
-    while (pos[0] != layout.menu.length) {
+    while (pos[0] !== layout.menu.length) {
         while (this.currentLayout.menu != null && this.currentLayout.menu[pos[this.depth]] != null) {
-            if(url == this.currentLayout.url) {
-                return;
+
+            if(url === this.currentLayout.url) {
+                return true;
             }
 
             this.addFolder(pos[this.depth]);
             pos[this.depth] = 0;
         }
 
-        if(url == this.currentLayout.url) {
-            return;
+        if(url === this.currentLayout.url) {
+            return true;
         }
 
         this.upFolders(1);
 
         pos[this.depth]++;
     }
+
+    return false;
 };
 
 Finder.prototype.addFolder = function (index) {
-    if (this.currentLayout.menu == undefined) return;
+    if (this.currentLayout.menu === undefined) return;
 
-    this.depth++;
-
-    this.currentLayout = this.currentLayout.menu[index];
-    this.folderIndexes.push(index);
-    this.folderNames.push(this.currentLayout.title);
+    this.addCurrentMenu(this.currentLayout.menu[index]);
 };
 
 Finder.prototype.getCurrentFolderName = function () {
@@ -76,6 +77,15 @@ Finder.prototype.setLayout = function (layout) {
     this.folderNames = [];
     this.folderIndexes.push(0);
     this.folderNames.push(layout.title);
+};
+
+Finder.prototype.addCurrentMenu = function (newCurrentLayout) {
+    this.depth++;
+
+    this.currentLayout = newCurrentLayout;
+    this.folderIndexes.push(0);
+    this.folderNames.push(this.currentLayout.title);
+    this.folderUrls.push(this.currentLayout.url);
 };
 
 Finder.prototype.getCurrentMenu = function (layout) {

@@ -17,12 +17,13 @@
 </div>
 
 <script type="text/javascript">
+
     function loadRateForQuiz(quizId, quizName) {
         finder.addCurrentMenu({
             "title": quizName,
             "rightButton": "logout",
             "leftButton": "back",
-            "url": '/admin/boards/rate/quiz/' + quizId,
+            "url": '/admin/boards/participants-results/quiz/' + quizId,
             "hasContent": true
         });
 
