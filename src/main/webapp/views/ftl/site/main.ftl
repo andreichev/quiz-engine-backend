@@ -1,6 +1,6 @@
 <div class="title center">Добро пожаловать</div>
 
-<button onclick="passage()" class="button center">Пройти викторину</button>
+<div onclick="passage()" class="title blue center" style="border-radius: 20px; cursor: pointer; padding: 10px">Пройти викторину</div>
 
 <script type="text/javascript">
 

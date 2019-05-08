@@ -1,7 +1,7 @@
-<div style="font-weight: 400; background-color: lightgray; padding: 7px 0 7px 7px;">Вопрос:</div>
+<div style="font-weight: 400; background-color: #f2f2f2; padding: 7px 0 7px 7px;">Вопрос:</div>
 <div id="questionText" style="font-size: 22px; margin: 10px 0 7px 7px;">${question.text}</div>
 <div style="padding: 0 0 20px 30px;">
-    <div style="font-weight: 400; background-color: lightgray; padding: 7px 0 7px 7px;">Варианты:</div>
+    <div style="font-weight: 400; background-color: #f2f2f2; padding: 7px 0 7px 7px;">Варианты:</div>
 
     <div id="variants">
     <#foreach option in question.questionOptions>

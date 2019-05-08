@@ -10,7 +10,7 @@
         </thead>
         <tbody>
             <#foreach participant in quiz.participants>
-            <tr class="pathItem" onclick="loadParticipant(${participant.id})">
+            <tr class="pathItem" onclick="loadParticipant(${participant.id}, '${participant.name}')">
                 <td>${participant?counter}</td>
                 <td>${participant.name}</td>
             <#--<td>${participant.questionAnswers?size}</td>-->
@@ -21,10 +21,17 @@
 </div>
 
 <script type="text/javascript">
-    function loadParticipant(id) {
-        var url = '/admin/boards/quiz/${quiz.id}/participant/' + id;
-        loadContent(url);
-        window.history.pushState(null, null, url);
+    function loadParticipant(id, participantName) {
+
+        finder.addCurrentMenu({
+            "title": participantName,
+            "rightButton": "logout",
+            "leftButton": "back",
+            "url": '/admin/boards/quiz/${quiz.id}/participant/' + id,
+            "hasContent": true
+        });
+
+        reload(true);
 
     }
 </script>

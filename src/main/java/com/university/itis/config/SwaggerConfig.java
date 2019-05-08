@@ -17,15 +17,16 @@ public class SwaggerConfig {
     public Docket newsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.university.itis.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.university.itis.controller.admin_api"))
                 .paths(PathSelectors.any())
                 .build()
+                .pathMapping("/swagger")
                 .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Quiz Engine api")
+                .title("Quiz Engine")
                 .version("0.1")
                 .build();
     }

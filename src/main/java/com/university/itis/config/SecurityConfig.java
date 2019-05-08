@@ -1,6 +1,5 @@
 package com.university.itis.config;
 
-import com.university.itis.model.Role;
 import com.university.itis.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

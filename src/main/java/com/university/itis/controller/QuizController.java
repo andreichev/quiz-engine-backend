@@ -9,10 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/quiz")
@@ -227,6 +224,15 @@ public class QuizController {
 
         List<QuestionAnswer> questionAnswers = questionAnswerRepository.findByParticipantId(participantId);
         Optional<QuizParticipant> participant = quizParticipantRepository.findById(participantId);
+        List<Question> questions = questionRepository.findAllByQuizId(quizId);
+
+        int countOfCorrect = 0;
+        Iterator<QuestionAnswer> answerIterator = questionAnswers.iterator();
+        while (answerIterator.hasNext()) {
+            if(answerIterator.next().getQuestionOption().isCorrect()) {
+                countOfCorrect++;
+            }
+        }
 
         if (!participant.isPresent()) {
             throw new Exception("Participant doesnt exist.");
@@ -234,7 +240,8 @@ public class QuizController {
 
         modelMap.put("content", "results");
         modelMap.put("participant", participant.get());
-        modelMap.put("answers", questionAnswers);
+        modelMap.put("countOfCorrect", countOfCorrect);
+        modelMap.put("questions", questions);
         modelMap.put("quiz", quiz.get());
 
         if (Utils.isAjax(request)) {

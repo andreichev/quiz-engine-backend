@@ -139,19 +139,33 @@
     <div id="content">
 
     <#if content=='main'>
+
         <#include 'main.ftl'>
+
     <#elseif content=='quiz-list'>
+
         <#include 'quiz-list.ftl'>
+
     <#elseif content=='participants'>
+
         <#include 'participants.ftl'>
-    <#elseif  content=='participant-status'>
+
+    <#elseif content=='participant-status'>
+
         <#include 'participant-status.ftl'>
-    <#elseif  content=='question'>
+
+    <#elseif content=='question'>
+
         <#include 'question.ftl'>
-    <#elseif  content=='results'>
-        <#include 'question.ftl'>
+
+    <#elseif content=='results'>
+
+        <#include 'results.ftl'>
+
     <#elseif content=='registration'>
+
         <#include 'registration.ftl'>
+
     <script type="text/javascript">
         setBroaderContentWidth();
     </script>

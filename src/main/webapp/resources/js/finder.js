@@ -6,25 +6,20 @@ function Finder() { //класc, в котором хранится наша т�
     this.depth = 0; //сколько папок мы прошли
     this.layout = null; //дерево менюшек
     this.currentLayout = null; //ссылка на узел в котором мы находимся
-    this.folderIndexes = []; //путь до текущей позиции (индексы)
-    this.folderNames = []; //путь до текущей позиции (названия)
-    this.folderUrls = []; //путь до текущей позиции (адреса)
+    this.folderNames = [];
+    this.folderLayouts = [];
 }
 
 Finder.prototype.upFolders = function (count) {
     if (this.depth - count < 0) return;
 
     this.depth -= count;
-    var i;
-    for (i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
+        this.folderLayouts.pop();
         this.folderNames.pop();
-        this.folderIndexes.pop();
     }
 
-    this.currentLayout = this.layout;
-    for (i = 1; i <= this.depth; i++) {
-        this.currentLayout = this.currentLayout.menu[this.folderIndexes[i]];
-    }
+    this.currentLayout = this.folderLayouts[this.depth];
 };
 
 //Возвращает: нашелся ли путь
@@ -58,7 +53,7 @@ Finder.prototype.setFolderWithUrl = function (url) {
 Finder.prototype.addFolder = function (index) {
     if (this.currentLayout.menu === undefined) return;
 
-    this.addCurrentMenu(this.currentLayout.menu[index]);
+    this.addCurrentMenu(this.currentLayout.menu[index], index);
 };
 
 Finder.prototype.getCurrentFolderName = function () {
@@ -73,19 +68,17 @@ Finder.prototype.setLayout = function (layout) {
     this.layout = layout;
     this.currentLayout = layout;
     this.depth = 0;
-    this.folderIndexes = [];
-    this.folderNames = [];
-    this.folderIndexes.push(0);
     this.folderNames.push(layout.title);
+    this.folderLayouts.push(layout);
 };
 
-Finder.prototype.addCurrentMenu = function (newCurrentLayout) {
+Finder.prototype.addCurrentMenu = function (newCurrentLayout, index) {
     this.depth++;
 
     this.currentLayout = newCurrentLayout;
-    this.folderIndexes.push(0);
     this.folderNames.push(this.currentLayout.title);
-    this.folderUrls.push(this.currentLayout.url);
+    this.folderLayouts.push(newCurrentLayout);
+    console.log(this.folderLayouts.length);
 };
 
 Finder.prototype.getCurrentMenu = function (layout) {

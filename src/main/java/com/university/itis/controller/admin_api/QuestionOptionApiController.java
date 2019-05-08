@@ -1,4 +1,4 @@
-package com.university.itis.controller.admin;
+package com.university.itis.controller.admin_api;
 
 import com.university.itis.model.Question;
 import com.university.itis.model.QuestionOption;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin")
-public class QuestionOptionController {
+public class QuestionOptionApiController {
 
     @Autowired
     QuizRepository quizRepository;
@@ -57,7 +57,7 @@ public class QuestionOptionController {
 
     @RequestMapping(value = "/quiz/{quizId}/question/{questionId}/option/{questionOptionId}", method = RequestMethod.POST)
     public @ResponseBody
-    Map addQuestionOption(@PathVariable Long questionOptionId, @ModelAttribute QuestionOption questionOption, Authentication authentication) throws Exception {
+    Map editQuestionOption(@PathVariable Long questionOptionId, @ModelAttribute QuestionOption questionOption, Authentication authentication) throws Exception {
 
         Optional<QuestionOption> oldQuestionOption = questionOptionRepository.findById(questionOptionId);
 
