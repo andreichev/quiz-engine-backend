@@ -1,0 +1,57 @@
+{
+  "dbo:Person": "Персона",
+  "dbo:Writer": "Писатель",
+  "dbo:MilitaryPerson": "Военный",
+  "dbo:Athlete": "Атлет",
+  "dbo:SportsTeamMember": "Член спортивной команды",
+
+  "dbo:CelestialBody": "Небесное тело",
+
+  "dbo:Place": 816837,
+  "dbo:Settlement": 469006,
+  "dbo:Village": 160111,
+  "dbo:Building": 68780,
+  "dbo:Station": 28250,
+
+  "dbo:Organisation": 302658,
+
+  "dbo:Sport": 275,
+  "dbo:SportsTeam": 46051,
+  "dbo:SportsEvent": 26438,
+
+  "dbo:Species": 261435,
+  "dbo:Eukaryote": 256474,
+  "dbo:Animal": 195176,
+  "dbo:Insect": 93578,
+  "dbo:NaturalPlace": 62184,
+  "dbo:Plant": 50931,
+  "dbo:Mollusca": 27691,
+
+  "dbo:MusicalWork": 193205,
+  "dbo:Album": 123803,
+  "dbo:Artist": 96300,
+  "dbo:Work": 425044,
+  "dbo:Film": 87285,
+  "dbo:WrittenWork": 56505,
+  "dbo:Book": 31029,
+  "dbo:Band": 30578,
+
+  "dbo:TimePeriod": 86002,
+  "dbo:Event": 50052,
+
+  "dbo:SocietalEvent": 49670,
+  "dbo:MusicalArtist": 45107,
+  "dbo:Town": 43038,
+  "dbo:BodyOfWater": 40598,
+  "dbo:Politician": 40343,
+
+  "dbo:Software": 31737,
+  "dbo:Device": 30336,
+
+  "dbo:Stream": 29272,
+  "dbo:River": 28925,
+
+  "dbo:MeanOfTransportation": 51355,
+  "dbo:AutomobileEngine": 22907,
+  "dbo:Ship": 27131
+}

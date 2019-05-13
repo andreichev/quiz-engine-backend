@@ -50,7 +50,7 @@ public class QuizController {
                                ModelMap modelMap,
                                @PathVariable Long quizId) throws Exception {
 
-        List<QuizParticipant> quizParticipants = quizParticipantRepository.findAll();
+        List<QuizParticipant> quizParticipants = quizParticipantRepository.findAllByQuizId(quizId);
         Optional<Quiz> quiz = quizRepository.findById(quizId);
 
         if (!quiz.isPresent()) {

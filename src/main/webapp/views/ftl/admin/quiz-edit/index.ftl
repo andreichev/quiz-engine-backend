@@ -166,6 +166,10 @@
 
                     <#include 'question-add-by-subject.ftl'>
 
+                <#elseif content=='question-add-by-type'>
+
+                    <#include 'question-add-by-type.ftl'>
+
                 <#else>
 
                 <div class="text">

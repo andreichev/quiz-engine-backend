@@ -95,4 +95,27 @@ public class QuestionCreationViewController {
             return "admin/quiz-edit/index";
         }
     }
+
+    @RequestMapping(value = "/quiz/{quizId}/add-question-by-type", method = RequestMethod.GET)
+    public String addQuestionByTypeView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
+
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
+
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+            throw new Exception("Access is denied");
+        }
+
+        modelMap.put("content", "question-add-by-type");
+        modelMap.put("quiz", quiz.get());
+
+        if (Utils.isAjax(request)) {
+            return "admin/quiz-edit/question-add-by-type";
+        } else {
+            return "admin/quiz-edit/index";
+        }
+    }
 }

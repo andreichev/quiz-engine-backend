@@ -62,11 +62,10 @@ public class SparqlQueryConfig {
 
     @Bean
     ClassesStorage configureClasses() {
-        TypeReference<LinkedHashMap<String, Integer>> typeReference = new TypeReference<LinkedHashMap<String, Integer>>(){};
-        Map<String, Integer> classes;
+        TypeReference<LinkedHashMap<String, String>> typeReference = new TypeReference<LinkedHashMap<String, String>>(){};
+        Map<String, String> classes;
         try {
-            InputStream resource = new ClassPathResource(
-                    "classes-instances.json").getInputStream();
+            InputStream resource = new ClassPathResource("classes.json").getInputStream();
 
             classes = mapper.readValue(resource, typeReference);
         } catch (IOException e){
