@@ -11,7 +11,7 @@
     }
     
     function createQuestionByType() {
-        loadContent('/admin/quiz/${quiz.id}/add-question-by-type', 'По сущности');
+        loadContent('/admin/quiz/${quiz.id}/add-question-by-type', 'По классу');
     }
     
     function createQuestionManually() {

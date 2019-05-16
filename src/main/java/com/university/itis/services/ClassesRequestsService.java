@@ -21,7 +21,8 @@ public class ClassesRequestsService {
     @Autowired
     SparqlHttpClient sparqlHttpClient;
 
-    private String LANGUAGE = "en";
+    private String LANGUAGE1 = "ru";
+    private String LANGUAGE2 = "en";
 
     public String selectEntity(String type, int offset) {
 
@@ -122,7 +123,7 @@ public class ClassesRequestsService {
                         "        ?lat < " + region[2] + " && \n" +
                         "        ?long > " + region[1] + " && \n" +
                         "        ?long < " + region[3] + " && \n" +
-                        "        lang(?label) = \"" + LANGUAGE + "\"\n" +
+                        "        lang(?label) = \"" + LANGUAGE2 + "\"\n" +
                         "    )\n" +
                         "} LIMIT 100\n"
         );
@@ -182,10 +183,9 @@ public class ClassesRequestsService {
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
                         "select distinct ?entity ?label where {\n" +
                         "  ?entity a " + type + " .\n" +
-                        "  ?entity rdfs:label ?labelQuery .\n" +
                         "  ?entity rdfs:label ?label .\n" +
-                        "  FILTER contains(?labelQuery, \"" + query + "\") .\n" +
-                        "  FILTER(langMatches(lang(?label), \"" + LANGUAGE + "\"))\n" +
+                        "  FILTER contains(?label, \"" + query + "\") .\n" +
+                        "  FILTER(langMatches(lang(?label), \"" + LANGUAGE1 + "\") || langMatches(lang(?label), \"" + LANGUAGE2 + "\"))\n" +
                         "}\n" +
                         "limit 100"
         );
@@ -200,7 +200,7 @@ public class ClassesRequestsService {
                 QuerySolution result = resultSet.next();
 
                 String entity = result.get("entity").toString();
-                String label = result.get("label").toString();
+                String label = result.getLiteral("label").getLexicalForm();
                 results.put(entity, label);
             }
         } catch (Exception e) {

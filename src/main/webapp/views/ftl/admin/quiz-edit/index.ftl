@@ -172,6 +172,10 @@
 
                     <#include 'question-add-by-type.ftl'>
 
+                <#elseif content=='question-add-with-entity'>
+
+                    <#include 'question-add-with-entity.ftl'>
+
                 <#else>
 
                 <div class="text">

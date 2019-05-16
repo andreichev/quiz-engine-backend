@@ -1,12 +1,11 @@
 package com.university.itis.controller.admin_api;
 
-import com.github.jsonldjava.utils.Obj;
 import com.university.itis.model.Question;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuestionRepository;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.services.SparqlQueryService;
-import com.university.itis.utils.ClassesStorage;
+import com.university.itis.utils.UriStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -25,7 +24,7 @@ public class QuestionApiController {
     private SparqlQueryService sparqlQueryService;
 
     @Autowired
-    private ClassesStorage classesStorage;
+    private UriStorage uriStorage;
 
     @Autowired
     QuizRepository quizRepository;
@@ -144,6 +143,6 @@ public class QuestionApiController {
 
     @RequestMapping(value = "/api/types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody Map types() {
-        return classesStorage.getClasses();
+        return uriStorage.getClasses();
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.university.itis.services.SparqlHttpClient;
-import com.university.itis.utils.ClassesStorage;
+import com.university.itis.utils.UriStorage;
 import com.university.itis.utils.PrefixesStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -61,18 +62,29 @@ public class SparqlQueryConfig {
     }
 
     @Bean
-    ClassesStorage configureClasses() {
-        TypeReference<LinkedHashMap<String, String>> typeReference = new TypeReference<LinkedHashMap<String, String>>(){};
+    UriStorage configureUriStorage() {
+        TypeReference<LinkedHashMap<String, String>> typeReferenceClasses = new TypeReference<LinkedHashMap<String, String>>(){};
         Map<String, String> classes;
         try {
             InputStream resource = new ClassPathResource("classes.json").getInputStream();
 
-            classes = mapper.readValue(resource, typeReference);
+            classes = mapper.readValue(resource, typeReferenceClasses);
         } catch (IOException e){
             System.out.println("Unable to read config: " + e.getMessage());
             return null;
         }
 
-        return new ClassesStorage(classes);
+        TypeReference<List<String>> typeReferenceBlackList = new TypeReference<List<String>>(){};
+        List<String> blacklist;
+        try {
+            InputStream resource = new ClassPathResource("blacklist.json").getInputStream();
+
+            blacklist = mapper.readValue(resource, typeReferenceBlackList);
+        } catch (IOException e){
+            System.out.println("Unable to read config: " + e.getMessage());
+            return null;
+        }
+
+        return new UriStorage(classes, blacklist);
     }
 }

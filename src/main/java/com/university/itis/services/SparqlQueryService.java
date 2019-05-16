@@ -1,5 +1,6 @@
 package com.university.itis.services;
 
+import com.university.itis.dto.TripleDto;
 import com.university.itis.utils.PrefixesStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class SparqlQueryService {
 
     @Autowired
     ClassesRequestsService findOntologyClassService;
+
+    @Autowired
+    PredicatesRequestsService triplesService;
 
     private Random random = new Random();
 
@@ -46,5 +50,9 @@ public class SparqlQueryService {
 
     public LinkedHashMap<String, String> findEntities(String type, String query) {
         return findOntologyClassService.findEntities(type, query);
+    }
+
+    public List<TripleDto> getSuitableTriples(String entityUri) {
+        return triplesService.getSuitableTriples(entityUri);
     }
 }

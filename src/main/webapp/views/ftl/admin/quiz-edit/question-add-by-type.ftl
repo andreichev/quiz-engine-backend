@@ -91,7 +91,9 @@
     }
 
     function createQuestionWith(entity) {
-        console.log(entity);
+        var url = encodeURI('/admin/quiz/${quiz.id}/add-question-with-entity?entity=' + entity);
+        console.log(url);
+        loadContent(url, 'По классу', true);
     }
 
     var myMap;

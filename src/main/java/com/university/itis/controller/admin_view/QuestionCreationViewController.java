@@ -12,8 +12,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -124,10 +126,10 @@ public class QuestionCreationViewController {
     }
 
 
-    @RequestMapping(value = "/quiz/{quizId}/add-question/{entity}", method = RequestMethod.GET)
+    @RequestMapping(value = "/quiz/{quizId}/add-question-with-entity", method = RequestMethod.GET)
     public String addQuestionByTypeView(HttpServletRequest request,
                                         @PathVariable Long quizId,
-                                        @PathVariable String entity,
+                                        @RequestParam String entity,
                                         Authentication authentication,
                                         ModelMap modelMap) throws Exception {
 
@@ -141,10 +143,11 @@ public class QuestionCreationViewController {
             throw new Exception("Access is denied");
         }
 
-        sparqlQueryService
+        List suitableTriples = sparqlQueryService.getSuitableTriples(entity);
 
         modelMap.put("content", "question-add-with-entity");
         modelMap.put("entity", entity);
+        modelMap.put("triples", suitableTriples);
         modelMap.put("quiz", quiz.get());
 
         if (Utils.isAjax(request)) {
