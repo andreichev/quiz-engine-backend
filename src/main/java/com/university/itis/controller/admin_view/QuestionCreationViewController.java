@@ -3,6 +3,7 @@ package com.university.itis.controller.admin_view;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuestionRepository;
 import com.university.itis.repository.QuizRepository;
+import com.university.itis.services.SparqlQueryService;
 import com.university.itis.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,10 +21,13 @@ import java.util.Optional;
 public class QuestionCreationViewController {
 
     @Autowired
-    QuizRepository quizRepository;
+    private QuizRepository quizRepository;
 
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private SparqlQueryService sparqlQueryService;
 
     @RequestMapping(value = "/quiz/{quizId}/add-question/", method = RequestMethod.GET)
     public String addQuestionView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
@@ -114,6 +118,37 @@ public class QuestionCreationViewController {
 
         if (Utils.isAjax(request)) {
             return "admin/quiz-edit/question-add-by-type";
+        } else {
+            return "admin/quiz-edit/index";
+        }
+    }
+
+
+    @RequestMapping(value = "/quiz/{quizId}/add-question/{entity}", method = RequestMethod.GET)
+    public String addQuestionByTypeView(HttpServletRequest request,
+                                        @PathVariable Long quizId,
+                                        @PathVariable String entity,
+                                        Authentication authentication,
+                                        ModelMap modelMap) throws Exception {
+
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
+
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+            throw new Exception("Access is denied");
+        }
+
+        sparqlQueryService
+
+        modelMap.put("content", "question-add-with-entity");
+        modelMap.put("entity", entity);
+        modelMap.put("quiz", quiz.get());
+
+        if (Utils.isAjax(request)) {
+            return "admin/quiz-edit/question-add-with-entity";
         } else {
             return "admin/quiz-edit/index";
         }

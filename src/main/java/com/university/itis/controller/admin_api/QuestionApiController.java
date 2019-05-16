@@ -1,5 +1,6 @@
 package com.university.itis.controller.admin_api;
 
+import com.github.jsonldjava.utils.Obj;
 import com.university.itis.model.Question;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuestionRepository;
@@ -104,23 +105,30 @@ public class QuestionApiController {
 
     @RequestMapping(value = "/api/random-entity", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Map fetchRandomEntity(@RequestParam String type, @RequestParam String region) {
+    Map fetchRandomEntity(@RequestParam String type,
+                          @RequestParam String region) {
 
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
         if (type.equals("dbo:Place")) {
+
             String[] coords = region.split(",");
             map.put("entity", sparqlQueryService.selectPlaceInRegion(coords));
-        } else {
-            map.put("entity", sparqlQueryService.selectEntityForQuestion(type));
-        }
+            return map;
 
-        return map;
+        } else {
+
+            map.put("entity", sparqlQueryService.selectEntityForQuestion(type));
+            return map;
+
+        }
     }
 
-    @RequestMapping(value = "/api/entity-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/api/find-entity", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Map fetchRandomEntityList(@RequestParam String type, @RequestParam String region) {
+    Map fetchRandomEntityList(@RequestParam String type,
+                              @RequestParam String region,
+                              @RequestParam String query) {
 
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
@@ -128,7 +136,7 @@ public class QuestionApiController {
             String[] coords = region.split(",");
             map.put("entities", sparqlQueryService.selectPlacesInRegion(coords));
         } else {
-            map.put("entity", sparqlQueryService.selectEntityForQuestion(type));
+            map.put("entities", sparqlQueryService.findEntities(type, query));
         }
 
         return map;

@@ -118,6 +118,8 @@
     <script src="/resources/js/jquery.min.js"></script>
     <script src="/resources/js/jquery-ui.min.js"></script>
     <script src="/resources/js/datepicker-ru.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=f929bb23-4471-42b8-a34e-13f2b18da04d&lang=ru_RU"
+        type="text/javascript"></script>
 
     <div id="dialog-message" style="display: none">
         <p id="message-container">

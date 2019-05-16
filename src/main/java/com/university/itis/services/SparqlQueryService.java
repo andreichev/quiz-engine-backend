@@ -4,9 +4,7 @@ import com.university.itis.utils.PrefixesStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class SparqlQueryService {
@@ -18,31 +16,35 @@ public class SparqlQueryService {
     SparqlHttpClient sparqlHttpClient;
 
     @Autowired
-    OntologyClassesService ontologyClassesService;
+    ClassesRequestsService findOntologyClassService;
 
     private Random random = new Random();
 
     public String selectEntityForQuestion(String type) {
-        int countOfClasses = ontologyClassesService.getCountOfInstancesForClass(type);
+        int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(type);
         if (countOfClasses == 0) {
             return "None";
         }
-        return ontologyClassesService.selectEntity(type, random.nextInt(countOfClasses));
+        return findOntologyClassService.selectEntity(type, random.nextInt(countOfClasses));
     }
 
     public String selectPlaceInRegion(String[] region) {
-        return ontologyClassesService.selectPlaceInRegion(region);
+        return findOntologyClassService.selectPlaceInRegion(region);
     }
 
-    public List<String> selectPlacesInRegion(String[] region) {
-        return ontologyClassesService.selectPlacesInRegion(region);
+    public LinkedHashMap<String, String> selectPlacesInRegion(String[] region) {
+        return findOntologyClassService.selectPlacesInRegion(region);
     }
 
     public List<String> selectEntitiesForQuestion(String type) {
-        int countOfClasses = ontologyClassesService.getCountOfInstancesForClass(type);
+        int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(type);
         if (countOfClasses == 0) {
             return Collections.singletonList("None");
         }
-        return ontologyClassesService.selectEntities(type, random.nextInt(countOfClasses));
+        return findOntologyClassService.selectEntities(type, random.nextInt(countOfClasses));
+    }
+
+    public LinkedHashMap<String, String> findEntities(String type, String query) {
+        return findOntologyClassService.findEntities(type, query);
     }
 }

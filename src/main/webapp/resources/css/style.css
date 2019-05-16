@@ -175,6 +175,15 @@ a{
     margin: 10px 0 10px 0;
 }
 
+.large-link {
+    line-height: 43px;
+    font-size: 25px;
+    margin: 5px 0 5px 0;
+    padding-left: 7px;
+    cursor: pointer;
+    color: #337ab7;
+}
+
 .container {
     margin: 30px;
 }
