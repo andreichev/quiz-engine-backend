@@ -2,6 +2,8 @@ package com.university.itis.dto;
 
 public class TripleDto {
 
+    private int counter;
+
     private String subjectUri;
     private String subjectLabel;
 
@@ -10,6 +12,14 @@ public class TripleDto {
 
     private String objectUri;
     private String objectLabel;
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int id) {
+        this.counter = id;
+    }
 
     public String getSubjectUri() {
         return subjectUri;

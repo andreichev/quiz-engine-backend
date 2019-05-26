@@ -1,9 +1,9 @@
 package com.university.itis.controller.admin_view;
 
+import com.university.itis.dto.TripleDto;
 import com.university.itis.model.Quiz;
-import com.university.itis.repository.QuestionRepository;
 import com.university.itis.repository.QuizRepository;
-import com.university.itis.services.SparqlQueryService;
+import com.university.itis.services.SparqlService;
 import com.university.itis.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,13 +26,13 @@ public class QuestionCreationViewController {
     private QuizRepository quizRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private SparqlQueryService sparqlQueryService;
+    private SparqlService sparqlService;
 
     @RequestMapping(value = "/quiz/{quizId}/add-question/", method = RequestMethod.GET)
-    public String addQuestionView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
+    public String addQuestionView(HttpServletRequest request,
+                                  @PathVariable Long quizId,
+                                  Authentication authentication,
+                                  ModelMap modelMap) throws Exception {
 
         Optional<Quiz> quiz = quizRepository.findById(quizId);
 
@@ -56,7 +56,10 @@ public class QuestionCreationViewController {
 
 
     @RequestMapping(value = "/quiz/{quizId}/add-question-manually", method = RequestMethod.GET)
-    public String addQuestionManuallyView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
+    public String addQuestionManuallyView(HttpServletRequest request,
+                                          @PathVariable Long quizId,
+                                          Authentication authentication,
+                                          ModelMap modelMap) throws Exception {
 
         Optional<Quiz> quiz = quizRepository.findById(quizId);
 
@@ -80,7 +83,10 @@ public class QuestionCreationViewController {
 
 
     @RequestMapping(value = "/quiz/{quizId}/add-question-by-subject", method = RequestMethod.GET)
-    public String addQuestionBySubjectView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
+    public String addQuestionBySubjectView(HttpServletRequest request,
+                                           @PathVariable Long quizId,
+                                           Authentication authentication,
+                                           ModelMap modelMap) throws Exception {
 
         Optional<Quiz> quiz = quizRepository.findById(quizId);
 
@@ -102,34 +108,9 @@ public class QuestionCreationViewController {
         }
     }
 
-    @RequestMapping(value = "/quiz/{quizId}/add-question-by-type", method = RequestMethod.GET)
-    public String addQuestionByTypeView(HttpServletRequest request, @PathVariable Long quizId, Authentication authentication, ModelMap modelMap) throws Exception {
-
-        Optional<Quiz> quiz = quizRepository.findById(quizId);
-
-        if (!quiz.isPresent()) {
-            throw new Exception("Quiz not exists");
-        }
-
-        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
-            throw new Exception("Access is denied");
-        }
-
-        modelMap.put("content", "question-add-by-type");
-        modelMap.put("quiz", quiz.get());
-
-        if (Utils.isAjax(request)) {
-            return "admin/quiz-edit/question-add-by-type";
-        } else {
-            return "admin/quiz-edit/index";
-        }
-    }
-
-
-    @RequestMapping(value = "/quiz/{quizId}/add-question-with-entity", method = RequestMethod.GET)
-    public String addQuestionByTypeView(HttpServletRequest request,
+    @RequestMapping(value = "/quiz/{quizId}/add-question-by-search", method = RequestMethod.GET)
+    public String addQuestionBySearchView(HttpServletRequest request,
                                         @PathVariable Long quizId,
-                                        @RequestParam String entity,
                                         Authentication authentication,
                                         ModelMap modelMap) throws Exception {
 
@@ -143,10 +124,65 @@ public class QuestionCreationViewController {
             throw new Exception("Access is denied");
         }
 
-        List suitableTriples = sparqlQueryService.getSuitableTriples(entity);
+        modelMap.put("content", "question-add-by-search");
+        modelMap.put("quiz", quiz.get());
+
+        if (Utils.isAjax(request)) {
+            return "admin/quiz-edit/question-add-by-search";
+        } else {
+            return "admin/quiz-edit/index";
+        }
+    }
+
+    @RequestMapping(value = "/quiz/{quizId}/add-question-random", method = RequestMethod.GET)
+    public String addQuestionRandomView(HttpServletRequest request,
+                                          @PathVariable Long quizId,
+                                          Authentication authentication,
+                                          ModelMap modelMap) throws Exception {
+
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
+
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+            throw new Exception("Access is denied");
+        }
+
+        modelMap.put("content", "question-add-random");
+        modelMap.put("quiz", quiz.get());
+
+        if (Utils.isAjax(request)) {
+            return "admin/quiz-edit/question-random";
+        } else {
+            return "admin/quiz-edit/index";
+        }
+    }
+
+    @RequestMapping(value = "/quiz/{quizId}/add-question-with-entity", method = RequestMethod.GET)
+    public String addQuestionByEntityView(HttpServletRequest request,
+                                        @PathVariable Long quizId,
+                                        @RequestParam String entity,
+                                        @RequestParam(required = false) String label,
+                                        Authentication authentication,
+                                        ModelMap modelMap) throws Exception {
+
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
+
+        if (!quiz.isPresent()) {
+            throw new Exception("Quiz not exists");
+        }
+
+        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+            throw new Exception("Access is denied");
+        }
+
+        List<TripleDto> suitableTriples = sparqlService.getSuitableTriples(entity);
 
         modelMap.put("content", "question-add-with-entity");
         modelMap.put("entity", entity);
+        modelMap.put("label", (label == null) ? entity : label);
         modelMap.put("triples", suitableTriples);
         modelMap.put("quiz", quiz.get());
 

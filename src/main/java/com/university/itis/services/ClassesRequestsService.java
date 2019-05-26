@@ -1,11 +1,11 @@
 package com.university.itis.services;
 
 import com.university.itis.utils.PrefixesStorage;
-import org.apache.jena.graph.impl.LiteralLabel;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,12 +27,17 @@ public class ClassesRequestsService {
     public String selectEntity(String type, int offset) {
 
         final ParameterizedSparqlString queryString = new ParameterizedSparqlString(
-                "SELECT ?e\n" +
-                        "WHERE {\n" +
-                        //"?e dbo:wikiPageID ?c .\n" +
-                        "?e a ?type .\n" +
-                        //"?e rdfs:label ?label .\n" +
-                        //"FILTER(LANG(?label) = \"\" || LANGMATCHES(LANG(?label), \"" + LANGUAGE + "\"))\n" +
+                PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
+                        "select coalesce(?labelLang1, ?labelLang2) as ?label where {\n" +
+                        "  ?subject a ?type .\n" +
+                        "\n" +
+                        "  OPTIONAL {\n" +
+                        "    ?subject rdfs:label ?labelLang1 .\n" +
+                        "    FILTER(langMatches(lang(?labelLang1), \"" + LANGUAGE1 + "\")) ." +
+                        "  }\n" +
+                        "  ?subject rdfs:label ?labelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?labelLang2), \"" + LANGUAGE2 + "\")) ." +
+                        "\n" +
                         "} OFFSET ?offset\n" +
                         "LIMIT 1"
         );
@@ -45,7 +50,14 @@ public class ClassesRequestsService {
 
             if (results.hasNext()) {
                 QuerySolution result = results.next();
-                return result.get("e").toString();
+
+                RDFNode label = result.get("label");
+                if(label.isLiteral()) {
+                    return label.asLiteral().getLexicalForm();
+                } else {
+                    return label.toString();
+                }
+
             } else {
                 return "None";
             }
@@ -57,8 +69,12 @@ public class ClassesRequestsService {
 
     public int getCountOfInstancesForClass(String ontologyClass) {
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
-                "select count(?obj) as ?count where {\n" +
-                        "?obj a <" + prefixesStorage.replaceInverse(ontologyClass) + "> .\n" +
+                PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
+                        "select count(?obj) as ?count " +
+                        "where {\n" +
+                        "  ?obj a <" + prefixesStorage.replaceInverse(ontologyClass) + "> .\n" +
+                        "  ?obj rdfs:label ?label ." +
+                        "  FILTER(langMatches(lang(?label), \"" + LANGUAGE2 + "\")) ." +
                         "}\n"
         );
 
@@ -138,7 +154,7 @@ public class ClassesRequestsService {
                 QuerySolution result = resultSet.next();
 
                 String place = result.get("place").toString();
-                String label = result.get("label").toString();
+                String label = result.getLiteral("label").getLexicalForm();
                 results.put(place, label);
             }
         } catch (Exception e) {

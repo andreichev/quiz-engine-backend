@@ -25,14 +25,14 @@
             loadingIndicator.hide();
 
             <#if content=='question-edit'>
-            setSelected('question${question.id}')
+            setSelected('question${question.id}');
             <#else>
             setSelected('${content}');
             </#if>
         });
 
         function loadContent(url, title, addToHistory) {
-            if (url != undefined && contentContainer != undefined) {
+            if (url !== undefined && contentContainer !== undefined) {
 
                 loadingIndicator.show();
                 contentContainer.hide();
@@ -51,6 +51,8 @@
                     if (addToHistory) {
                         window.history.pushState({"html": data, "pageTitle": title}, title, url);
                     }
+
+                    $("html, body").animate({ scrollTop: 0 }, 200);
                 });
             }
         }
@@ -110,6 +112,10 @@
             $('.selected').removeClass('selected');
         }
 
+        window.onpopstate = function (e) {
+            loadContent(window.location.href, e.state.pageTitle, false);
+        };
+
     </script>
 
 </#macro>
@@ -118,6 +124,7 @@
     <script src="/resources/js/jquery.min.js"></script>
     <script src="/resources/js/jquery-ui.min.js"></script>
     <script src="/resources/js/datepicker-ru.js"></script>
+    <script src="/resources/js/engine-admin-scripts.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=f929bb23-4471-42b8-a34e-13f2b18da04d&lang=ru_RU"
         type="text/javascript"></script>
 
@@ -168,9 +175,13 @@
 
                     <#include 'question-add-by-subject.ftl'>
 
-                <#elseif content=='question-add-by-type'>
+                <#elseif content=='question-add-by-search'>
 
-                    <#include 'question-add-by-type.ftl'>
+                    <#include 'question-add-by-search.ftl'>
+
+                <#elseif content=='question-add-random'>
+
+                    <#include 'question-add-random.ftl'>
 
                 <#elseif content=='question-add-with-entity'>
 

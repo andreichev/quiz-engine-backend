@@ -4,7 +4,7 @@ import com.university.itis.model.Question;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuestionRepository;
 import com.university.itis.repository.QuizRepository;
-import com.university.itis.services.SparqlQueryService;
+import com.university.itis.services.SparqlService;
 import com.university.itis.utils.UriStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ import java.util.Optional;
 public class QuestionApiController {
 
     @Autowired
-    private SparqlQueryService sparqlQueryService;
+    private SparqlService sparqlService;
 
     @Autowired
     private UriStorage uriStorage;
@@ -112,12 +113,12 @@ public class QuestionApiController {
         if (type.equals("dbo:Place")) {
 
             String[] coords = region.split(",");
-            map.put("entity", sparqlQueryService.selectPlaceInRegion(coords));
+            map.put("entity", sparqlService.selectPlaceInRegion(coords));
             return map;
 
         } else {
 
-            map.put("entity", sparqlQueryService.selectEntityForQuestion(type));
+            map.put("entity", sparqlService.selectEntityForQuestion(type));
             return map;
 
         }
@@ -133,12 +134,18 @@ public class QuestionApiController {
 
         if (type.equals("dbo:Place")) {
             String[] coords = region.split(",");
-            map.put("entities", sparqlQueryService.selectPlacesInRegion(coords));
+            map.put("entities", sparqlService.selectPlacesInRegion(coords));
         } else {
-            map.put("entities", sparqlQueryService.findEntities(type, query));
+            map.put("entities", sparqlService.findEntities(type, query));
         }
 
         return map;
+    }
+
+    @RequestMapping(value = "/api/alternative-answers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    List<String> fetchAlternativeAnswers(@RequestParam String predicate, @RequestParam String correct) {
+        return sparqlService.getAlternativeAnswers(predicate, correct);
     }
 
     @RequestMapping(value = "/api/types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -52,6 +52,36 @@
         loadingIndicator.show();
         contentContainer.hide();
 
+        $.getJSON("https://www.googleapis.com/customsearch/v1?key=AIzaSyBrfIoFHXAedKtC82_dpg42zYihvsWjado&cx=004840712803425132701:vwdd-8bl5iw&q=" + queryInput.val(), function (data) {
+
+            loadingIndicator.hide();
+            contentContainer.fadeTo(200, 1);
+
+            resultsContainer.html('');
+
+            if (data.items !== undefined) {
+                if (data.items.length === 0) {
+                    labelSelectEntity.html("Нет результатов. Попробуйте ввести другой запрос.");
+                } else {
+                    labelSelectEntity.html("Выберите:");
+                    for (var key in data.items) {
+                        var currentResultContainer = $("<div class='large-link'></div>");
+                        currentResultContainer.attr('onclick', 'createQuestionWith("' + data.items[key].link + '")');
+                        currentResultContainer.html(data.items[key].htmlTitle);
+                        resultsContainer.append(currentResultContainer);
+                    }
+                }
+            } else {
+                labelSelectEntity.html("Нет результатов. Попробуйте ввести другой запрос.");
+            }
+        })
+    }
+
+    function findEntity1() {
+
+        loadingIndicator.show();
+        contentContainer.hide();
+
         console.log('bounds of map: ' + myMap.getBounds());
         console.log('selected type:' + selectContaiter.find('option:selected').val());
 

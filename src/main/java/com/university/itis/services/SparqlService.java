@@ -1,6 +1,8 @@
 package com.university.itis.services;
 
 import com.university.itis.dto.TripleDto;
+import com.university.itis.services.answers.AlternativeAnswersHandler;
+import com.university.itis.services.answers.AnswerClass;
 import com.university.itis.utils.PrefixesStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class SparqlQueryService {
+public class SparqlService {
 
 	@Autowired
     PrefixesStorage prefixesStorage;
@@ -21,6 +23,9 @@ public class SparqlQueryService {
 
     @Autowired
     PredicatesRequestsService triplesService;
+
+    @Autowired
+    AlternativeAnswersHandler alternativeAnswersHandler;
 
     private Random random = new Random();
 
@@ -53,6 +58,33 @@ public class SparqlQueryService {
     }
 
     public List<TripleDto> getSuitableTriples(String entityUri) {
-        return triplesService.getSuitableTriples(entityUri);
+        List<TripleDto> results = new ArrayList<>();
+        results.addAll(triplesService.getSuitableTriplesStepOne(entityUri));
+        results.addAll(triplesService.getSuitableTriplesStepTwo(entityUri));
+        return results;
+    }
+
+    public List<String> getAlternativeAnswers(String predicateUri, String correctAnswer) {
+
+        String typeUri = triplesService.getRangeOfPredicate(predicateUri);
+        if(typeUri == null) {
+            return null;
+        }
+
+        AnswerClass answerClass = alternativeAnswersHandler.extractAnswerClass(typeUri, correctAnswer);
+        if(answerClass.equals(AnswerClass.OTHER)) {
+
+            int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(typeUri);
+            List<String> result = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                String label = findOntologyClassService.selectEntity(typeUri, random.nextInt(countOfClasses));
+                result.add(label);
+            }
+
+            return result;
+
+        } else {
+            return alternativeAnswersHandler.getAlternativeAnswersForClass(answerClass);
+        }
     }
 }
