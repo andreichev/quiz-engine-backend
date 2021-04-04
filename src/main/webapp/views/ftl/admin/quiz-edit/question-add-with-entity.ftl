@@ -3,13 +3,13 @@
 
 <#if triples?has_content>
 
-<div class="title-small-bold">Получившиеся вопросы:</div>
+<div class="title-small-bold">Получившиеся вопросы (${triples?size}):</div>
 <div class="text">Выберите подходящий вопрос</div>
 
     <#foreach triple in triples>
 
     <div onclick="addClick($(this).html(), ['${triple.objectLabel!}'])"
-         class="question">What is the ${triple.predicateLabel!} of ${triple.subjectLabel!}?</div>
+         class="question">Кто, или что, или какой ${triple.predicateLabel!} ${triple.subjectLabel!}?</div>
 
     <div class="variant">(${triple.objectLabel!})</div>
 

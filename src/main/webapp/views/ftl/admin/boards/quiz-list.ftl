@@ -6,17 +6,17 @@
         <table id="quizzes">
             <thead>
             <tr>
-                <th onclick="sortTable($('#spectacles').find('tbody'), 0, 'tabledit-span', 'number')">#</th>
-                <th onclick="sortTable($('#spectacles').find('tbody'), 1, 'tabledit-span', 'string')">Название</th>
-                <th onclick="sortTable($('#spectacles').find('tbody'), 2, 'tabledit-span', 'string')">
+                <th onclick="sortTable($('#quizzes').find('tbody'), 0, 'tabledit-span', 'number')">#</th>
+                <th onclick="sortTable($('#quizzes').find('tbody'), 1, 'tabledit-span', 'string')">Название</th>
+                <th onclick="sortTable($('#quizzes').find('tbody'), 2, 'tabledit-span', 'string')">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </th>
-                <th onclick="sortTable($('#spectacles').find('tbody'), 3, 'tabledit-span', 'number')">Кол-во ???</th>
-                <th onclick="sortTable($('#spectacles').find('tbody'), 3, 'tabledit-span', 'number')">
+                <th onclick="sortTable($('#quizzes').find('tbody'), 3, 'tabledit-span', 'number')">Кол-во ???</th>
+                <th onclick="sortTable($('#quizzes').find('tbody'), 4, 'tabledit-span', 'number')">
                     <span class="glyphicon glyphicon-user"></span>
                 </th>
 
-                <th onclick="sortTable($('#spectacles').find('tbody'), 3, 'tabledit-span', 'number')">
+                <th onclick="sortTable($('#quizzes').find('tbody'), 5, 'tabledit-span', 'number')">
                     <span class="glyphicon glyphicon-check"></span>
                 </th>
 

@@ -1,24 +1,16 @@
 package com.university.itis.services;
 
-import com.university.itis.utils.InsecureSSLSocketFactory;
-import org.apache.http.HttpVersion;
+import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 
-import java.security.KeyStore;
+import java.util.Collections;
+import java.util.List;
 
 public class SparqlHttpClient {
 
@@ -31,27 +23,9 @@ public class SparqlHttpClient {
     }
 
     private static HttpClient getInsecureHttpClient() {
-        try {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
-
-            InsecureSSLSocketFactory sf = new InsecureSSLSocketFactory(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-            HttpParams params = new BasicHttpParams();
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-            registry.register(new Scheme("https", sf, 443));
-
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
-            return new DefaultHttpClient(ccm, params);
-        } catch (Exception e) {
-            return new DefaultHttpClient();
-        }
+        Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        List<Header> headers = Collections.singletonList(header);
+        return HttpClients.custom().setDefaultHeaders(headers).build();
     }
 
     public QueryExecution queryExecution(ParameterizedSparqlString query) {

@@ -154,7 +154,7 @@ public class QuestionCreationViewController {
         modelMap.put("quiz", quiz.get());
 
         if (Utils.isAjax(request)) {
-            return "admin/quiz-edit/question-random";
+            return "admin/quiz-edit/question-add-random";
         } else {
             return "admin/quiz-edit/index";
         }

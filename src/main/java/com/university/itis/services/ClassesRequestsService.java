@@ -129,19 +129,26 @@ public class ClassesRequestsService {
     public LinkedHashMap<String, String> selectPlacesInRegion(String[] region) {
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
-                        "select ?place ?label where {\n" +
-                        "    ?place a dbo:Place .\n" +
-                        "    ?place geopos:lat ?lat .\n" +
-                        "    ?place geopos:long ?long .\n" +
-                        "    ?place rdfs:label ?label . \n" +
-                        "    FILTER (\n" +
-                        "        ?lat > " + region[0] + " && \n" +
-                        "        ?lat < " + region[2] + " && \n" +
-                        "        ?long > " + region[1] + " && \n" +
-                        "        ?long < " + region[3] + " && \n" +
-                        "        lang(?label) = \"" + LANGUAGE2 + "\"\n" +
-                        "    )\n" +
-                        "} LIMIT 100\n"
+                        "select ?place coalesce(?labelLang1, ?labelLang2) as ?label where {\n" +
+                        "  ?place a dbo:Place .\n" +
+                        "  ?place geopos:lat ?lat .\n" +
+                        "  ?place geopos:long ?long .\n" +
+                        "\n" +
+                        "  OPTIONAL {\n" +
+                        "    ?place rdfs:label ?labelLang1 .\n" +
+                        "    FILTER(langMatches(lang(?labelLang1), \"ru\")) .\n" +
+                        "  }\n" +
+                        "\n" +
+                        "  ?place rdfs:label ?labelLang2 .\n" +
+                        "\n" +
+                        "  FILTER (\n" +
+                        "    ?lat > " + region[0] + " && \n" +
+                        "    ?lat < " + region[2] + " && \n" +
+                        "    ?long > " + region[1] + " && \n" +
+                        "    ?long < " + region[3] + " && \n" +
+                        "    lang(?labelLang2) = \"en\"\n" +
+                        "  )\n" +
+                        "} LIMIT 1000"
         );
 
         System.out.println(queryEngineHTTP.getQueryString());

@@ -78,7 +78,6 @@ Finder.prototype.addCurrentMenu = function (newCurrentLayout, index) {
     this.currentLayout = newCurrentLayout;
     this.folderNames.push(this.currentLayout.title);
     this.folderLayouts.push(newCurrentLayout);
-    console.log(this.folderLayouts.length);
 };
 
 Finder.prototype.getCurrentMenu = function (layout) {

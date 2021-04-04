@@ -56,6 +56,7 @@
 
     function createQuestionWith(entity, label) {
         entity = entity.replace('/page', '/resource');
+        entity = entity.replace('https', 'http');
 
         var url = '/admin/quiz/${quiz.id}/add-question-with-entity?entity=' + entity;
         if(label !== undefined) {

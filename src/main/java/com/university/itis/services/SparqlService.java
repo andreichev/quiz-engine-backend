@@ -3,7 +3,6 @@ package com.university.itis.services;
 import com.university.itis.dto.TripleDto;
 import com.university.itis.services.answers.AlternativeAnswersHandler;
 import com.university.itis.services.answers.AnswerClass;
-import com.university.itis.utils.PrefixesStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +10,6 @@ import java.util.*;
 
 @Service
 public class SparqlService {
-
-	@Autowired
-    PrefixesStorage prefixesStorage;
-
-	@Autowired
-    SparqlHttpClient sparqlHttpClient;
 
     @Autowired
     ClassesRequestsService findOntologyClassService;
