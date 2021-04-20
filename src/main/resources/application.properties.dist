@@ -21,5 +21,3 @@ spring.freemarker.expose-request-attributes=true
 spring.freemarker.charset=UTF-8
 
 spring.datasource.initialization-mode=always
-
-
