@@ -1,6 +1,7 @@
 .idea
 target
 *.iml
+application.properties
 
 ### VS Code ###
 .vscode/

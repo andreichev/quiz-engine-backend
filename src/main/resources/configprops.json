@@ -1,5 +1,5 @@
 {
-  "endpointUrl": "http://dbpedia.org/sparql",
+  "endpointUrl": "https://dbpedia.org/sparql",
   "prefixes": {
     "http://dbpedia.org/resource/": "dbr:",
     "http://dbpedia.org/ontology/": "dbo:",

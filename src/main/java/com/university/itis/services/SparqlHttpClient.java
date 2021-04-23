@@ -1,16 +1,10 @@
 package com.university.itis.services;
 
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
-
-import java.util.Collections;
-import java.util.List;
 
 public class SparqlHttpClient {
 
@@ -23,9 +17,7 @@ public class SparqlHttpClient {
     }
 
     private static HttpClient getInsecureHttpClient() {
-        Header header = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        List<Header> headers = Collections.singletonList(header);
-        return HttpClients.custom().setDefaultHeaders(headers).build();
+        return HttpClients.createDefault();
     }
 
     public QueryExecution queryExecution(ParameterizedSparqlString query) {
