@@ -102,6 +102,13 @@
             <version>RELEASE</version>
         </dependency>
 
+        <!-- MORPHER -->
+        <dependency>
+            <groupId>ru.morpher</groupId>
+            <artifactId>russian</artifactId>
+            <version>2.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

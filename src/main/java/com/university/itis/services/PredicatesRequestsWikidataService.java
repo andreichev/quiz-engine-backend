@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PredicatesRequestsService {
+public class PredicatesRequestsWikidataService {
 
     @Autowired
     PrefixesStorage prefixesStorage;
@@ -31,18 +31,15 @@ public class PredicatesRequestsService {
 
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
-                        "select DISTINCT coalesce(?subjectLabelLang1, ?subjectLabelLang2) as ?subjectLabel, " +
-                        "?predicate, " +
-                        "coalesce(?predicateLabelLang1, ?predicateLabelLang2) as ?predicateLabel, " +
-                        "?object, " +
-                        "coalesce(coalesce(?objectLabelLang1, ?objectLabelLang2), ?object) as ?objectLabel where {\n" +
-                        "  <" +  entityUri + "> ?predicate ?object .\n" +
-                        "\n" +
+                        "select DISTINCT ?subjectLabel ?predicate ?predicateLabel ?object ?objectLabel where {\n" +
+                        "  <" + entityUri + "> ?predicate ?object .\n" +
+                        "  ?predicate1 wikibase:directClaim ?predicate .\n" +
+                        "  \n" +
                         "  OPTIONAL {\n" +
-                        "    <" +  entityUri + "> rdfs:label ?subjectLabelLang1 .\n" +
+                        "    <" + entityUri + "> rdfs:label ?subjectLabelLang1 .\n" +
                         "    FILTER(langMatches(lang(?subjectLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
-                        "  <" +  entityUri + "> rdfs:label ?subjectLabelLang2 .\n" +
+                        "  <" + entityUri + "> rdfs:label ?subjectLabelLang2 .\n" +
                         "  FILTER(langMatches(lang(?subjectLabelLang2), \"en\")) .\n" +
                         "\n" +
                         "  OPTIONAL {\n" +
@@ -50,18 +47,21 @@ public class PredicatesRequestsService {
                         "    FILTER(langMatches(lang(?objectLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  OPTIONAL {\n" +
-                        "    ?object rdfs:label ?objectLabelLang2 .\n" +
-                        "    FILTER(langMatches(lang(?objectLabelLang2), \"en\")) .\n" +
-                        "  }\n" +
+                        "  ?object rdfs:label ?objectLabelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?objectLabelLang2), \"en\")) .\n" +
                         "\n" +
                         "  OPTIONAL {\n" +
-                        "    ?predicate rdfs:label ?predicateLabelLang1 . \n" +
+                        "    ?predicate1 rdfs:label ?predicateLabelLang1 . \n" +
                         "    FILTER(langMatches(lang(?predicateLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  ?predicate rdfs:label ?predicateLabelLang2 .\n" +
-                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) ." +
+                        "  ?predicate1 rdfs:label ?predicateLabelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) .\n" +
+                        "  \n" +
+                        "  BIND (COALESCE(?objectLabelLang1, ?objectLabelLang2) AS ?objectLabel)\n" +
+                        "  BIND (COALESCE(?subjectLabelLang1, ?subjectLabelLang2) AS ?subjectLabel)\n" +
+                        "  BIND (COALESCE(?predicateLabelLang1, ?predicateLabelLang2) AS ?predicateLabel)\n" +
+                        " \n" +
                         "}\n" +
                         "limit 3000"
         );
@@ -112,14 +112,10 @@ public class PredicatesRequestsService {
 
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
-                        "select DISTINCT ?subject," +
-                        "coalesce(?subjectLabelLang1, ?subjectLabelLang2) as ?subjectLabel, " +
-                        "?predicate, " +
-                        "coalesce(?predicateLabelLang1, ?predicateLabelLang2) as ?predicateLabel, " +
-                        "coalesce(?objectLabelLang1, ?objectLabelLang2) as ?objectLabel " +
-                        " where {\n" +
-                        "  ?subject ?predicate <" +  entityUri + "> .\n" +
-                        "\n" +
+                        "select DISTINCT ?subject ?subjectLabel ?predicate ?predicateLabel ?objectLabel where {\n" +
+                        "  ?subject ?predicate <" + entityUri + "> .\n" +
+                        "  ?predicate1 wikibase:directClaim ?predicate .\n" +
+                        "  \n" +
                         "  OPTIONAL {\n" +
                         "    <" + entityUri + "> rdfs:label ?objectLabelLang1 .\n" +
                         "    FILTER(langMatches(lang(?objectLabelLang1), \"ru\")) .\n" +
@@ -136,12 +132,17 @@ public class PredicatesRequestsService {
                         "  FILTER(langMatches(lang(?subjectLabelLang2), \"en\")) .\n" +
                         "\n" +
                         "  OPTIONAL {\n" +
-                        "    ?predicate rdfs:label ?predicateLabelLang1 . \n" +
+                        "    ?predicate1 rdfs:label ?predicateLabelLang1 . \n" +
                         "    FILTER(langMatches(lang(?predicateLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  ?predicate rdfs:label ?predicateLabelLang2 .\n" +
-                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) ." +
+                        "  ?predicate1 rdfs:label ?predicateLabelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) .\n" +
+                        "  \n" +
+                        "  BIND (COALESCE(?objectLabelLang1, ?objectLabelLang2) AS ?objectLabel)\n" +
+                        "  BIND (COALESCE(?subjectLabelLang1, ?subjectLabelLang2) AS ?subjectLabel)\n" +
+                        "  BIND (COALESCE(?predicateLabelLang1, ?predicateLabelLang2) AS ?predicateLabel)\n" +
+                        "  \n" +
                         "}\n" +
                         "limit 3000"
         );
@@ -213,3 +214,4 @@ public class PredicatesRequestsService {
         return null;
     }
 }
+

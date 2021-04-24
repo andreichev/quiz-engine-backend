@@ -9,7 +9,7 @@
     <#foreach triple in triples>
 
     <div onclick="addClick($(this).html(), ['${triple.objectLabel!}'])"
-         class="question">Кто, или что, или какой ${triple.predicateLabel!} ${triple.subjectLabel!}?</div>
+         class="question">Укажите ${triple.predicateLabel!} ${triple.subjectLabel!}</div>
 
     <div class="variant">(${triple.objectLabel!})</div>
 
