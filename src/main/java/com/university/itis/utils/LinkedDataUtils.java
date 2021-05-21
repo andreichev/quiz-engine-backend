@@ -3,8 +3,6 @@ package com.university.itis.utils;
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class LinkedDataUtils {
 

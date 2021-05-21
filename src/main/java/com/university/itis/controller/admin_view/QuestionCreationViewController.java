@@ -3,9 +3,9 @@ package com.university.itis.controller.admin_view;
 import com.university.itis.dto.TripleDto;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuizRepository;
-import com.university.itis.services.SparqlService;
+import com.university.itis.services.impl.SparqlServiceImpl;
 import com.university.itis.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,33 +20,26 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin")
+@AllArgsConstructor
 public class QuestionCreationViewController {
 
-    @Autowired
-    private QuizRepository quizRepository;
-
-    @Autowired
-    private SparqlService sparqlService;
+    private final QuizRepository quizRepository;
+    private final SparqlServiceImpl sparqlService;
 
     @RequestMapping(value = "/quiz/{quizId}/add-question/", method = RequestMethod.GET)
     public String addQuestionView(HttpServletRequest request,
                                   @PathVariable Long quizId,
                                   Authentication authentication,
                                   ModelMap modelMap) throws Exception {
-
         Optional<Quiz> quiz = quizRepository.findById(quizId);
-
-        if (!quiz.isPresent()) {
+        if (quiz.isPresent() == false) {
             throw new Exception("Quiz not exists");
         }
-
-        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+        if (quiz.get().getAuthor().getUsername().equals(authentication.getName()) == false) {
             throw new Exception("Access is denied");
         }
-
         modelMap.put("content", "question-add");
         modelMap.put("quiz", quiz.get());
-
         if (Utils.isAjax(request)) {
             return "admin/quiz-edit/question-add";
         } else {
@@ -60,20 +53,15 @@ public class QuestionCreationViewController {
                                           @PathVariable Long quizId,
                                           Authentication authentication,
                                           ModelMap modelMap) throws Exception {
-
         Optional<Quiz> quiz = quizRepository.findById(quizId);
-
-        if (!quiz.isPresent()) {
+        if (quiz.isPresent() == false) {
             throw new Exception("Quiz not exists");
         }
-
-        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+        if (quiz.get().getAuthor().getUsername().equals(authentication.getName()) == false) {
             throw new Exception("Access is denied");
         }
-
         modelMap.put("content", "question-add-manually");
         modelMap.put("quiz", quiz.get());
-
         if (Utils.isAjax(request)) {
             return "admin/quiz-edit/question-add-manually";
         } else {
@@ -87,20 +75,15 @@ public class QuestionCreationViewController {
                                            @PathVariable Long quizId,
                                            Authentication authentication,
                                            ModelMap modelMap) throws Exception {
-
         Optional<Quiz> quiz = quizRepository.findById(quizId);
-
-        if (!quiz.isPresent()) {
+        if (quiz.isPresent() == false) {
             throw new Exception("Quiz not exists");
         }
-
-        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+        if (quiz.get().getAuthor().getUsername().equals(authentication.getName()) == false) {
             throw new Exception("Access is denied");
         }
-
         modelMap.put("content", "question-add-by-subject");
         modelMap.put("quiz", quiz.get());
-
         if (Utils.isAjax(request)) {
             return "admin/quiz-edit/question-add-by-subject";
         } else {
@@ -113,20 +96,15 @@ public class QuestionCreationViewController {
                                         @PathVariable Long quizId,
                                         Authentication authentication,
                                         ModelMap modelMap) throws Exception {
-
         Optional<Quiz> quiz = quizRepository.findById(quizId);
-
-        if (!quiz.isPresent()) {
+        if (quiz.isPresent() == false) {
             throw new Exception("Quiz not exists");
         }
-
-        if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
+        if (quiz.get().getAuthor().getUsername().equals(authentication.getName()) == false) {
             throw new Exception("Access is denied");
         }
-
         modelMap.put("content", "question-add-by-search");
         modelMap.put("quiz", quiz.get());
-
         if (Utils.isAjax(request)) {
             return "admin/quiz-edit/question-add-by-search";
         } else {

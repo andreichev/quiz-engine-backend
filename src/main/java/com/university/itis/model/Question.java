@@ -1,13 +1,17 @@
 package com.university.itis.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "question")
+@Getter
+@Setter
 public class Question extends AbstractEntity implements Comparable<Question> {
 
     @Column
@@ -23,46 +27,10 @@ public class Question extends AbstractEntity implements Comparable<Question> {
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
-    private SortedSet<QuestionOption> questionOptions;
-
-
-    public Question() {
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
+    private Set<QuestionOption> questionOptions;
 
     @Override
     public int compareTo(Question o) {
         return (int) (this.getId() - o.getId());
-    }
-
-    public SortedSet<QuestionOption> getQuestionOptions() {
-        return questionOptions;
-    }
-
-    public void setQuestionOptions(SortedSet<QuestionOption> questionOptions) {
-        this.questionOptions = questionOptions;
-    }
-
-    public List<QuestionAnswer> getQuestionAnswers() {
-        return questionAnswers;
-    }
-
-    public void setQuestionAnswers(List<QuestionAnswer> questionAnswers) {
-        this.questionAnswers = questionAnswers;
     }
 }

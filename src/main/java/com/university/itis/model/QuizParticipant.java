@@ -1,10 +1,15 @@
 package com.university.itis.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "quiz_participant")
+@Getter
+@Setter
 public class QuizParticipant extends AbstractEntity implements Comparable<QuizParticipant> {
 
     @Column
@@ -17,33 +22,8 @@ public class QuizParticipant extends AbstractEntity implements Comparable<QuizPa
     @OneToMany(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<QuestionAnswer> questionAnswers;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
-
-    public List<QuestionAnswer> getQuestionAnswers() {
-        return questionAnswers;
-    }
-
-    public void setQuestionAnswers(List<QuestionAnswer> questionAnswers) {
-        this.questionAnswers = questionAnswers;
-    }
-
     @Override
     public int compareTo(QuizParticipant o) {
         return (int) (this.getId() - o.getId());
     }
-
 }

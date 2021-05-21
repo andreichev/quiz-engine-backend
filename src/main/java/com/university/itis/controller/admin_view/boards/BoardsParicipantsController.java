@@ -5,7 +5,7 @@ import com.university.itis.model.QuizParticipant;
 import com.university.itis.repository.QuizParticipantRepository;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,12 +19,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin")
+@AllArgsConstructor
 public class BoardsParicipantsController {
-    @Autowired
-    private QuizRepository quizRepository;
 
-    @Autowired
-    private QuizParticipantRepository quizParticipantRepository;
+    private final QuizRepository quizRepository;
+    private final QuizParticipantRepository quizParticipantRepository;
 
     @RequestMapping(value = "/boards/users", method = RequestMethod.GET)
     public String usersSelectQuiz(HttpServletRequest request,
@@ -46,17 +45,13 @@ public class BoardsParicipantsController {
                                            @PathVariable Long quizId) throws Exception {
         if (Utils.isAjax(request)) {
             Optional<Quiz> optionalQuiz = quizRepository.findById(quizId);
-
             if (!optionalQuiz.isPresent()) {
                 throw new Exception("Quiz not exists");
             }
-
             if (!optionalQuiz.get().getAuthor().getUsername().equals(authentication.getName())) {
                 throw new Exception("Access is denied");
             }
-
             modelMap.put("quiz", optionalQuiz.get());
-
             return "admin/boards/quiz-participants";
         } else {
             return "admin/index";
@@ -71,21 +66,16 @@ public class BoardsParicipantsController {
                                      @PathVariable Long participantId) throws Exception {
         if (Utils.isAjax(request)) {
             Optional<Quiz> quiz = quizRepository.findById(quizId);
-
             if (!quiz.isPresent()) {
                 throw new Exception("Quiz not exists");
             }
-
             if (!quiz.get().getAuthor().getUsername().equals(authentication.getName())) {
                 throw new Exception("Access is denied");
             }
-
             Optional<QuizParticipant> quizParticipant = quizParticipantRepository.findById(participantId);
-
             if (!quizParticipant.isPresent()) {
                 throw new Exception("Participant not exists");
             }
-
             modelMap.put("quiz", quiz.get());
             modelMap.put("participant", quizParticipant.get());
             return "admin/boards/user-results";

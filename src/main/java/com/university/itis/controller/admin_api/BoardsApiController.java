@@ -4,7 +4,7 @@ import com.university.itis.model.Quiz;
 import com.university.itis.model.User;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +16,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin")
+@AllArgsConstructor
 public class BoardsApiController {
 
-    @Autowired
-    private QuizRepository quizRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    final private QuizRepository quizRepository;
+    final private UserRepository userRepository;
 
     @RequestMapping(value = "/boards/quiz-list/add", method = RequestMethod.POST)
     public @ResponseBody

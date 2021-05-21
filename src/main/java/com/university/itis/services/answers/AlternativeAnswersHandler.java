@@ -9,23 +9,17 @@ import java.util.regex.Pattern;
 
 @Service
 public class AlternativeAnswersHandler {
-
     public AnswerClass extractAnswerClass(String propertyType, String correctAnswer) {
-
         final Pattern patternInt = Pattern.compile("^-?\\d*(\\d+)?$");
         final Pattern patternFloat = Pattern.compile("^-?\\d*(\\.\\d+)?$");
         final Matcher matcherInt = patternInt.matcher(correctAnswer);
         final Matcher matcherFloat = patternFloat.matcher(correctAnswer);
-
         if (propertyType.equals("http://www.w3.org/2001/XMLSchema#gYear")) {
             return AnswerClass.YEAR;
-
         } else if (propertyType.equals("http://www.w3.org/2001/XMLSchema#date")) {
             return AnswerClass.DATE;
-
         } else if (matcherInt.find()) {
             return AnswerClass.INT;
-
         } else if (matcherFloat.find()) {
             return AnswerClass.FLOAT;
         } else {

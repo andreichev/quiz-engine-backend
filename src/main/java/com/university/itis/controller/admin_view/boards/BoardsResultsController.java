@@ -52,7 +52,7 @@ public class BoardsResultsController {
                 throw new Exception("Access is denied");
             }
             Quiz quiz = optionalQuiz.get();
-            SortedSet<QuizParticipant> participants = quiz.getParticipants();
+            Set<QuizParticipant> participants = quiz.getParticipants();
             List<String> participantResults = new ArrayList<>();
 
             Iterator<QuizParticipant> participantIterator = participants.iterator();

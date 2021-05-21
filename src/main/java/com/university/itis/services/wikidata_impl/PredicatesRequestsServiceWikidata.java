@@ -1,34 +1,30 @@
-package com.university.itis.services;
+package com.university.itis.services.wikidata_impl;
 
 import com.university.itis.dto.TripleDto;
+import com.university.itis.services.PredicatesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
+import com.university.itis.utils.SparqlHttpClient;
 import com.university.itis.utils.UriStorage;
+import lombok.AllArgsConstructor;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PredicatesRequestsWikidataService {
+@AllArgsConstructor
+public class PredicatesRequestsServiceWikidata implements PredicatesRequestsService {
+    private final PrefixesStorage prefixesStorage;
+    private final SparqlHttpClient sparqlHttpClient;
+    private final UriStorage uriStorage;
 
-    @Autowired
-    PrefixesStorage prefixesStorage;
-
-    @Autowired
-    SparqlHttpClient sparqlHttpClient;
-
-    @Autowired
-    UriStorage uriStorage;
-
-    //returns suitable triples for question
+    @Override
     public List<TripleDto> getSuitableTriplesStepOne(String entityUri) {
-
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
                         "select DISTINCT ?subjectLabel ?predicate ?predicateLabel ?object ?objectLabel where {\n" +
@@ -108,8 +104,8 @@ public class PredicatesRequestsWikidataService {
         return results;
     }
 
+    @Override
     public List<TripleDto> getSuitableTriplesStepTwo(String entityUri) {
-
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
                         "select DISTINCT ?subject ?subjectLabel ?predicate ?predicateLabel ?objectLabel where {\n" +
@@ -186,9 +182,8 @@ public class PredicatesRequestsWikidataService {
         return results;
     }
 
-    //returns suitable triples for question
+    @Override
     public String getRangeOfPredicate(String predicateUri) {
-
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
                         "select ?range where {\n" +

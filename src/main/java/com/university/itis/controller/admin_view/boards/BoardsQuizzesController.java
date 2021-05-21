@@ -3,7 +3,7 @@ package com.university.itis.controller.admin_view.boards;
 import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.utils.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,10 +15,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin")
+@AllArgsConstructor
 public class BoardsQuizzesController {
 
-    @Autowired
-    private QuizRepository quizRepository;
+    private final QuizRepository quizRepository;
 
     @RequestMapping(value = "/boards/quiz-list", method = RequestMethod.GET)
     public String quizList(HttpServletRequest request, ModelMap modelMap, Authentication authentication) {

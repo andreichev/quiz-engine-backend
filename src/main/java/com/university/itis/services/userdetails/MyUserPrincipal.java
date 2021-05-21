@@ -1,18 +1,15 @@
 package com.university.itis.services.userdetails;
 
 import com.university.itis.model.User;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@AllArgsConstructor
 public class MyUserPrincipal implements UserDetails {
-    private User user;
-
-    public MyUserPrincipal(User user) {
-        this.user = user;
-    }
-
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

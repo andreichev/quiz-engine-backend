@@ -1,14 +1,18 @@
 package com.university.itis.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SortNatural;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.SortedSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "quiz")
+@Getter
+@Setter
 public class Quiz extends AbstractEntity implements Comparable<Quiz> {
 
     @Column
@@ -34,71 +38,12 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private SortedSet<Question> questions;
+    private Set<Question> questions;
 
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private SortedSet<QuizParticipant> participants;
-
-    public Quiz() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public SortedSet<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(SortedSet<Question> questions) {
-        this.questions = questions;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public SortedSet<QuizParticipant> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(SortedSet<QuizParticipant> participants) {
-        this.participants = participants;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
+    private Set<QuizParticipant> participants;
 
     @Override
     public int compareTo(Quiz o) {
@@ -116,13 +61,5 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
         } else {
             return thisDate.compareTo(oDate);
         }
-    }
-
-    public boolean isAnyOrder() {
-        return isAnyOrder;
-    }
-
-    public void setAnyOrder(boolean anyOrder) {
-        isAnyOrder = anyOrder;
     }
 }

@@ -14,12 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class DefaultController {
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest request, ModelMap modelMap) {
-
         modelMap.put("content", "main");
-
         if(Utils.isAjax(request)) {
             return "site/main";
         } else {
