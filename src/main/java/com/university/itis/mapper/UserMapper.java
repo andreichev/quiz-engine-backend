@@ -25,7 +25,7 @@ public class UserMapper {
             userDto.setRoles(new HashSet<>(set) );
         }
         userDto.setPhone( user.getPhone() );
-        userDto.setActive( user.isActive() );
+        userDto.setIsActive( user.isActive() );
         return userDto;
     }
 

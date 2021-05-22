@@ -1,4 +1,4 @@
-package com.university.itis.services.answers;
+package com.university.itis.services.sparql.dbpedia_impl;
 
 public enum AnswerClass {
     YEAR,

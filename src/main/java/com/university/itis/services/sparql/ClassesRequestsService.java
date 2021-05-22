@@ -1,4 +1,4 @@
-package com.university.itis.services;
+package com.university.itis.services.sparql;
 
 import java.util.LinkedHashMap;
 import java.util.List;

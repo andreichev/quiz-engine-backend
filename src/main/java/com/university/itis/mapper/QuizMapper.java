@@ -42,8 +42,12 @@ public class QuizMapper {
                 throw new NotFoundException("User with id " + form.getAuthor().getId() + " not found");
             }
         }
-        quiz.setParticipants(Collections.emptyList());
-        quiz.setQuestions(Collections.emptyList());
+        if (quiz.getParticipants() == null) {
+            quiz.setParticipants(Collections.emptyList());
+        }
+        if (quiz.getQuestions() == null) {
+            quiz.setQuestions(Collections.emptyList());
+        }
         return quiz;
     }
 

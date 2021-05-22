@@ -1,7 +1,7 @@
-package com.university.itis.services.wikidata_impl;
+package com.university.itis.services.sparql.dbpedia_impl;
 
 import com.university.itis.dto.TripleDto;
-import com.university.itis.services.PredicatesRequestsService;
+import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
 import com.university.itis.utils.UriStorage;
@@ -11,6 +11,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,19 +19,26 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class PredicatesRequestsServiceWikidata implements PredicatesRequestsService {
+@Primary
+public class PredicatesRequestsServiceDbpedia implements PredicatesRequestsService {
+
     private final PrefixesStorage prefixesStorage;
     private final SparqlHttpClient sparqlHttpClient;
     private final UriStorage uriStorage;
 
+    //returns suitable triples for question
     @Override
     public List<TripleDto> getSuitableTriplesStepOne(String entityUri) {
+
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
-                        "select DISTINCT ?subjectLabel ?predicate ?predicateLabel ?object ?objectLabel where {\n" +
+                        "select DISTINCT coalesce(?subjectLabelLang1, ?subjectLabelLang2) as ?subjectLabel, " +
+                        "?predicate, " +
+                        "coalesce(?predicateLabelLang1, ?predicateLabelLang2) as ?predicateLabel, " +
+                        "?object, " +
+                        "coalesce(coalesce(?objectLabelLang1, ?objectLabelLang2), ?object) as ?objectLabel where {\n" +
                         "  <" + entityUri + "> ?predicate ?object .\n" +
-                        "  ?predicate1 wikibase:directClaim ?predicate .\n" +
-                        "  \n" +
+                        "\n" +
                         "  OPTIONAL {\n" +
                         "    <" + entityUri + "> rdfs:label ?subjectLabelLang1 .\n" +
                         "    FILTER(langMatches(lang(?subjectLabelLang1), \"ru\")) .\n" +
@@ -43,21 +51,18 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
                         "    FILTER(langMatches(lang(?objectLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  ?object rdfs:label ?objectLabelLang2 .\n" +
-                        "  FILTER(langMatches(lang(?objectLabelLang2), \"en\")) .\n" +
+                        "  OPTIONAL {\n" +
+                        "    ?object rdfs:label ?objectLabelLang2 .\n" +
+                        "    FILTER(langMatches(lang(?objectLabelLang2), \"en\")) .\n" +
+                        "  }\n" +
                         "\n" +
                         "  OPTIONAL {\n" +
-                        "    ?predicate1 rdfs:label ?predicateLabelLang1 . \n" +
+                        "    ?predicate rdfs:label ?predicateLabelLang1 . \n" +
                         "    FILTER(langMatches(lang(?predicateLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  ?predicate1 rdfs:label ?predicateLabelLang2 .\n" +
-                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) .\n" +
-                        "  \n" +
-                        "  BIND (COALESCE(?objectLabelLang1, ?objectLabelLang2) AS ?objectLabel)\n" +
-                        "  BIND (COALESCE(?subjectLabelLang1, ?subjectLabelLang2) AS ?subjectLabel)\n" +
-                        "  BIND (COALESCE(?predicateLabelLang1, ?predicateLabelLang2) AS ?predicateLabel)\n" +
-                        " \n" +
+                        "  ?predicate rdfs:label ?predicateLabelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) ." +
                         "}\n" +
                         "limit 3000"
         );
@@ -77,18 +82,18 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
 
                 currentTriple.setPredicateUri(result.get("predicate").toString());
 
-                if(uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
+                if (uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
                     continue;
                 }
 
                 Literal predicateLabel = result.getLiteral("predicateLabel");
-                if(predicateLabel != null) {
+                if (predicateLabel != null) {
                     currentTriple.setPredicateLabel(predicateLabel.getLexicalForm());
                 }
 
                 currentTriple.setObjectUri(result.get("object").toString());
                 RDFNode objectLabel = result.get("objectLabel");
-                if(objectLabel.isLiteral()) {
+                if (objectLabel.isLiteral()) {
                     currentTriple.setObjectLabel(objectLabel.asLiteral().getLexicalForm());
                 } else {
                     currentTriple.setObjectLabel(objectLabel.toString());
@@ -106,12 +111,17 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
 
     @Override
     public List<TripleDto> getSuitableTriplesStepTwo(String entityUri) {
+
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
-                        "select DISTINCT ?subject ?subjectLabel ?predicate ?predicateLabel ?objectLabel where {\n" +
+                        "select DISTINCT ?subject," +
+                        "coalesce(?subjectLabelLang1, ?subjectLabelLang2) as ?subjectLabel, " +
+                        "?predicate, " +
+                        "coalesce(?predicateLabelLang1, ?predicateLabelLang2) as ?predicateLabel, " +
+                        "coalesce(?objectLabelLang1, ?objectLabelLang2) as ?objectLabel " +
+                        " where {\n" +
                         "  ?subject ?predicate <" + entityUri + "> .\n" +
-                        "  ?predicate1 wikibase:directClaim ?predicate .\n" +
-                        "  \n" +
+                        "\n" +
                         "  OPTIONAL {\n" +
                         "    <" + entityUri + "> rdfs:label ?objectLabelLang1 .\n" +
                         "    FILTER(langMatches(lang(?objectLabelLang1), \"ru\")) .\n" +
@@ -128,17 +138,12 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
                         "  FILTER(langMatches(lang(?subjectLabelLang2), \"en\")) .\n" +
                         "\n" +
                         "  OPTIONAL {\n" +
-                        "    ?predicate1 rdfs:label ?predicateLabelLang1 . \n" +
+                        "    ?predicate rdfs:label ?predicateLabelLang1 . \n" +
                         "    FILTER(langMatches(lang(?predicateLabelLang1), \"ru\")) .\n" +
                         "  }\n" +
                         "\n" +
-                        "  ?predicate1 rdfs:label ?predicateLabelLang2 .\n" +
-                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) .\n" +
-                        "  \n" +
-                        "  BIND (COALESCE(?objectLabelLang1, ?objectLabelLang2) AS ?objectLabel)\n" +
-                        "  BIND (COALESCE(?subjectLabelLang1, ?subjectLabelLang2) AS ?subjectLabel)\n" +
-                        "  BIND (COALESCE(?predicateLabelLang1, ?predicateLabelLang2) AS ?predicateLabel)\n" +
-                        "  \n" +
+                        "  ?predicate rdfs:label ?predicateLabelLang2 .\n" +
+                        "  FILTER(langMatches(lang(?predicateLabelLang2), \"en\")) ." +
                         "}\n" +
                         "limit 3000"
         );
@@ -160,12 +165,12 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
 
                 currentTriple.setPredicateUri(result.get("predicate").toString());
 
-                if(uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
+                if (uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
                     continue;
                 }
 
                 Literal predicateLabel = result.getLiteral("predicateLabel");
-                if(predicateLabel != null) {
+                if (predicateLabel != null) {
                     currentTriple.setPredicateLabel(predicateLabel.getLexicalForm());
                 }
 
@@ -182,6 +187,7 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
         return results;
     }
 
+    //returns suitable triples for question
     @Override
     public String getRangeOfPredicate(String predicateUri) {
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
@@ -209,4 +215,3 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
         return null;
     }
 }
-

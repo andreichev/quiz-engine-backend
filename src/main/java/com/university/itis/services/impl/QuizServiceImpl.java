@@ -39,6 +39,15 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
+    public QuizFullDto updateQuiz(Long id, EditQuizForm form) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
+        Quiz quizToSave = quizMapper.toQuiz(form, quiz);
+        Quiz savedQuiz = quizRepository.save(quizToSave);
+        return quizMapper.toFullDtoConvert(savedQuiz);
+    }
+
+    @Override
     public QuizFullDto getQuizById(Long id) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));

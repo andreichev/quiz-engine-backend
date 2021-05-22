@@ -33,8 +33,12 @@ public class QuestionMapper {
                 throw new NotFoundException("Quiz with id " + questionDto.getQuizId() + " not found");
             }
         }
-        question.setQuestionAnswers(Collections.emptyList());
-        question.setQuestionOptions(Collections.emptyList());
+        if (question.getQuestionAnswers() == null) {
+            question.setQuestionAnswers(Collections.emptyList());
+        }
+        if(question.getQuestionOptions() == null) {
+            question.setQuestionOptions(Collections.emptyList());
+        }
         return question;
     }
 

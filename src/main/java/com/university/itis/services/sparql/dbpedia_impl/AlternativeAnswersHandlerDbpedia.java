@@ -1,4 +1,4 @@
-package com.university.itis.services.answers;
+package com.university.itis.services.sparql.dbpedia_impl;
 
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class AlternativeAnswersHandler {
+public class AlternativeAnswersHandlerDbpedia {
     public AnswerClass extractAnswerClass(String propertyType, String correctAnswer) {
         final Pattern patternInt = Pattern.compile("^-?\\d*(\\d+)?$");
         final Pattern patternFloat = Pattern.compile("^-?\\d*(\\.\\d+)?$");

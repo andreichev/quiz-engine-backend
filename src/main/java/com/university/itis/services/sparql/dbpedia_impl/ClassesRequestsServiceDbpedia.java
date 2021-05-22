@@ -1,6 +1,6 @@
-package com.university.itis.services.dbpedia_impl;
+package com.university.itis.services.sparql.dbpedia_impl;
 
-import com.university.itis.services.ClassesRequestsService;
+import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
 import lombok.AllArgsConstructor;

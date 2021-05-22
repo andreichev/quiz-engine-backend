@@ -50,6 +50,15 @@ public class QuizController extends ResponseCreator {
         return createGoodResponse(quizService.saveQuiz(form));
     }
 
+    @PutMapping(value = "/{id}")
+    ResponseEntity updateQuiz(@RequestBody EditQuizForm form, @PathVariable Long id) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
+        if (formErrorOrNull.isPresent()) {
+            return createErrorResponse(formErrorOrNull.get());
+        }
+        return createGoodResponse(quizService.updateQuiz(id, form));
+    }
+
     @GetMapping(value = "/{id}")
     ResponseEntity getQuiz(@PathVariable Long id) {
         return createGoodResponse(quizService.getQuizById(id));

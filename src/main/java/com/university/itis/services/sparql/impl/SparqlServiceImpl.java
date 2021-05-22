@@ -1,11 +1,11 @@
-package com.university.itis.services.impl;
+package com.university.itis.services.sparql.impl;
 
 import com.university.itis.dto.TripleDto;
-import com.university.itis.services.ClassesRequestsService;
-import com.university.itis.services.PredicatesRequestsService;
-import com.university.itis.services.SparqlService;
-import com.university.itis.services.answers.AlternativeAnswersHandler;
-import com.university.itis.services.answers.AnswerClass;
+import com.university.itis.services.sparql.ClassesRequestsService;
+import com.university.itis.services.sparql.PredicatesRequestsService;
+import com.university.itis.services.sparql.SparqlService;
+import com.university.itis.services.sparql.dbpedia_impl.AlternativeAnswersHandlerDbpedia;
+import com.university.itis.services.sparql.dbpedia_impl.AnswerClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class SparqlServiceImpl implements SparqlService {
 
     private final ClassesRequestsService findOntologyClassService;
     private final PredicatesRequestsService triplesService;
-    private final AlternativeAnswersHandler alternativeAnswersHandler;
+    private final AlternativeAnswersHandlerDbpedia alternativeAnswersHandler;
 
     private final Random random = new Random();
 

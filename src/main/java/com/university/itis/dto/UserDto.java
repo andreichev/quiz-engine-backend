@@ -15,5 +15,5 @@ public class UserDto {
     private String email;
     private Set<Role> roles;
     private String phone;
-    private boolean isActive;
+    private Boolean isActive;
 }

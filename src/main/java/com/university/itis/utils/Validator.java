@@ -1,8 +1,10 @@
 package com.university.itis.utils;
 
-import com.university.itis.dto.*;
+import com.university.itis.dto.LoginForm;
+import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.QuestionOptionDto;
+import com.university.itis.dto.RegisterForm;
 import com.university.itis.dto.quiz.EditQuizForm;
-import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
 import com.university.itis.services.UserService;
 import lombok.RequiredArgsConstructor;
