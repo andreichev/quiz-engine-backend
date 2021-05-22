@@ -25,14 +25,6 @@ public class QuestionMapper {
 
     public Question toQuestion(QuestionDto questionDto, Question question) {
         question.setText(questionDto.getText());
-        if (questionDto.getQuizId() != null) {
-            Optional<Quiz> optionalQuiz = quizRepository.findById(questionDto.getQuizId());
-            if(optionalQuiz.isPresent()) {
-                question.setQuiz(optionalQuiz.get());
-            } else {
-                throw new NotFoundException("Quiz with id " + questionDto.getQuizId() + " not found");
-            }
-        }
         if (question.getQuestionAnswers() == null) {
             question.setQuestionAnswers(Collections.emptyList());
         }
