@@ -1,7 +1,7 @@
 package com.university.itis.controller;
 
-import com.university.itis.dto.QuizDto;
 import com.university.itis.dto.UserDto;
+import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizService;
 import com.university.itis.utils.ErrorEntity;
@@ -35,19 +35,19 @@ public class QuizController extends ResponseCreator {
     }
 
     @PostMapping
-    ResponseEntity saveQuiz(ServletRequest request, @RequestBody QuizDto quizDto) {
-        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(quizDto);
+    ResponseEntity saveQuiz(ServletRequest request, @RequestBody EditQuizForm form) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
         if (formErrorOrNull.isPresent()) {
             return createErrorResponse(formErrorOrNull.get());
         }
         User user = (User) request.getAttribute("user");
-        quizDto.setAuthor(
+        form.setAuthor(
                 UserDto
                         .builder()
                         .id(user.getId())
                         .build()
         );
-        return createGoodResponse(quizService.saveQuiz(quizDto));
+        return createGoodResponse(quizService.saveQuiz(form));
     }
 
     @GetMapping(value = "/{id}")

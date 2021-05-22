@@ -17,9 +17,11 @@ public enum ErrorEntity {
     INVALID_PHONE(451, "Введите корректный телефон"),
     PHONE_ALREADY_TAKEN(452, "Телефон уже занят"),
     EMAIL_ALREADY_TAKEN(453, "Email уже занят"),
+    TEXT_REQUIRED(450, "text - Обязательное поле"),
+    TEXT_TOO_SHORT(460, "Текст слишком короткий, минимальная длина - " + Validator.MIN_TEXT_LENGTH),
 
     // Регистрация
-    PASSWORD_TOO_SHORT(460, "Пароль слишком короткий"),
+    PASSWORD_TOO_SHORT(460, "Пароль слишком короткий, минимальная длина - " + Validator.MIN_PASSWORD_LENGTH),
     INVALID_EMAIL(461, "Некорректный Email"),
 
     // Вход
@@ -29,6 +31,9 @@ public enum ErrorEntity {
     // Quiz
     TITLE_REQUIRED(450, "title - Обязательное поле"),
     DESCRIPTION_REQUIRED(451, "description - Обязательное поле"),
+
+    // Question option
+    IS_CORRECT_REQUIRED(451, "isCorrect - Обязательное поле")
 
     ;
 

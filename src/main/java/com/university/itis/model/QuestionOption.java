@@ -19,7 +19,7 @@ public class QuestionOption extends AbstractEntity implements Comparable<Questio
     private Question question;
 
     @Column(name = "correct")
-    private boolean isCorrect;
+    private Boolean isCorrect;
 
     @Override
     public int compareTo(QuestionOption o) {

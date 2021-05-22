@@ -1,5 +1,6 @@
-package com.university.itis.dto;
+package com.university.itis.dto.quiz;
 
+import com.university.itis.dto.UserDto;
 import lombok.*;
 
 import java.util.Date;
@@ -10,13 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuizDto {
+public class EditQuizForm {
     private Long id;
     private String title;
     private UserDto author;
     private String description;
-    private Date startDate;
     private Boolean isAnyOrder;
     private Boolean isActive;
-    private List<UserDto> participants;
 }

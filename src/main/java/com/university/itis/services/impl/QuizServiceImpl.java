@@ -1,6 +1,8 @@
 package com.university.itis.services.impl;
 
-import com.university.itis.dto.QuizDto;
+import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.mapper.QuizMapper;
@@ -20,27 +22,27 @@ public class QuizServiceImpl implements QuizService {
     private final QuizMapper quizMapper;
 
     @Override
-    public List<QuizDto> getAllActive() {
+    public List<QuizShortDto> getAllActive() {
         return quizMapper.toListDtoConvert(quizRepository.findAllByIsActiveIsTrue());
     }
 
     @Override
-    public List<QuizDto> getAllByAuthor(User user) {
+    public List<QuizShortDto> getAllByAuthor(User user) {
         return quizMapper.toListDtoConvert(quizRepository.findAllByAuthor(user));
     }
 
     @Override
-    public QuizDto saveQuiz(QuizDto quizDto) {
-        Quiz quizToSave = quizMapper.toQuiz(quizDto);
+    public QuizFullDto saveQuiz(EditQuizForm form) {
+        Quiz quizToSave = quizMapper.toQuiz(form);
         Quiz savedQuiz = quizRepository.save(quizToSave);
-        return quizMapper.toDtoConvert(savedQuiz);
+        return quizMapper.toFullDtoConvert(savedQuiz);
     }
 
     @Override
-    public QuizDto getQuizById(Long id) {
+    public QuizFullDto getQuizById(Long id) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
-        return quizMapper.toDtoConvert(quiz);
+        return quizMapper.toFullDtoConvert(quiz);
     }
 
     @Override

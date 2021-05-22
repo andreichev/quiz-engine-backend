@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "quiz")
@@ -38,12 +38,12 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Question> questions;
+    private List<Question> questions;
 
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<QuizParticipant> participants;
+    private List<QuizParticipant> participants;
 
     @Override
     public int compareTo(Quiz o) {

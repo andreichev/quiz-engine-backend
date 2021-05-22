@@ -1,16 +1,16 @@
 package com.university.itis.services;
 
-import com.university.itis.dto.QuizDto;
+import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface QuizService {
-    List<QuizDto> getAllActive();
-    List<QuizDto> getAllByAuthor(User user);
-    QuizDto saveQuiz(QuizDto quizDto);
-    QuizDto getQuizById(Long id);
+    List<QuizShortDto> getAllActive();
+    List<QuizShortDto> getAllByAuthor(User user);
+    QuizFullDto saveQuiz(EditQuizForm form);
+    QuizFullDto getQuizById(Long id);
     void deleteById(Long id, User user);
 }

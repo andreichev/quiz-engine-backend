@@ -1,6 +1,8 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.QuizDto;
+import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Quiz;
 import com.university.itis.model.QuizParticipant;
@@ -20,31 +22,41 @@ import java.util.stream.Collectors;
 public class QuizMapper {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final QuestionMapper questionMapper;
 
-    public Quiz toQuiz(QuizDto quizDto) {
-        return toQuiz(quizDto, new Quiz());
+    public Quiz toQuiz(EditQuizForm form) {
+        return toQuiz(form, new Quiz());
     }
 
-    public Quiz toQuiz(QuizDto quizDto, Quiz quiz) {
-        quiz.setTitle(quizDto.getTitle());
-        quiz.setDescription(quizDto.getDescription());
-        quiz.setActive(quizDto.getIsActive());
-        quiz.setAnyOrder(quizDto.getIsAnyOrder());
-        quiz.setStartDate(quizDto.getStartDate() != null ? quizDto.getStartDate() : new Date());
-        if (quizDto.getAuthor() != null && quizDto.getAuthor().getId() != null) {
-            Optional<User> optionalUser = userService.findOneById(quizDto.getAuthor().getId());
+    public Quiz toQuiz(EditQuizForm form, Quiz quiz) {
+        quiz.setTitle(form.getTitle());
+        quiz.setDescription(form.getDescription());
+        quiz.setActive(form.getIsActive());
+        quiz.setAnyOrder(form.getIsAnyOrder());
+        quiz.setStartDate(quiz.getStartDate() != null ? quiz.getStartDate() : new Date());
+        if (form.getAuthor() != null && form.getAuthor().getId() != null) {
+            Optional<User> optionalUser = userService.findOneById(form.getAuthor().getId());
             if(optionalUser.isPresent()) {
                 quiz.setAuthor(optionalUser.get());
             } else {
-                throw new NotFoundException("User with id " + quizDto.getAuthor().getId() + " not found");
+                throw new NotFoundException("User with id " + form.getAuthor().getId() + " not found");
             }
         }
-        quiz.setParticipants(Collections.emptySet());
+        quiz.setParticipants(Collections.emptyList());
+        quiz.setQuestions(Collections.emptyList());
         return quiz;
     }
 
-    public QuizDto toDtoConvert(Quiz quiz) {
-        return QuizDto.builder()
+    public QuizShortDto toShortDtoConvert(Quiz quiz) {
+        return QuizShortDto.builder()
+                .id(quiz.getId())
+                .title(quiz.getTitle())
+                .description(quiz.getDescription())
+                .build();
+    }
+
+    public QuizFullDto toFullDtoConvert(Quiz quiz) {
+        return QuizFullDto.builder()
                 .id(quiz.getId())
                 .title(quiz.getTitle())
                 .author(userMapper.toViewDto(quiz.getAuthor()))
@@ -54,23 +66,17 @@ public class QuizMapper {
                 .isActive(quiz.isActive())
                 .participants(userMapper.toListDtoConvert(
                         quiz.getParticipants().stream()
-                        .map(QuizParticipant::getUser)
-                        .collect(Collectors.toList())
+                                .map(QuizParticipant::getUser)
+                                .collect(Collectors.toList())
                 ))
+                .questions(questionMapper.toListDtoConvert(quiz.getQuestions()))
                 .build();
     }
 
-    public List<QuizDto> toListDtoConvert(List<Quiz> quizList) {
+    public List<QuizShortDto> toListDtoConvert(List<Quiz> quizList) {
         return quizList
                 .stream()
-                .map(this::toDtoConvert)
-                .collect(Collectors.toList());
-    }
-
-    public List<Quiz> toListConvert(List<QuizDto> quizDtoList) {
-        return quizDtoList
-                .stream()
-                .map(this::toQuiz)
+                .map(this::toShortDtoConvert)
                 .collect(Collectors.toList());
     }
 }

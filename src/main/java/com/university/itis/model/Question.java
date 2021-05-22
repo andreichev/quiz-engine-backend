@@ -27,7 +27,7 @@ public class Question extends AbstractEntity implements Comparable<Question> {
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<QuestionOption> questionOptions;
+    private List<QuestionOption> questionOptions;
 
     @Override
     public int compareTo(Question o) {

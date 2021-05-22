@@ -1,8 +1,8 @@
 package com.university.itis.utils;
 
-import com.university.itis.dto.LoginForm;
-import com.university.itis.dto.QuizDto;
-import com.university.itis.dto.RegisterForm;
+import com.university.itis.dto.*;
+import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
 import com.university.itis.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 @Component
 @RequiredArgsConstructor
 public class Validator extends ResponseCreator {
-    private final int MIN_PASSWORD_LENGTH = 4;
+    public static final int MIN_PASSWORD_LENGTH = 4;
+    public static final int MIN_TEXT_LENGTH = 4;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
     private final Pattern phonePattern = Pattern.compile("^[78]9\\d{9}$");
 
@@ -53,12 +54,35 @@ public class Validator extends ResponseCreator {
         return Optional.empty();
     }
 
-    public Optional<ErrorEntity> getSaveQuizFormError(QuizDto form) {
+    public Optional<ErrorEntity> getSaveQuizFormError(EditQuizForm form) {
         if (form.getTitle() == null) {
             return Optional.of(ErrorEntity.TITLE_REQUIRED);
         }
         if (form.getDescription() == null) {
             return Optional.of(ErrorEntity.DESCRIPTION_REQUIRED);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ErrorEntity> getSaveQuestionFormError(QuestionDto form) {
+        if (form.getText() == null) {
+            return Optional.of(ErrorEntity.TEXT_REQUIRED);
+        }
+        if (form.getText().length() < MIN_TEXT_LENGTH) {
+            return Optional.of(ErrorEntity.TEXT_TOO_SHORT);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ErrorEntity> getSaveQuestionOptionFormError(QuestionOptionDto form) {
+        if (form.getText() == null) {
+            return Optional.of(ErrorEntity.TEXT_REQUIRED);
+        }
+        if (form.getText().length() < MIN_TEXT_LENGTH) {
+            return Optional.of(ErrorEntity.TEXT_TOO_SHORT);
+        }
+        if (form.getIsCorrect() == null) {
+            return Optional.of(ErrorEntity.IS_CORRECT_REQUIRED);
         }
         return Optional.empty();
     }
