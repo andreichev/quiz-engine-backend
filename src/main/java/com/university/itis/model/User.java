@@ -1,20 +1,35 @@
 package com.university.itis.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends AbstractEntity {
 
     @Column(name = "username")
     private String username;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "email_confirmed")
+    private Boolean isEmailConfirmed;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "registration_date")
+    private Date registrationDate;
 
     @Column(name = "password")
     private String password;

@@ -12,8 +12,9 @@ import java.util.List;
 @Setter
 public class QuizParticipant extends AbstractEntity implements Comparable<QuizParticipant> {
 
-    @Column
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")

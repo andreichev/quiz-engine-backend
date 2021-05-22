@@ -1,77 +1,42 @@
 package com.university.itis.config;
 
-import com.university.itis.services.userdetails.MyUserDetailsService;
+import com.university.itis.config.filter.JwtFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private final MyUserDetailsService userDetailsService;
-
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public SecurityConfig(MyUserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/resources/**");
-    }
+    private final JwtFilter jwtFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                .antMatchers("/admin", "/admin/**")
-                .authenticated();
-
-        http
-                .formLogin()
-                .loginPage("/admin/login")
-                .loginProcessingUrl("/admin/login/process")
-                .defaultSuccessUrl("/admin", false)
-                .usernameParameter("username").passwordParameter("password")
-                .permitAll();
-
-        http
-                .logout()
-                .invalidateHttpSession(true)
-                .logoutUrl("/logout")
-                .permitAll()
-                .logoutSuccessUrl("/");
-
-        //http.csrf().disable();
-    }
-
-    @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .authenticationProvider(authenticationProvider());
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider
-                = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
-        return authProvider;
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**", "/quiz/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/register", "/auth").permitAll()
+                .and()
+                .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return passwordEncoder;
+        return new BCryptPasswordEncoder();
     }
 }

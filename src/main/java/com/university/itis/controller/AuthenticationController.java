@@ -1,54 +1,65 @@
 package com.university.itis.controller;
 
+import com.university.itis.config.filter.JwtHelper;
+import com.university.itis.dto.LoginForm;
+import com.university.itis.dto.RegisterForm;
+import com.university.itis.dto.TokenDto;
+import com.university.itis.dto.UserDto;
 import com.university.itis.model.Role;
 import com.university.itis.model.User;
-import com.university.itis.repository.UserRepository;
-import com.university.itis.utils.Utils;
-import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.university.itis.services.UserService;
+import com.university.itis.utils.ErrorEntity;
+import com.university.itis.utils.ResponseCreator;
+import com.university.itis.utils.Validator;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.Optional;
 
 @Controller
-@AllArgsConstructor
-public class AuthenticationController {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+class AuthenticationController extends ResponseCreator {
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(HttpServletRequest request, ModelMap modelMap) {
-        modelMap.put("content", "registration");
-        if(Utils.isAjax(request)) {
-            return "/views/ftl/site/registration.ftl";
-        } else {
-            return "site/index";
-        }
+    private final JwtHelper jwtHelper;
+    private final UserService userService;
+    private final Validator validator;
+
+    public AuthenticationController(JwtHelper jwtHelper, UserService userService, Validator validator) {
+        this.jwtHelper = jwtHelper;
+        this.userService = userService;
+        this.validator = validator;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String saveUser(User user, ModelMap modelMap) {
-        User existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser != null) {
-            modelMap.put("error", "Пользователь с таким именем существует");
-            modelMap.put("content", "registration");
-            return "site/index";
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity registerUser(@RequestBody RegisterForm registerForm) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getUserRegisterFormError(registerForm);
+        if (formErrorOrNull.isPresent()) {
+            return createErrorResponse(formErrorOrNull.get());
         }
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setActive(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return "redirect:/admin/login";
+        User user = User.builder()
+                .email(registerForm.getEmail())
+                .password(registerForm.getPassword())
+                .phone(registerForm.getPhone())
+                .roles(Collections.singleton(Role.ROLE_USER))
+                .isActive(true)
+                .isEmailConfirmed(false)
+                .build();
+        UserDto userDto = userService.save(user);
+        return createGoodResponse(userDto);
     }
 
-    @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
-    @PreAuthorize("isAnonymous()")
-    public String login() {
-        return "admin/login";
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public ResponseEntity auth(@RequestBody LoginForm loginForm) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getLoginFormError(loginForm);
+        if (formErrorOrNull.isPresent()) {
+            return createErrorResponse(formErrorOrNull.get());
+        }
+        User user = userService.getByEmail(loginForm.getEmail());
+        return createGoodResponse(new TokenDto(jwtHelper.generateToken(user)));
     }
 }
