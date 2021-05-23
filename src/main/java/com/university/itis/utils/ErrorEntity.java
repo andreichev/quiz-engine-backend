@@ -12,6 +12,7 @@ public enum ErrorEntity {
     // Общие ошибки
     INVALID_REQUEST(400, "Неверный запрос"),
     INVALID_TOKEN(403, "Ошибка авторизации"),
+    FORBIDDEN(403, "Доступ запрещен"),
     NOT_FOUND(404, "Не найдено"),
     INVALID_NAME(450, "Неверное имя"),
     INVALID_PHONE(451, "Введите корректный телефон"),

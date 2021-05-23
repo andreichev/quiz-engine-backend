@@ -34,14 +34,6 @@ public class QuizMapper {
         quiz.setActive(form.getIsActive());
         quiz.setAnyOrder(form.getIsAnyOrder());
         quiz.setStartDate(quiz.getStartDate() != null ? quiz.getStartDate() : new Date());
-        if (form.getAuthor() != null && form.getAuthor().getId() != null) {
-            Optional<User> optionalUser = userService.findOneById(form.getAuthor().getId());
-            if(optionalUser.isPresent()) {
-                quiz.setAuthor(optionalUser.get());
-            } else {
-                throw new NotFoundException("User with id " + form.getAuthor().getId() + " not found");
-            }
-        }
         if (quiz.getParticipants() == null) {
             quiz.setParticipants(Collections.emptyList());
         }
