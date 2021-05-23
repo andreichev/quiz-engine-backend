@@ -7,10 +7,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "quiz_participant")
+@Table(name = "quiz_passing")
 @Getter
 @Setter
-public class QuizParticipant extends AbstractEntity implements Comparable<QuizParticipant> {
+public class QuizPassing extends AbstractEntity implements Comparable<QuizPassing> {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -20,11 +20,11 @@ public class QuizParticipant extends AbstractEntity implements Comparable<QuizPa
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<QuestionAnswer> questionAnswers;
+    @OneToMany(mappedBy = "passing", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<QuestionAnswer> answers;
 
     @Override
-    public int compareTo(QuizParticipant o) {
+    public int compareTo(QuizPassing o) {
         return (int) (this.getId() - o.getId());
     }
 }

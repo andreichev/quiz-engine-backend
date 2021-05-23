@@ -47,7 +47,7 @@ public class QuizController extends ResponseCreator {
                         .id(user.getId())
                         .build()
         );
-        return createGoodResponse(quizService.saveQuiz(form));
+        return createGoodResponse(quizService.save(form));
     }
 
     @PutMapping(value = "/{id}")
@@ -56,18 +56,18 @@ public class QuizController extends ResponseCreator {
         if (formErrorOrNull.isPresent()) {
             return createErrorResponse(formErrorOrNull.get());
         }
-        return createGoodResponse(quizService.updateQuiz(id, form));
+        return createGoodResponse(quizService.update(id, form));
     }
 
     @GetMapping(value = "/{id}")
     ResponseEntity getQuiz(@PathVariable Long id) {
-        return createGoodResponse(quizService.getQuizById(id));
+        return createGoodResponse(quizService.getById(id));
     }
 
     @DeleteMapping(value = "/{id}")
     ResponseEntity deleteQuiz(ServletRequest request, @PathVariable Long id) {
         User user = (User) request.getAttribute("user");
-        quizService.deleteById(id, user);
+        quizService.delete(id, user);
         return createGoodResponse();
     }
 }

@@ -19,9 +19,9 @@ public class QuestionAnswer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "option_id")
-    private QuestionOption questionOption;
+    private QuestionOption option;
 
     @ManyToOne
-    @JoinColumn(name = "participant_id")
-    private QuizParticipant participant;
+    @JoinColumn(name = "passing_id")
+    private QuizPassing passing;
 }

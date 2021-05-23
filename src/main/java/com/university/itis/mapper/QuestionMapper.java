@@ -22,11 +22,11 @@ public class QuestionMapper {
 
     public Question toQuestion(QuestionDto questionDto, Question question) {
         question.setText(questionDto.getText());
-        if (question.getQuestionAnswers() == null) {
-            question.setQuestionAnswers(Collections.emptyList());
+        if (question.getAnswers() == null) {
+            question.setAnswers(Collections.emptyList());
         }
-        if(question.getQuestionOptions() == null) {
-            question.setQuestionOptions(Collections.emptyList());
+        if(question.getOptions() == null) {
+            question.setOptions(Collections.emptyList());
         }
         return question;
     }
@@ -35,7 +35,7 @@ public class QuestionMapper {
         return QuestionDto.builder()
                 .id(question.getId())
                 .text(question.getText())
-                .options(questionOptionMapper.toListDtoConvert(question.getQuestionOptions()))
+                .options(questionOptionMapper.toListDtoConvert(question.getOptions()))
                 .build();
     }
 

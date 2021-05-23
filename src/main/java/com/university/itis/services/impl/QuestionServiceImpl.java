@@ -28,7 +28,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto saveQuestion(Long quizId, QuestionDto form, User user) {
+    public QuestionDto save(Long quizId, QuestionDto form, User user) {
         Question questionToSave = questionMapper.toQuestion(form);
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " not found"));
@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto updateQuestion(Long quizId, Long questionId, QuestionDto form, User user) {
+    public QuestionDto update(Long quizId, Long questionId, QuestionDto form, User user) {
         Question question = getQuestion(quizId, questionId, user);
         Question questionToSave = questionMapper.toQuestion(form, question);
         Question savedQuestion = questionRepository.save(questionToSave);

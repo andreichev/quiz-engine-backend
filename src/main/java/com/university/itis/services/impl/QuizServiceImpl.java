@@ -32,14 +32,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public QuizFullDto saveQuiz(EditQuizForm form) {
+    public QuizFullDto save(EditQuizForm form) {
         Quiz quizToSave = quizMapper.toQuiz(form);
         Quiz savedQuiz = quizRepository.save(quizToSave);
         return quizMapper.toFullDtoConvert(savedQuiz);
     }
 
     @Override
-    public QuizFullDto updateQuiz(Long id, EditQuizForm form) {
+    public QuizFullDto update(Long id, EditQuizForm form) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
         Quiz quizToSave = quizMapper.toQuiz(form, quiz);
@@ -48,14 +48,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public QuizFullDto getQuizById(Long id) {
+    public QuizFullDto getById(Long id) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
         return quizMapper.toFullDtoConvert(quiz);
     }
 
     @Override
-    public void deleteById(Long id, User user) {
+    public void delete(Long id, User user) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
         if (quiz.getAuthor().getId().equals(user.getId()) == false) {

@@ -37,7 +37,7 @@ public class QuestionController extends ResponseCreator {
             return createErrorResponse(formErrorOrNull.get());
         }
         User user = (User) request.getAttribute("user");
-        return createGoodResponse(questionService.saveQuestion(quizId, questionDto, user));
+        return createGoodResponse(questionService.save(quizId, questionDto, user));
     }
 
     @PutMapping(value = "/{questionId}")
@@ -52,7 +52,7 @@ public class QuestionController extends ResponseCreator {
             return createErrorResponse(formErrorOrNull.get());
         }
         User user = (User) request.getAttribute("user");
-        return createGoodResponse(questionService.updateQuestion(quizId, questionId, questionDto, user));
+        return createGoodResponse(questionService.update(quizId, questionId, questionDto, user));
     }
 
     @GetMapping(value = "/{questionId}")

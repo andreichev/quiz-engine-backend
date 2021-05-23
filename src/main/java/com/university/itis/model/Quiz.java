@@ -43,7 +43,7 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @SortNatural
     @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<QuizParticipant> participants;
+    private List<QuizPassing> participants;
 
     @Override
     public int compareTo(Quiz o) {

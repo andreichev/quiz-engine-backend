@@ -5,7 +5,7 @@ import com.university.itis.dto.quiz.QuizFullDto;
 import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Quiz;
-import com.university.itis.model.QuizParticipant;
+import com.university.itis.model.QuizPassing;
 import com.university.itis.model.User;
 import com.university.itis.services.UserService;
 import lombok.AllArgsConstructor;
@@ -70,7 +70,7 @@ public class QuizMapper {
                 .isActive(quiz.isActive())
                 .participants(userMapper.toListDtoConvert(
                         quiz.getParticipants().stream()
-                                .map(QuizParticipant::getUser)
+                                .map(QuizPassing::getUser)
                                 .collect(Collectors.toList())
                 ))
                 .questions(questionMapper.toListDtoConvert(quiz.getQuestions()))
