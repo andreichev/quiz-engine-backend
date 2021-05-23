@@ -11,25 +11,36 @@ import com.university.itis.model.User;
 import com.university.itis.repository.QuestionOptionRepository;
 import com.university.itis.repository.QuestionRepository;
 import com.university.itis.services.QuestionOptionService;
+import com.university.itis.utils.ErrorEntity;
+import com.university.itis.utils.Result;
+import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class QuestionOptionServiceImpl implements QuestionOptionService {
+    private final Validator validator;
     private final QuestionOptionRepository questionOptionRepository;
     private final QuestionRepository questionRepository;
     private final QuestionOptionMapper questionOptionMapper;
 
     @Override
-    public List<QuestionOptionDto> getAllByQuestionId(Long questionId) {
-        return questionOptionMapper.toListDtoConvert(questionOptionRepository.findAllByQuestionId(questionId));
+    public Result getAllByQuestionId(Long questionId) {
+        return Result.success(
+                questionOptionMapper
+                        .toListDtoConvert(questionOptionRepository.findAllByQuestionId(questionId))
+        );
     }
 
     @Override
-    public QuestionOptionDto save(Long questionId, QuestionOptionDto form, User user) {
+    public Result save(Long questionId, QuestionOptionDto form, User user) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionOptionFormError(form);
+        if (formErrorOrNull.isPresent()) {
+            return Result.error(formErrorOrNull.get());
+        }
         QuestionOption questionOptionToSave = questionOptionMapper.toQuestionOption(form);
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException("Question with id " + questionId + " not found"));
@@ -39,27 +50,32 @@ public class QuestionOptionServiceImpl implements QuestionOptionService {
         }
         questionOptionToSave.setQuestion(question);
         QuestionOption savedQuestionOption = questionOptionRepository.save(questionOptionToSave);
-        return questionOptionMapper.toDtoConvert(savedQuestionOption);
+        return Result.success(questionOptionMapper.toDtoConvert(savedQuestionOption));
     }
 
     @Override
-    public QuestionOptionDto update(Long questionId, Long questionOptionId, QuestionOptionDto form, User user) {
+    public Result update(Long questionId, Long questionOptionId, QuestionOptionDto form, User user) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionOptionFormError(form);
+        if (formErrorOrNull.isPresent()) {
+            return Result.error(formErrorOrNull.get());
+        }
         QuestionOption questionOption = getQuestionOption(questionId, questionOptionId, user);
         QuestionOption questionOptionToSave = questionOptionMapper.toQuestionOption(form, questionOption);
         QuestionOption savedQuestionOption = questionOptionRepository.save(questionOptionToSave);
-        return questionOptionMapper.toDtoConvert(savedQuestionOption);
+        return Result.success(questionOptionMapper.toDtoConvert(savedQuestionOption));
     }
 
     @Override
-    public QuestionOptionDto getById(Long questionId, Long questionOptionId) {
+    public Result getById(Long questionId, Long questionOptionId) {
         QuestionOption questionOption = questionOptionRepository.findByIdAndQuestionId(questionOptionId, questionId)
                 .orElseThrow(() -> new NotFoundException("Question with id " + questionId + " or question option with id " + questionOptionId + " not found"));
-        return questionOptionMapper.toDtoConvert(questionOption);
+        return Result.success(questionOptionMapper.toDtoConvert(questionOption));
     }
 
     @Override
-    public void delete(Long questionId, Long questionOptionId, User user) {
+    public Result delete(Long questionId, Long questionOptionId, User user) {
         questionOptionRepository.delete(getQuestionOption(questionId, questionOptionId, user));
+        return Result.success();
     }
 
     private QuestionOption getQuestionOption(Long questionId, Long questionOptionId, User user) {

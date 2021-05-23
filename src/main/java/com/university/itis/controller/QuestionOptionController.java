@@ -3,27 +3,22 @@ package com.university.itis.controller;
 import com.university.itis.dto.QuestionOptionDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuestionOptionService;
-import com.university.itis.utils.ErrorEntity;
-import com.university.itis.utils.ResponseCreator;
-import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/question/{questionId}/option")
 @AllArgsConstructor
-public class QuestionOptionController extends ResponseCreator {
-    private final Validator validator;
+public class QuestionOptionController {
     private final QuestionOptionService questionOptionService;
 
     @GetMapping
     ResponseEntity getAllByQuestionId(@PathVariable Long questionId) {
-        return createGoodResponse(questionOptionService.getAllByQuestionId(questionId));
+        return questionOptionService.getAllByQuestionId(questionId).getResponseEntity();
     }
 
     @PostMapping
@@ -32,12 +27,8 @@ public class QuestionOptionController extends ResponseCreator {
             @PathVariable Long questionId,
             @RequestBody QuestionOptionDto questionOptionDto
     ) {
-        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionOptionFormError(questionOptionDto);
-        if (formErrorOrNull.isPresent()) {
-            return createErrorResponse(formErrorOrNull.get());
-        }
         User user = (User) request.getAttribute("user");
-        return createGoodResponse(questionOptionService.save(questionId, questionOptionDto, user));
+        return questionOptionService.save(questionId, questionOptionDto, user).getResponseEntity();
     }
 
     @PutMapping(value = "/{questionOptionId}")
@@ -47,23 +38,19 @@ public class QuestionOptionController extends ResponseCreator {
             @PathVariable Long questionId,
             @PathVariable Long questionOptionId
     ) {
-        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionOptionFormError(questionDto);
-        if (formErrorOrNull.isPresent()) {
-            return createErrorResponse(formErrorOrNull.get());
-        }
         User user = (User) request.getAttribute("user");
-        return createGoodResponse(questionOptionService.update(questionId, questionOptionId, questionDto, user));
+        return questionOptionService.update(questionId, questionOptionId, questionDto, user)
+                .getResponseEntity();
     }
 
     @GetMapping(value = "/{questionOptionId}")
     ResponseEntity getQuestionOptionById(@PathVariable Long questionId, @PathVariable Long questionOptionId) {
-        return createGoodResponse(questionOptionService.getById(questionId, questionOptionId));
+        return questionOptionService.getById(questionId, questionOptionId).getResponseEntity();
     }
 
     @DeleteMapping(value = "/{questionOptionId}")
     ResponseEntity deleteQuestionOption(ServletRequest request, @PathVariable Long questionId, @PathVariable Long questionOptionId) {
         User user = (User) request.getAttribute("user");
-        questionOptionService.delete(questionId, questionOptionId, user);
-        return createGoodResponse();
+        return questionOptionService.delete(questionId, questionOptionId, user).getResponseEntity();
     }
 }

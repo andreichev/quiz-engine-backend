@@ -6,7 +6,7 @@ import com.university.itis.dto.QuestionOptionDto;
 import com.university.itis.dto.RegisterForm;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
-import com.university.itis.services.UserService;
+import com.university.itis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +15,16 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
-public class Validator extends ResponseCreator {
+public class Validator {
     public static final int MIN_PASSWORD_LENGTH = 4;
     public static final int MIN_TEXT_LENGTH = 1;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
     private final Pattern phonePattern = Pattern.compile("^[78]9\\d{9}$");
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     public Optional<ErrorEntity> getLoginFormError(LoginForm form) {
-        Optional<User> optionalUserEntity = userService.findOneByEmail(form.getEmail());
+        Optional<User> optionalUserEntity = userRepository.findByEmail(form.getEmail());
         if (optionalUserEntity.isPresent() == false) {
             return Optional.of(ErrorEntity.USER_NOT_FOUND);
         }
@@ -43,14 +43,14 @@ public class Validator extends ResponseCreator {
             if (phonePattern.matcher(form.getPhone()).matches() == false) {
                 return Optional.of(ErrorEntity.INVALID_PHONE);
             }
-            if (userService.findOneByPhone(form.getPhone()).isPresent()) {
+            if (userRepository.findByPhone(form.getPhone()).isPresent()) {
                 return Optional.of(ErrorEntity.PHONE_ALREADY_TAKEN);
             }
         }
         if (form.getPassword() == null || form.getPassword().length() < MIN_PASSWORD_LENGTH) {
             return Optional.of(ErrorEntity.PASSWORD_TOO_SHORT);
         }
-        if (userService.findOneByEmail(form.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(form.getEmail()).isPresent()) {
             return Optional.of(ErrorEntity.EMAIL_ALREADY_TAKEN);
         }
         return Optional.empty();

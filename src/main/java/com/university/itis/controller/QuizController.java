@@ -14,7 +14,6 @@ import javax.servlet.ServletRequest;
 @RequestMapping("/quiz")
 @AllArgsConstructor
 public class QuizController {
-
     private final QuizService quizService;
 
     @GetMapping(value = "/public-quiz-list")

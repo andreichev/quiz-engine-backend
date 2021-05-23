@@ -1,8 +1,8 @@
 package com.university.itis.services;
 
-import com.university.itis.utils.Result;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
+import com.university.itis.utils.Result;
 
 public interface QuizService {
     Result getAllActive();

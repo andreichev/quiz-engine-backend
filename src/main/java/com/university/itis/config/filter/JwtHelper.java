@@ -46,13 +46,6 @@ public class JwtHelper {
         return false;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles()
-                .stream()
-                .map( (role) -> new SimpleGrantedAuthority(role.name()))
-                .collect(Collectors.toList());
-    }
-
     public String getEmailFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
         return (String) claims.get("email");

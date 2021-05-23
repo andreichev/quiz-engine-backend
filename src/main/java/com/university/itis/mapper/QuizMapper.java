@@ -3,24 +3,19 @@ package com.university.itis.mapper;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.dto.quiz.QuizFullDto;
 import com.university.itis.dto.quiz.QuizShortDto;
-import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Quiz;
 import com.university.itis.model.QuizPassing;
-import com.university.itis.model.User;
-import com.university.itis.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class QuizMapper {
-    private final UserService userService;
     private final UserMapper userMapper;
     private final QuestionMapper questionMapper;
 

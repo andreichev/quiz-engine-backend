@@ -10,25 +10,33 @@ import com.university.itis.model.User;
 import com.university.itis.repository.QuestionRepository;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.services.QuestionService;
+import com.university.itis.utils.ErrorEntity;
+import com.university.itis.utils.Result;
+import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
+    private final Validator validator;
     private final QuestionMapper questionMapper;
     private final QuestionRepository questionRepository;
     private final QuizRepository quizRepository;
 
     @Override
-    public List<QuestionDto> getAllByQuizId(Long quizId) {
-        return questionMapper.toListDtoConvert(questionRepository.findAllByQuizId(quizId));
+    public Result getAllByQuizId(Long quizId) {
+        return Result.success(questionMapper.toListDtoConvert(questionRepository.findAllByQuizId(quizId)));
     }
 
     @Override
-    public QuestionDto save(Long quizId, QuestionDto form, User user) {
+    public Result save(Long quizId, QuestionDto form, User user) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionFormError(form);
+        if (formErrorOrNull.isPresent()) {
+            return Result.error(formErrorOrNull.get());
+        }
         Question questionToSave = questionMapper.toQuestion(form);
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " not found"));
@@ -37,28 +45,34 @@ public class QuestionServiceImpl implements QuestionService {
         }
         questionToSave.setQuiz(quiz);
         Question savedQuestion = questionRepository.save(questionToSave);
-        return questionMapper.toDtoConvert(savedQuestion);
+        return Result.success(questionMapper.toDtoConvert(savedQuestion));
     }
 
     @Override
-    public QuestionDto update(Long quizId, Long questionId, QuestionDto form, User user) {
+    public Result update(Long quizId, Long questionId, QuestionDto form, User user) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionFormError(form);
+        if (formErrorOrNull.isPresent()) {
+            return Result.error(formErrorOrNull.get());
+        }
         Question question = getQuestion(quizId, questionId, user);
         Question questionToSave = questionMapper.toQuestion(form, question);
         Question savedQuestion = questionRepository.save(questionToSave);
-        return questionMapper.toDtoConvert(savedQuestion);
+        return Result.success(questionMapper.toDtoConvert(savedQuestion));
     }
 
     @Override
-    public QuestionDto getById(Long quizId, Long questionId) {
-        return questionMapper.toDtoConvert(
+    public Result getById(Long quizId, Long questionId) {
+        QuestionDto questionDto = questionMapper.toDtoConvert(
                 questionRepository.findByIdAndQuizId(questionId, quizId)
                         .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " or question with id " + questionId + " not found"))
         );
+        return Result.success(questionDto);
     }
 
     @Override
-    public void delete(Long quizId, Long questionId, User user) {
+    public Result delete(Long quizId, Long questionId, User user) {
         questionRepository.delete(getQuestion(quizId, questionId, user));
+        return Result.success();
     }
 
     private Question getQuestion(Long quizId, Long questionId, User user) {
