@@ -1,16 +1,13 @@
 package com.university.itis.mapper;
 
 import com.university.itis.dto.QuestionDto;
-import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Question;
-import com.university.itis.model.Quiz;
 import com.university.itis.repository.QuizRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,7 +1,6 @@
 package com.university.itis.controller;
 
 import com.university.itis.dto.QuestionDto;
-import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
 import com.university.itis.services.QuestionService;
 import com.university.itis.utils.ErrorEntity;
