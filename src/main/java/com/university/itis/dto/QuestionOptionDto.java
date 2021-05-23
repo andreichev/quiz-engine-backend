@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class QuestionOptionDto {
+    private Long id;
     private String text;
     private Boolean isCorrect;
 }

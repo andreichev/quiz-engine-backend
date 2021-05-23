@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class Validator extends ResponseCreator {
     public static final int MIN_PASSWORD_LENGTH = 4;
-    public static final int MIN_TEXT_LENGTH = 4;
+    public static final int MIN_TEXT_LENGTH = 1;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
     private final Pattern phonePattern = Pattern.compile("^[78]9\\d{9}$");
 

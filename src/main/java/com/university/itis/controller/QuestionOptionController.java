@@ -60,7 +60,7 @@ public class QuestionOptionController extends ResponseCreator {
         return createGoodResponse(questionOptionService.getById(questionId, questionOptionId));
     }
 
-    @DeleteMapping(value = "/{questionId}")
+    @DeleteMapping(value = "/{questionOptionId}")
     ResponseEntity deleteQuestionOption(ServletRequest request, @PathVariable Long questionId, @PathVariable Long questionOptionId) {
         User user = (User) request.getAttribute("user");
         questionOptionService.delete(questionId, questionOptionId, user);

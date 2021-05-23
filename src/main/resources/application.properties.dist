@@ -3,7 +3,7 @@ spring.application.name=QuizEngine
 debug=false
 host=http://localhost:8080/
 jwt.secret=123123
-storage.images=/Users/andreichev/Documents/uploads/images/
+storage.images=/Absolute/Path/To/Uploads/Images/
 
 sms.url=http://gate.smsaero.ru/testsend/
 sms.email=

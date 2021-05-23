@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface QuestionOptionRepository extends JpaRepository<QuestionOption, Long> {
     Optional<QuestionOption> findByIsCorrectAndQuestionId(boolean isCorrect, Long questionId);
     List<QuestionOption> findAllByQuestionId(Long questionId);
+    Optional<QuestionOption> findByIdAndQuestionId(Long id, Long questionId);
 }

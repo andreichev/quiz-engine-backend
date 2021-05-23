@@ -23,6 +23,7 @@ public class QuestionOptionMapper {
 
     public QuestionOptionDto toDtoConvert(QuestionOption questionOption) {
         return QuestionOptionDto.builder()
+                .id(questionOption.getId())
                 .text(questionOption.getText())
                 .isCorrect(questionOption.getIsCorrect())
                 .build();
