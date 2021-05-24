@@ -45,6 +45,9 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuizPassing> participants;
 
+    @Column(name = "secret")
+    private String secret;
+
     @Override
     public int compareTo(Quiz o) {
         final int BEFORE = -1;

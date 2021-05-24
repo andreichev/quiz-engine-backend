@@ -16,17 +16,14 @@ import java.util.Set;
 @AllArgsConstructor
 public class User extends AbstractEntity {
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "fullname")
+    private String fullName;
 
     @Column(name = "email")
     private String email;
 
     @Column(name = "email_confirmed")
     private Boolean isEmailConfirmed;
-
-    @Column(name = "phone")
-    private String phone;
 
     @Column(name = "registration_date")
     private Date registrationDate;

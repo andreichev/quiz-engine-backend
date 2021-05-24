@@ -12,8 +12,8 @@ import java.util.Set;
 @Builder
 public class UserDto {
     private Long id;
+    private String fullName;
     private String email;
     private Set<Role> roles;
-    private String phone;
     private Boolean isActive;
 }

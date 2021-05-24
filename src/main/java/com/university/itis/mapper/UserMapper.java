@@ -16,15 +16,14 @@ public class UserMapper {
         if ( user == null ) {
             return null;
         }
-
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
+        userDto.setId( user.getId() );
+        userDto.setFullName( user.getFullName() );
         userDto.setEmail( user.getEmail() );
         Set<Role> set = user.getRoles();
         if ( set != null ) {
             userDto.setRoles(new HashSet<>(set) );
         }
-        userDto.setPhone( user.getPhone() );
         userDto.setIsActive( user.isActive() );
         return userDto;
     }

@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -40,6 +41,7 @@ public class QuizServiceImpl implements QuizService {
         }
         Quiz quizToSave = quizMapper.toQuiz(form);
         quizToSave.setAuthor(user);
+        quizToSave.setSecret(UUID.randomUUID().toString());
         Quiz savedQuiz = quizRepository.save(quizToSave);
         return Result.success(quizMapper.toFullDtoConvert(savedQuiz));
     }

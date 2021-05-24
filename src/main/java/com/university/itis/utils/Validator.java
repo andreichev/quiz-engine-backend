@@ -19,7 +19,7 @@ public class Validator {
     public static final int MIN_PASSWORD_LENGTH = 4;
     public static final int MIN_TEXT_LENGTH = 1;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
-    private final Pattern phonePattern = Pattern.compile("^[78]9\\d{9}$");
+    private final Pattern fullNamePattern = Pattern.compile("^[a-zA-Z ,.'-]+$");
 
     private final UserRepository userRepository;
 
@@ -36,16 +36,11 @@ public class Validator {
     }
 
     public Optional<ErrorEntity> getUserRegisterFormError(RegisterForm form) {
+        if (form.getFullName() == null || fullNamePattern.matcher(form.getFullName()).matches() == false) {
+            return Optional.of(ErrorEntity.INVALID_FULL_NAME);
+        }
         if (form.getEmail() == null || emailPattern.matcher(form.getEmail()).matches() == false) {
             return Optional.of(ErrorEntity.INVALID_EMAIL);
-        }
-        if (form.getPhone() != null) {
-            if (phonePattern.matcher(form.getPhone()).matches() == false) {
-                return Optional.of(ErrorEntity.INVALID_PHONE);
-            }
-            if (userRepository.findByPhone(form.getPhone()).isPresent()) {
-                return Optional.of(ErrorEntity.PHONE_ALREADY_TAKEN);
-            }
         }
         if (form.getPassword() == null || form.getPassword().length() < MIN_PASSWORD_LENGTH) {
             return Optional.of(ErrorEntity.PASSWORD_TOO_SHORT);

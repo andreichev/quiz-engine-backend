@@ -1,14 +1,10 @@
 package com.university.itis.config.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.User;
 import com.university.itis.services.SecurityService;
-import com.university.itis.utils.ErrorEntity;
-import com.university.itis.utils.Result;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -36,6 +31,10 @@ public class JwtFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        if(servletRequest.getAttribute("user") != null) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         try {
             User user = securityService.getByAuthToken(token);

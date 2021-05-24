@@ -68,9 +68,9 @@ public class SecurityServiceImpl implements SecurityService {
             return Result.error(formErrorOrNull.get());
         }
         User user = User.builder()
+                .fullName(form.getFullName())
                 .email(form.getEmail())
                 .password(form.getPassword())
-                .phone(form.getPhone())
                 .roles(Collections.singleton(Role.ROLE_USER))
                 .isActive(true)
                 .isEmailConfirmed(false)

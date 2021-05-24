@@ -1,12 +1,12 @@
 package com.university.itis.config;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
 import com.university.itis.utils.UriStorage;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -18,13 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
+@AllArgsConstructor
 public class SparqlQueryConfig {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    public SparqlQueryConfig() {
-        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-    }
+    private final ObjectMapper mapper;
 
     @Bean
     SparqlHttpClient configureSparqlHttpClient() {
