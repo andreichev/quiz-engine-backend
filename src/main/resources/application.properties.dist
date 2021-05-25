@@ -33,6 +33,6 @@ spring.freemarker.expose-request-attributes=true
 spring.freemarker.charset=UTF-8
 
 spring.http.converters.preferred-json-mapper=jackson
-spring.jackson.default-property-inclusion=non_null
+# spring.jackson.default-property-inclusion=non_null
 
 spring.datasource.initialization-mode=always

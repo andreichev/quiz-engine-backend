@@ -19,6 +19,10 @@ public class User extends AbstractEntity {
     @Column(name = "fullname")
     private String fullName;
 
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @Column(name = "email")
     private String email;
 

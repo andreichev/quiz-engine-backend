@@ -13,6 +13,8 @@ import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +42,9 @@ public class QuizServiceImpl implements QuizService {
             return Result.error(formErrorOrNull.get());
         }
         Quiz quizToSave = quizMapper.toQuiz(form);
+        quizToSave.setParticipants(Collections.emptyList());
+        quizToSave.setQuestions(Collections.emptyList());
+        quizToSave.setStartDate(new Date());
         quizToSave.setAuthor(user);
         quizToSave.setSecret(UUID.randomUUID().toString());
         Quiz savedQuiz = quizRepository.save(quizToSave);

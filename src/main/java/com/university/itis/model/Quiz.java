@@ -35,13 +35,9 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @Column(name = "active")
     private boolean isActive;
 
-    @SortNatural
-    @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Question> questions;
 
-    @SortNatural
-    @OrderBy
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuizPassing> participants;
 

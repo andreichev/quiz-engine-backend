@@ -28,13 +28,6 @@ public class QuizMapper {
         quiz.setDescription(form.getDescription());
         quiz.setActive(form.getIsActive());
         quiz.setAnyOrder(form.getIsAnyOrder());
-        quiz.setStartDate(quiz.getStartDate() != null ? quiz.getStartDate() : new Date());
-        if (quiz.getParticipants() == null) {
-            quiz.setParticipants(Collections.emptyList());
-        }
-        if (quiz.getQuestions() == null) {
-            quiz.setQuestions(Collections.emptyList());
-        }
         return quiz;
     }
 

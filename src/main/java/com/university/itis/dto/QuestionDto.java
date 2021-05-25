@@ -11,7 +11,6 @@ import java.util.List;
 @Builder
 public class QuestionDto {
     private Long id;
-    private Long quizId;
     private String text;
     private List<QuestionOptionDto> options;
 }

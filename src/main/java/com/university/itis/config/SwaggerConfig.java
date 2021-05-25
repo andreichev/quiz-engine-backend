@@ -17,7 +17,7 @@ public class SwaggerConfig {
     public Docket adminApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.university.itis.controller.admin_api"))
+                .apis(RequestHandlerSelectors.basePackage("com.university.itis.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .pathMapping("/swagger")
