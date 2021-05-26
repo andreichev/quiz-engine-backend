@@ -1,14 +1,17 @@
 package com.university.itis.services;
 
 import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
-import com.university.itis.utils.Result;
+
+import java.util.List;
 
 public interface QuizService {
-    Result getAllActive();
-    Result getAllByAuthor(User user);
-    Result save(EditQuizForm form, User user);
-    Result getById(Long id);
-    Result update(Long id, EditQuizForm form, User user);
-    Result delete(Long id, User user);
+    List<QuizShortDto> getAllActive();
+    List<QuizShortDto> getAllByAuthor(User user);
+    QuizFullDto save(EditQuizForm form, User user);
+    QuizFullDto getById(Long id);
+    QuizFullDto update(Long id, EditQuizForm form, User user);
+    void delete(Long id, User user);
 }

@@ -1,22 +1,22 @@
 package com.university.itis.services.impl;
 
 import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
+import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
+import com.university.itis.exceptions.ValidationException;
 import com.university.itis.mapper.QuizMapper;
 import com.university.itis.model.Quiz;
 import com.university.itis.model.User;
 import com.university.itis.repository.QuizRepository;
 import com.university.itis.services.QuizService;
 import com.university.itis.utils.ErrorEntity;
-import com.university.itis.utils.Result;
 import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -26,20 +26,20 @@ public class QuizServiceImpl implements QuizService {
     private final QuizMapper quizMapper;
 
     @Override
-    public Result getAllActive() {
-        return Result.success(quizMapper.toListDtoConvert(quizRepository.findAllByIsActiveIsTrue()));
+    public List<QuizShortDto> getAllActive() {
+        return quizMapper.toListDtoConvert(quizRepository.findAllByIsActiveIsTrue());
     }
 
     @Override
-    public Result getAllByAuthor(User user) {
-        return Result.success(quizMapper.toListDtoConvert(quizRepository.findAllByAuthor(user)));
+    public List<QuizShortDto> getAllByAuthor(User user) {
+        return quizMapper.toListDtoConvert(quizRepository.findAllByAuthor(user));
     }
 
     @Override
-    public Result save(EditQuizForm form, User user) {
+    public QuizFullDto save(EditQuizForm form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
         if (formErrorOrNull.isPresent()) {
-            return Result.error(formErrorOrNull.get());
+            throw new ValidationException(formErrorOrNull.get());
         }
         Quiz quizToSave = quizMapper.toQuiz(form);
         quizToSave.setParticipants(Collections.emptyList());
@@ -48,37 +48,36 @@ public class QuizServiceImpl implements QuizService {
         quizToSave.setAuthor(user);
         quizToSave.setSecret(UUID.randomUUID().toString());
         Quiz savedQuiz = quizRepository.save(quizToSave);
-        return Result.success(quizMapper.toFullDtoConvert(savedQuiz));
+        return quizMapper.toFullDtoConvert(savedQuiz);
     }
 
     @Override
-    public Result update(Long id, EditQuizForm form, User user) {
+    public QuizFullDto update(Long id, EditQuizForm form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
         if (formErrorOrNull.isPresent()) {
-            return Result.error(formErrorOrNull.get());
+            throw new ValidationException(formErrorOrNull.get());
         }
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
         Quiz quizToSave = quizMapper.toQuiz(form, quiz);
         Quiz savedQuiz = quizRepository.save(quizToSave);
-        return Result.success(quizMapper.toFullDtoConvert(savedQuiz));
+        return quizMapper.toFullDtoConvert(savedQuiz);
     }
 
     @Override
-    public Result getById(Long id) {
+    public QuizFullDto getById(Long id) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
-        return Result.success(quizMapper.toFullDtoConvert(quiz));
+        return quizMapper.toFullDtoConvert(quiz);
     }
 
     @Override
-    public Result delete(Long id, User user) {
+    public void delete(Long id, User user) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
         if (quiz.getAuthor().getId().equals(user.getId()) == false) {
-            return Result.error(ErrorEntity.FORBIDDEN);
+            throw new InvalidTokenException("Доступ запрещен");
         }
         quizRepository.delete(quiz);
-        return Result.success();
     }
 }

@@ -1,56 +1,59 @@
 package com.university.itis.controller;
 
 import com.university.itis.dto.quiz.EditQuizForm;
+import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/quiz")
 @AllArgsConstructor
 public class QuizController {
     private final QuizService quizService;
 
     @GetMapping(value = "/public-quiz-list")
-    ResponseEntity getAllPublic() {
-        return quizService.getAllActive().getResponseEntity();
+    List<QuizShortDto> getAllPublic() {
+        return quizService.getAllActive();
     }
 
     @GetMapping(value = "/own-list")
-    ResponseEntity getAllByAuthor(ServletRequest request) {
+    List<QuizShortDto> getAllByAuthor(ServletRequest request) {
         User user = (User) request.getAttribute("user");
-        return quizService.getAllByAuthor(user).getResponseEntity();
+        return quizService.getAllByAuthor(user);
     }
 
     @PostMapping
-    ResponseEntity saveQuiz(ServletRequest request, @RequestBody EditQuizForm form) {
+    QuizFullDto saveQuiz(ServletRequest request, @RequestBody EditQuizForm form) {
         User user = (User) request.getAttribute("user");
-        return quizService.save(form, user).getResponseEntity();
+        return quizService.save(form, user);
     }
 
     @PutMapping(value = "/{id}")
-    ResponseEntity updateQuiz(
+    QuizFullDto updateQuiz(
             ServletRequest request,
             @RequestBody EditQuizForm form,
             @PathVariable Long id
     ) {
         User user = (User) request.getAttribute("user");
-        return quizService.update(id, form, user).getResponseEntity();
+        return quizService.update(id, form, user);
     }
 
     @GetMapping(value = "/{id}")
-    ResponseEntity getQuiz(@PathVariable Long id) {
-        return quizService.getById(id).getResponseEntity();
+    QuizFullDto getQuiz(@PathVariable Long id) {
+        return quizService.getById(id);
     }
 
     @DeleteMapping(value = "/{id}")
     ResponseEntity deleteQuiz(ServletRequest request, @PathVariable Long id) {
         User user = (User) request.getAttribute("user");
-        return quizService.delete(id, user).getResponseEntity();
+        quizService.delete(id, user);
+        return ResponseEntity.ok().build();
     }
 }

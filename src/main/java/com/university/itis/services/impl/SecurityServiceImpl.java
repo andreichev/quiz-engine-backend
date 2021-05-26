@@ -7,13 +7,13 @@ import com.university.itis.dto.TokenDto;
 import com.university.itis.dto.UserDto;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
+import com.university.itis.exceptions.ValidationException;
 import com.university.itis.mapper.UserMapper;
 import com.university.itis.model.Role;
 import com.university.itis.model.User;
 import com.university.itis.repository.UserRepository;
 import com.university.itis.services.SecurityService;
 import com.university.itis.utils.ErrorEntity;
-import com.university.itis.utils.Result;
 import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,21 +51,21 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public Result login(LoginForm form) {
+    public TokenDto login(LoginForm form) {
         Optional<ErrorEntity> formErrorOrNull = validator.getLoginFormError(form);
         if (formErrorOrNull.isPresent()) {
-            return Result.error(formErrorOrNull.get());
+            throw new ValidationException(formErrorOrNull.get());
         }
         User user = userRepository.findByEmail(form.getEmail())
                 .orElseThrow(() -> new NotFoundException("User with email " + form.getEmail() + " not found"));
-        return Result.success(new TokenDto(jwtHelper.generateToken(user)));
+        return new TokenDto(jwtHelper.generateToken(user));
     }
 
     @Override
-    public Result register(RegisterForm form) {
+    public UserDto register(RegisterForm form) {
         Optional<ErrorEntity> formErrorOrNull = validator.getUserRegisterFormError(form);
         if (formErrorOrNull.isPresent()) {
-            return Result.error(formErrorOrNull.get());
+            throw new ValidationException(formErrorOrNull.get());
         }
         User user = User.builder()
                 .fullName(form.getFullName())
@@ -76,7 +76,6 @@ public class SecurityServiceImpl implements SecurityService {
                 .isEmailConfirmed(false)
                 .build();
         User savedUser = userRepository.save(user);
-        UserDto userDto = userMapper.toViewDto(savedUser);
-        return Result.success(userDto);
+        return userMapper.toViewDto(savedUser);
     }
 }

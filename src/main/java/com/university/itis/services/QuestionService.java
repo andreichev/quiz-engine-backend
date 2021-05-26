@@ -2,12 +2,13 @@ package com.university.itis.services;
 
 import com.university.itis.dto.QuestionDto;
 import com.university.itis.model.User;
-import com.university.itis.utils.Result;
+
+import java.util.List;
 
 public interface QuestionService {
-    Result getAllByQuizId(Long quizId);
-    Result save(Long quizId, QuestionDto form, User user);
-    Result getById(Long quizId, Long questionId);
-    Result update(Long quizId, Long questionId, QuestionDto form, User user);
-    Result delete(Long quizId, Long questionId, User user);
+    List<QuestionDto> getAllByQuizId(Long quizId);
+    QuestionDto save(Long quizId, QuestionDto form, User user);
+    QuestionDto getById(Long quizId, Long questionId);
+    QuestionDto update(Long quizId, Long questionId, QuestionDto form, User user);
+    void delete(Long quizId, Long questionId, User user);
 }

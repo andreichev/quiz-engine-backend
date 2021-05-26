@@ -5,51 +5,52 @@ import com.university.itis.model.User;
 import com.university.itis.services.QuestionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/quiz/{quizId}/question")
 @AllArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    ResponseEntity getAll(@PathVariable Long quizId) {
-        return questionService.getAllByQuizId(quizId).getResponseEntity();
+    List<QuestionDto> getAll(@PathVariable Long quizId) {
+        return questionService.getAllByQuizId(quizId);
     }
 
     @PostMapping
-    ResponseEntity createQuestion(
+    QuestionDto createQuestion(
             ServletRequest request,
             @PathVariable Long quizId,
             @RequestBody QuestionDto questionDto
     ) {
         User user = (User) request.getAttribute("user");
-        return questionService.save(quizId, questionDto, user).getResponseEntity();
+        return questionService.save(quizId, questionDto, user);
     }
 
     @PutMapping(value = "/{questionId}")
-    ResponseEntity updateQuestion(
+    QuestionDto updateQuestion(
             ServletRequest request,
             @RequestBody QuestionDto questionDto,
             @PathVariable Long quizId,
             @PathVariable Long questionId
     ) {
         User user = (User) request.getAttribute("user");
-        return questionService.update(quizId, questionId, questionDto, user).getResponseEntity();
+        return questionService.update(quizId, questionId, questionDto, user);
     }
 
     @GetMapping(value = "/{questionId}")
-    ResponseEntity getQuestionById(@PathVariable Long quizId, @PathVariable Long questionId) {
-        return questionService.getById(quizId, questionId).getResponseEntity();
+    QuestionDto getQuestionById(@PathVariable Long quizId, @PathVariable Long questionId) {
+        return questionService.getById(quizId, questionId);
     }
 
     @DeleteMapping(value = "/{questionId}")
     ResponseEntity deleteQuestion(ServletRequest request, @PathVariable Long quizId, @PathVariable Long questionId) {
         User user = (User) request.getAttribute("user");
-        return questionService.delete(quizId, questionId, user).getResponseEntity();
+        questionService.delete(quizId, questionId, user);
+        return ResponseEntity.ok().build();
     }
 }
