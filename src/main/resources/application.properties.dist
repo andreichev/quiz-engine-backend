@@ -1,6 +1,5 @@
 spring.application.name=QuizEngine
 
-debug=false
 host=http://localhost:8080/
 jwt.secret=123123
 storage.images=/Absolute/Path/To/Uploads/Images/
