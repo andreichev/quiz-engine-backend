@@ -2,7 +2,7 @@ package com.university.itis.services.impl;
 
 import com.university.itis.exceptions.FileSavingException;
 import com.university.itis.exceptions.NotFoundException;
-import com.university.itis.services.ImageService;
+import com.university.itis.services.ImageFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class ImageServiceImpl implements ImageService {
+public class ImageFileServiceImpl implements ImageFileService {
 
     @Value("${storage.images}")
     private String path;
@@ -55,11 +55,11 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public void delete(String imgName) throws IOException {
+    public void delete(String imgName) {
         String directoryPath = getStoragePath() + "/" + imgName;
         File file = new File(directoryPath);
         if (file.delete() == false) {
-            throw new IOException("can't delete");
+            throw new FileSavingException("can't delete");
         }
     }
 

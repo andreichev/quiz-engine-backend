@@ -37,8 +37,10 @@ public enum ErrorEntity {
     IS_ANY_ORDER_REQUIRED(453, "isAnyOrder - Обязательное поле"),
 
     // Question option
-    IS_CORRECT_REQUIRED(451, "isCorrect - Обязательное поле")
+    IS_CORRECT_REQUIRED(451, "isCorrect - Обязательное поле"),
 
+    // Выгрузка картинки
+    ONLY_IMAGES_AVAILABLE_TO_UPLOAD(460, "Выгружать можно только картинки"),
     ;
 
     int status;

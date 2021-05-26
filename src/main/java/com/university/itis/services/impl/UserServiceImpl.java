@@ -1,18 +1,19 @@
 package com.university.itis.services.impl;
 
 import com.university.itis.config.filter.JwtHelper;
-import com.university.itis.dto.LoginForm;
-import com.university.itis.dto.RegisterForm;
-import com.university.itis.dto.TokenDto;
-import com.university.itis.dto.UserDto;
+import com.university.itis.dto.*;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;
+import com.university.itis.mapper.ImageMapper;
 import com.university.itis.mapper.UserMapper;
+import com.university.itis.model.Image;
 import com.university.itis.model.Role;
 import com.university.itis.model.User;
+import com.university.itis.repository.ImageRepository;
 import com.university.itis.repository.UserRepository;
-import com.university.itis.services.SecurityService;
+import com.university.itis.services.ImageFileService;
+import com.university.itis.services.UserService;
 import com.university.itis.utils.ErrorEntity;
 import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
@@ -25,11 +26,14 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class SecurityServiceImpl implements SecurityService {
+public class UserServiceImpl implements UserService {
     private final Validator validator;
     private final JwtHelper jwtHelper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ImageRepository imageRepository;
+    private final ImageFileService imageFileService;
+    private final ImageMapper imageMapper;
 
     @Override
     public User getByAuthToken(String token) {
@@ -77,5 +81,30 @@ public class SecurityServiceImpl implements SecurityService {
                 .build();
         User savedUser = userRepository.save(user);
         return userMapper.toViewDto(savedUser);
+    }
+
+    @Override
+    public ImageDto updateAvatar(User user, UploadImageDto uploadImageDto) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getImageFormDataError(uploadImageDto);
+        if (formErrorOrNull.isPresent()) {
+            throw new ValidationException(formErrorOrNull.get());
+        }
+        String imageName = imageFileService.save(uploadImageDto.getImage());
+        Image image = imageRepository.save(new Image(imageName));
+        user.setImage(image);
+        userRepository.save(user);
+        return imageMapper.toDtoConvert(image);
+    }
+
+    @Override
+    public void deleteAvatar(User user) {
+        Image image = user.getImage();
+        if (image == null) {
+            throw new NotFoundException("Image not found");
+        }
+        user.setImage(null);
+        userRepository.save(user);
+        imageRepository.delete(image);
+        imageFileService.delete(image.getName());
     }
 }

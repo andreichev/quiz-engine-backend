@@ -3,7 +3,7 @@ package com.university.itis.config.filter;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.User;
-import com.university.itis.services.SecurityService;
+import com.university.itis.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +27,7 @@ import static org.springframework.util.StringUtils.hasText;
 @AllArgsConstructor
 public class JwtFilter extends GenericFilterBean {
     private static final String AUTHORIZATION = "Authorization";
-    private final SecurityService securityService;
+    private final UserService userService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -37,7 +37,7 @@ public class JwtFilter extends GenericFilterBean {
         }
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         try {
-            User user = securityService.getByAuthToken(token);
+            User user = userService.getByAuthToken(token);
             servletRequest.setAttribute("user", user);
             Collection<? extends GrantedAuthority> authorities = getAuthorities(user);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, authorities);

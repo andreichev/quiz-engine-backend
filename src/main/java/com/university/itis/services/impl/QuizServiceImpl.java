@@ -59,6 +59,9 @@ public class QuizServiceImpl implements QuizService {
         }
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
+        if (quiz.getAuthor().getId().equals(user.getId()) == false) {
+            throw new InvalidTokenException("Доступ запрещен");
+        }
         Quiz quizToSave = quizMapper.toQuiz(form, quiz);
         Quiz savedQuiz = quizRepository.save(quizToSave);
         return quizMapper.toFullDtoConvert(savedQuiz);

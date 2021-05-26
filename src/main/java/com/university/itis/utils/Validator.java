@@ -1,15 +1,14 @@
 package com.university.itis.utils;
 
-import com.university.itis.dto.LoginForm;
-import com.university.itis.dto.QuestionDto;
-import com.university.itis.dto.QuestionOptionDto;
-import com.university.itis.dto.RegisterForm;
+import com.university.itis.dto.*;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
 import com.university.itis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -86,6 +85,17 @@ public class Validator {
         }
         if (form.getIsCorrect() == null) {
             return Optional.of(ErrorEntity.IS_CORRECT_REQUIRED);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ErrorEntity> getImageFormDataError(UploadImageDto uploadImageDto) {
+        if (uploadImageDto.getImage() == null) {
+            return Optional.of(ErrorEntity.INVALID_REQUEST);
+        }
+        if (Objects.equals(uploadImageDto.getImage().getContentType(), MediaType.IMAGE_JPEG_VALUE) == false
+                && Objects.equals(uploadImageDto.getImage().getContentType(), MediaType.IMAGE_PNG_VALUE) == false) {
+            return Optional.of(ErrorEntity.ONLY_IMAGES_AVAILABLE_TO_UPLOAD);
         }
         return Optional.empty();
     }
