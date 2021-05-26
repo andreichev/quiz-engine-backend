@@ -9,48 +9,49 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/question/{questionId}/option")
 @AllArgsConstructor
 public class QuestionOptionController {
     private final QuestionOptionService questionOptionService;
 
     @GetMapping
-    ResponseEntity getAllByQuestionId(@PathVariable Long questionId) {
-        return questionOptionService.getAllByQuestionId(questionId).getResponseEntity();
+    List<QuestionOptionDto> getAllByQuestionId(@PathVariable Long questionId) {
+        return questionOptionService.getAllByQuestionId(questionId);
     }
 
     @PostMapping
-    ResponseEntity createQuestionOption(
+    QuestionOptionDto createQuestionOption(
             ServletRequest request,
             @PathVariable Long questionId,
             @RequestBody QuestionOptionDto questionOptionDto
     ) {
         User user = (User) request.getAttribute("user");
-        return questionOptionService.save(questionId, questionOptionDto, user).getResponseEntity();
+        return questionOptionService.save(questionId, questionOptionDto, user);
     }
 
     @PutMapping(value = "/{questionOptionId}")
-    ResponseEntity updateQuestionOption(
+    QuestionOptionDto updateQuestionOption(
             ServletRequest request,
             @RequestBody QuestionOptionDto questionDto,
             @PathVariable Long questionId,
             @PathVariable Long questionOptionId
     ) {
         User user = (User) request.getAttribute("user");
-        return questionOptionService.update(questionId, questionOptionId, questionDto, user)
-                .getResponseEntity();
+        return questionOptionService.update(questionId, questionOptionId, questionDto, user);
     }
 
     @GetMapping(value = "/{questionOptionId}")
-    ResponseEntity getQuestionOptionById(@PathVariable Long questionId, @PathVariable Long questionOptionId) {
-        return questionOptionService.getById(questionId, questionOptionId).getResponseEntity();
+    QuestionOptionDto getQuestionOptionById(@PathVariable Long questionId, @PathVariable Long questionOptionId) {
+        return questionOptionService.getById(questionId, questionOptionId);
     }
 
     @DeleteMapping(value = "/{questionOptionId}")
     ResponseEntity deleteQuestionOption(ServletRequest request, @PathVariable Long questionId, @PathVariable Long questionOptionId) {
         User user = (User) request.getAttribute("user");
-        return questionOptionService.delete(questionId, questionOptionId, user).getResponseEntity();
+        questionOptionService.delete(questionId, questionOptionId, user);
+        return ResponseEntity.ok().build();
     }
 }
