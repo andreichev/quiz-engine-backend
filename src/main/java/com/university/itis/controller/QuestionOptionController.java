@@ -5,7 +5,6 @@ import com.university.itis.model.User;
 import com.university.itis.services.QuestionOptionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;

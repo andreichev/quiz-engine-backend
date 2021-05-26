@@ -8,8 +8,6 @@ import com.university.itis.model.QuizPassing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,7 @@ public class QuizMapper {
     public Quiz toQuiz(EditQuizForm form, Quiz quiz) {
         quiz.setTitle(form.getTitle());
         quiz.setDescription(form.getDescription());
-        quiz.setActive(form.getIsActive());
+        quiz.setPublic(form.getIsPublic());
         quiz.setAnyOrder(form.getIsAnyOrder());
         return quiz;
     }
@@ -47,7 +45,7 @@ public class QuizMapper {
                 .description(quiz.getDescription())
                 .startDate(quiz.getStartDate())
                 .isAnyOrder(quiz.isAnyOrder())
-                .isActive(quiz.isActive())
+                .isPublic(quiz.isPublic())
                 .participants(userMapper.toListDtoConvert(
                         quiz.getParticipants().stream()
                                 .map(QuizPassing::getUser)

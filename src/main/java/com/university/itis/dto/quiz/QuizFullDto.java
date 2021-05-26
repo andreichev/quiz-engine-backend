@@ -19,7 +19,7 @@ public class QuizFullDto {
     private String description;
     private Date startDate;
     private Boolean isAnyOrder;
-    private Boolean isActive;
+    private Boolean isPublic;
     private List<QuestionDto> questions;
     private List<UserDto> participants;
 }

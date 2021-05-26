@@ -26,8 +26,8 @@ public class QuizServiceImpl implements QuizService {
     private final QuizMapper quizMapper;
 
     @Override
-    public List<QuizShortDto> getAllActive() {
-        return quizMapper.toListDtoConvert(quizRepository.findAllByIsActiveIsTrue());
+    public List<QuizShortDto> getAllPublic() {
+        return quizMapper.toListDtoConvert(quizRepository.findAllByIsPublicIsTrue());
     }
 
     @Override
@@ -65,9 +65,19 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public QuizFullDto getById(Long id) {
+    public QuizFullDto getById(Long id, User user) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
+        if(quiz.isPublic() == false && quiz.getAuthor().getId().equals(user.getId()) == false) {
+            throw new InvalidTokenException("Доступ запрещен.");
+        }
+        return quizMapper.toFullDtoConvert(quiz);
+    }
+
+    @Override
+    public QuizFullDto getBySecret(String secret) {
+        Quiz quiz = quizRepository.findBySecret(secret)
+                .orElseThrow(() -> new NotFoundException("Quiz with secret " + secret + " not found"));
         return quizMapper.toFullDtoConvert(quiz);
     }
 

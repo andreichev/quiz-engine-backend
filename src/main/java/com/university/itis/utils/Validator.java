@@ -58,6 +58,12 @@ public class Validator {
         if (form.getDescription() == null) {
             return Optional.of(ErrorEntity.DESCRIPTION_REQUIRED);
         }
+        if(form.getIsPublic() == null) {
+            return Optional.of(ErrorEntity.IS_PUBLIC_REQUIRED);
+        }
+        if(form.getIsAnyOrder() == null) {
+            return Optional.of(ErrorEntity.IS_ANY_ORDER_REQUIRED);
+        }
         return Optional.empty();
     }
 

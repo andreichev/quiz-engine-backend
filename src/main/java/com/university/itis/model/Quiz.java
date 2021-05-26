@@ -2,7 +2,6 @@ package com.university.itis.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SortNatural;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -32,8 +31,8 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
     @Column(name = "is_any_order")
     private boolean isAnyOrder;
 
-    @Column(name = "active")
-    private boolean isActive;
+    @Column(name = "is_public")
+    private boolean isPublic;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Question> questions;

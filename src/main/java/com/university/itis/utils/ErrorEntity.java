@@ -33,6 +33,8 @@ public enum ErrorEntity {
     // Quiz
     TITLE_REQUIRED(450, "title - Обязательное поле"),
     DESCRIPTION_REQUIRED(451, "description - Обязательное поле"),
+    IS_PUBLIC_REQUIRED(452, "isPublic - Обязательное поле"),
+    IS_ANY_ORDER_REQUIRED(453, "isAnyOrder - Обязательное поле"),
 
     // Question option
     IS_CORRECT_REQUIRED(451, "isCorrect - Обязательное поле")

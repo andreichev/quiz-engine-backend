@@ -20,7 +20,7 @@ public class QuizController {
 
     @GetMapping(value = "/public-quiz-list")
     List<QuizShortDto> getAllPublic() {
-        return quizService.getAllActive();
+        return quizService.getAllPublic();
     }
 
     @GetMapping(value = "/own-list")
@@ -46,8 +46,14 @@ public class QuizController {
     }
 
     @GetMapping(value = "/{id}")
-    QuizFullDto getQuiz(@PathVariable Long id) {
-        return quizService.getById(id);
+    QuizFullDto getQuizById(ServletRequest request, @PathVariable Long id) {
+        User user = (User) request.getAttribute("user");
+        return quizService.getById(id, user);
+    }
+
+    @GetMapping(value = "/secret/{secret}")
+    QuizFullDto getQuizBySecret(@PathVariable String secret) {
+        return quizService.getBySecret(secret);
     }
 
     @DeleteMapping(value = "/{id}")

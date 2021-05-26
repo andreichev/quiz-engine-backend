@@ -12,5 +12,5 @@ public class EditQuizForm {
     private String title;
     private String description;
     private Boolean isAnyOrder;
-    private Boolean isActive;
+    private Boolean isPublic;
 }
