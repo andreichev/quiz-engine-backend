@@ -3,7 +3,6 @@ package com.university.itis.controller;
 import com.university.itis.dto.LoginForm;
 import com.university.itis.dto.RegisterForm;
 import com.university.itis.dto.TokenDto;
-import com.university.itis.dto.UserDto;
 import com.university.itis.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ class AuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public UserDto registerUser(@RequestBody RegisterForm registerForm) {
+    public TokenDto registerUser(@RequestBody RegisterForm registerForm) {
         return userService.register(registerForm);
     }
 

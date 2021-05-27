@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto register(RegisterForm form) {
+    public TokenDto register(RegisterForm form) {
         Optional<ErrorEntity> formErrorOrNull = validator.getUserRegisterFormError(form);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 .isEmailConfirmed(false)
                 .build();
         User savedUser = userRepository.save(user);
-        return userMapper.toViewDto(savedUser);
+        return new TokenDto(jwtHelper.generateToken(savedUser));
     }
 
     @Override
