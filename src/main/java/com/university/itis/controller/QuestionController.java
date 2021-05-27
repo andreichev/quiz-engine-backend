@@ -17,14 +17,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    List<QuestionDto> getAll(@PathVariable Long quizId) {
+    List<QuestionDto> getAll(@PathVariable String quizId) {
         return questionService.getAllByQuizId(quizId);
     }
 
     @PostMapping
     QuestionDto createQuestion(
             ServletRequest request,
-            @PathVariable Long quizId,
+            @PathVariable String quizId,
             @RequestBody QuestionDto questionDto
     ) {
         User user = (User) request.getAttribute("user");
@@ -35,7 +35,7 @@ public class QuestionController {
     QuestionDto updateQuestion(
             ServletRequest request,
             @RequestBody QuestionDto questionDto,
-            @PathVariable Long quizId,
+            @PathVariable String quizId,
             @PathVariable Long questionId
     ) {
         User user = (User) request.getAttribute("user");
@@ -43,12 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping(value = "/{questionId}")
-    QuestionDto getQuestionById(@PathVariable Long quizId, @PathVariable Long questionId) {
+    QuestionDto getQuestionById(@PathVariable String quizId, @PathVariable Long questionId) {
         return questionService.getById(quizId, questionId);
     }
 
     @DeleteMapping(value = "/{questionId}")
-    ResponseEntity deleteQuestion(ServletRequest request, @PathVariable Long quizId, @PathVariable Long questionId) {
+    ResponseEntity deleteQuestion(ServletRequest request, @PathVariable String quizId, @PathVariable Long questionId) {
         User user = (User) request.getAttribute("user");
         questionService.delete(quizId, questionId, user);
         return ResponseEntity.ok().build();

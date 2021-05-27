@@ -12,7 +12,10 @@ import java.util.List;
 @Table(name = "quiz")
 @Getter
 @Setter
-public class Quiz extends AbstractEntity implements Comparable<Quiz> {
+public class Quiz implements Comparable<Quiz> {
+
+    @Id
+    private String id;
 
     @Column
     private String title;
@@ -39,9 +42,6 @@ public class Quiz extends AbstractEntity implements Comparable<Quiz> {
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuizPassing> participants;
-
-    @Column(name = "secret")
-    private String secret;
 
     @Override
     public int compareTo(Quiz o) {

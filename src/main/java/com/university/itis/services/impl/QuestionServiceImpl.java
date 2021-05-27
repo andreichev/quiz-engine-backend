@@ -28,12 +28,12 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuizRepository quizRepository;
 
     @Override
-    public List<QuestionDto> getAllByQuizId(Long quizId) {
+    public List<QuestionDto> getAllByQuizId(String quizId) {
         return questionMapper.toListDtoConvert(questionRepository.findAllByQuizId(quizId));
     }
 
     @Override
-    public QuestionDto save(Long quizId, QuestionDto form, User user) {
+    public QuestionDto save(String quizId, QuestionDto form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionFormError(form);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
@@ -50,7 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto update(Long quizId, Long questionId, QuestionDto form, User user) {
+    public QuestionDto update(String quizId, Long questionId, QuestionDto form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuestionFormError(form);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
@@ -62,7 +62,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto getById(Long quizId, Long questionId) {
+    public QuestionDto getById(String quizId, Long questionId) {
         return questionMapper.toDtoConvert(
                 questionRepository.findByIdAndQuizId(questionId, quizId)
                         .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " or question with id " + questionId + " not found"))
@@ -70,11 +70,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void delete(Long quizId, Long questionId, User user) {
+    public void delete(String quizId, Long questionId, User user) {
         questionRepository.delete(getQuestion(quizId, questionId, user));
     }
 
-    private Question getQuestion(Long quizId, Long questionId, User user) {
+    private Question getQuestion(String quizId, Long questionId, User user) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException("Question with id " + questionId + " not found"));
         Quiz quiz = quizRepository.findById(quizId)

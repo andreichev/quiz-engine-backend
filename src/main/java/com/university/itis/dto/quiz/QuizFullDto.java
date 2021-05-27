@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class QuizFullDto {
-    private Long id;
+    private String id;
     private String title;
     private UserDto author;
     private String description;

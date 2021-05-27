@@ -39,25 +39,19 @@ public class QuizController {
     QuizFullDto updateQuiz(
             ServletRequest request,
             @RequestBody EditQuizForm form,
-            @PathVariable Long id
+            @PathVariable String id
     ) {
         User user = (User) request.getAttribute("user");
         return quizService.update(id, form, user);
     }
 
     @GetMapping(value = "/{id}")
-    QuizFullDto getQuizById(ServletRequest request, @PathVariable Long id) {
-        User user = (User) request.getAttribute("user");
-        return quizService.getById(id, user);
-    }
-
-    @GetMapping(value = "/secret/{secret}")
-    QuizFullDto getQuizBySecret(@PathVariable String secret) {
-        return quizService.getBySecret(secret);
+    QuizFullDto getQuizById(@PathVariable String id) {
+        return quizService.getById(id);
     }
 
     @DeleteMapping(value = "/{id}")
-    ResponseEntity deleteQuiz(ServletRequest request, @PathVariable Long id) {
+    ResponseEntity deleteQuiz(ServletRequest request, @PathVariable String id) {
         User user = (User) request.getAttribute("user");
         quizService.delete(id, user);
         return ResponseEntity.ok().build();

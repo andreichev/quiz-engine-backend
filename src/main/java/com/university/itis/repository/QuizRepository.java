@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QuizRepository extends JpaRepository<Quiz, Long> {
-    Optional<Quiz> findBySecret(String secret);
+public interface QuizRepository extends JpaRepository<Quiz, String> {
     List<Quiz> findAllByIsPublicIsTrue();
     List<Quiz> findAllByAuthor(User author);
 }

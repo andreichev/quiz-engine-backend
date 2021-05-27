@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class QuizShortDto {
-    private Long id;
+    private String id;
     private String title;
     private String description;
 }

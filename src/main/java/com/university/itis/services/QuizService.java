@@ -11,8 +11,7 @@ public interface QuizService {
     List<QuizShortDto> getAllPublic();
     List<QuizShortDto> getAllByAuthor(User user);
     QuizFullDto save(EditQuizForm form, User user);
-    QuizFullDto getById(Long id, User user);
-    QuizFullDto getBySecret(String secret);
-    QuizFullDto update(Long id, EditQuizForm form, User user);
-    void delete(Long id, User user);
+    QuizFullDto getById(String id);
+    QuizFullDto update(String id, EditQuizForm form, User user);
+    void delete(String id, User user);
 }
