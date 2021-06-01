@@ -22,10 +22,11 @@ public class QuestionMapper {
 
     public Question toQuestion(QuestionDto questionDto, Question question) {
         question.setText(questionDto.getText());
-        if (question.getAnswers() == null) {
-            question.setAnswers(Collections.emptyList());
+        if (questionDto.getOptions() != null) {
+            question.setOptions(questionOptionMapper.toListConvert(questionDto.getOptions()));
+            question.getOptions().forEach(questionOption -> questionOption.setQuestion(question));
         }
-        if(question.getOptions() == null) {
+        if (question.getOptions() == null) {
             question.setOptions(Collections.emptyList());
         }
         return question;

@@ -1,4 +1,4 @@
-package com.university.itis.dto;
+package com.university.itis.dto.authorization;
 
 import lombok.Getter;
 import lombok.Setter;

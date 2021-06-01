@@ -6,7 +6,6 @@ import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
@@ -51,9 +50,8 @@ public class QuizController {
     }
 
     @DeleteMapping(value = "/{id}")
-    ResponseEntity deleteQuiz(ServletRequest request, @PathVariable String id) {
+    void deleteQuiz(ServletRequest request, @PathVariable String id) {
         User user = (User) request.getAttribute("user");
         quizService.delete(id, user);
-        return ResponseEntity.ok().build();
     }
 }

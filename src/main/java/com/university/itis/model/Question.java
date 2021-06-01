@@ -2,7 +2,6 @@ package com.university.itis.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,12 +19,10 @@ public class Question extends AbstractEntity implements Comparable<Question> {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuestionAnswer> answers;
 
-    @SortNatural
-    @OrderBy
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuestionOption> options;
 
     @Override

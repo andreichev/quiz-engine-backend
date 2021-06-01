@@ -46,7 +46,6 @@ public class QuizServiceImpl implements QuizService {
         quizToSave.setStartDate(new Date());
         quizToSave.setId(UUID.randomUUID().toString());
         quizToSave.setParticipants(Collections.emptyList());
-        quizToSave.setQuestions(Collections.emptyList());
         Quiz savedQuiz = quizRepository.save(quizToSave);
         return quizMapper.toFullDtoConvert(savedQuiz);
     }

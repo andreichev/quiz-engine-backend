@@ -1,6 +1,9 @@
 package com.university.itis.utils;
 
 import com.university.itis.dto.*;
+import com.university.itis.dto.authorization.LoginForm;
+import com.university.itis.dto.authorization.RegisterForm;
+import com.university.itis.dto.QuestionDto;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.model.User;
 import com.university.itis.repository.UserRepository;
