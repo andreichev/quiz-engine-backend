@@ -1,12 +1,15 @@
 package com.university.itis.mapper;
 
 import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.QuestionOptionDto;
+import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Question;
+import com.university.itis.model.QuestionOption;
 import com.university.itis.repository.QuizRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,12 +25,23 @@ public class QuestionMapper {
 
     public Question toQuestion(QuestionDto questionDto, Question question) {
         question.setText(questionDto.getText());
-        if (questionDto.getOptions() != null) {
-            question.setOptions(questionOptionMapper.toListConvert(questionDto.getOptions()));
-            question.getOptions().forEach(questionOption -> questionOption.setQuestion(question));
-        }
         if (question.getOptions() == null) {
-            question.setOptions(Collections.emptyList());
+            question.setOptions(new ArrayList<>());
+        }
+        if (questionDto.getOptions() != null) {
+            for (QuestionOptionDto optionDto : questionDto.getOptions()) {
+                if (optionDto.getId() != null) {
+                    QuestionOption option = question.getOptions().stream()
+                            .filter(item -> item.getId().equals(optionDto.getId()))
+                            .findAny()
+                            .orElseThrow(() -> new NotFoundException("QuestionOption with id " + optionDto.getId() + " not found"));
+                    questionOptionMapper.toQuestionOption(optionDto, option);
+                } else {
+                    QuestionOption option = questionOptionMapper.toQuestionOption(optionDto);
+                    option.setQuestion(question);
+                    question.getOptions().add(option);
+                }
+            }
         }
         return question;
     }

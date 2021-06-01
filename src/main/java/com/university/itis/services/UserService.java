@@ -1,6 +1,8 @@
 package com.university.itis.services;
 
-import com.university.itis.dto.*;
+import com.university.itis.dto.ImageDto;
+import com.university.itis.dto.TokenDto;
+import com.university.itis.dto.UploadImageDto;
 import com.university.itis.dto.authorization.LoginForm;
 import com.university.itis.dto.authorization.RegisterForm;
 import com.university.itis.model.User;

@@ -1,8 +1,8 @@
 package com.university.itis.controller;
 
+import com.university.itis.dto.TokenDto;
 import com.university.itis.dto.authorization.LoginForm;
 import com.university.itis.dto.authorization.RegisterForm;
-import com.university.itis.dto.TokenDto;
 import com.university.itis.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
