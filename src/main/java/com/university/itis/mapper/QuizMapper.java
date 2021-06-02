@@ -11,7 +11,6 @@ import com.university.itis.model.QuizPassing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,10 +29,9 @@ public class QuizMapper {
         quiz.setDescription(form.getDescription());
         quiz.setPublic(form.getIsPublic());
         quiz.setAnyOrder(form.getIsAnyOrder());
-        if (quiz.getQuestions() == null) {
-            quiz.setQuestions(new ArrayList<>());
-        }
         if (form.getQuestions() != null) {
+            quiz.getQuestions().removeIf(question -> form.getQuestions().stream()
+                    .anyMatch(item -> item.getId().equals(question.getId())) == false);
             for (QuestionDto questionDto : form.getQuestions()) {
                 if (questionDto.getId() != null) {
                     Question question = quiz.getQuestions().stream()

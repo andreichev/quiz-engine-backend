@@ -23,9 +23,3 @@ INSERT INTO public.question_option (id, correct, text, question_id) VALUES (12, 
 INSERT INTO public.question_option (id, correct, text, question_id) VALUES (13, true, 'Пушкин, Александр Сергеевич', 5);
 INSERT INTO public.question_option (id, correct, text, question_id) VALUES (14, false, 'Лермонтов', 5);
 INSERT INTO public.question_option (id, correct, text, question_id) VALUES (15, false, 'Ломоносов', 5);
-
-INSERT INTO public.quiz_participant (id, name, quiz_id) VALUES (1, 'Михаил', 1);
-
-INSERT INTO public.question_answer (id, participant_id, question_id, option_id) VALUES (4, 1, 1, 1);
-INSERT INTO public.question_answer (id, participant_id, question_id, option_id) VALUES (5, 1, 2, 6);
-INSERT INTO public.question_answer (id, participant_id, question_id, option_id) VALUES (6, 1, 3, 8);

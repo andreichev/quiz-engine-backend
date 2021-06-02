@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +39,10 @@ public class Quiz implements Comparable<Quiz> {
     private boolean isPublic;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<QuizPassing> participants;
+    private List<QuizPassing> participants = new ArrayList<>();
 
     @Override
     public int compareTo(Quiz o) {

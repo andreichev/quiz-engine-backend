@@ -1,7 +1,6 @@
 package com.university.itis.model;
 
 import lombok.*;
-import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,11 +36,6 @@ public class User extends AbstractEntity {
 
     @Column(name = "active")
     private boolean isActive;
-
-    @SortNatural
-    @OrderBy
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Quiz> quizzes;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))

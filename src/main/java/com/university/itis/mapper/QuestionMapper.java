@@ -9,7 +9,6 @@ import com.university.itis.repository.QuizRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +24,9 @@ public class QuestionMapper {
 
     public Question toQuestion(QuestionDto questionDto, Question question) {
         question.setText(questionDto.getText());
-        if (question.getOptions() == null) {
-            question.setOptions(new ArrayList<>());
-        }
         if (questionDto.getOptions() != null) {
+            question.getOptions().removeIf(option -> questionDto.getOptions().stream()
+                    .anyMatch(item -> item.getId().equals(option.getId())) == false);
             for (QuestionOptionDto optionDto : questionDto.getOptions()) {
                 if (optionDto.getId() != null) {
                     QuestionOption option = question.getOptions().stream()

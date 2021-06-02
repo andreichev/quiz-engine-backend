@@ -16,7 +16,10 @@ import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -45,7 +48,6 @@ public class QuizServiceImpl implements QuizService {
         quizToSave.setAuthor(user);
         quizToSave.setStartDate(new Date());
         quizToSave.setId(UUID.randomUUID().toString());
-        quizToSave.setParticipants(Collections.emptyList());
         Quiz savedQuiz = quizRepository.save(quizToSave);
         return quizMapper.toFullDtoConvert(savedQuiz);
     }

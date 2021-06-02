@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class QuizPassing extends AbstractEntity implements Comparable<QuizPassin
     private Quiz quiz;
 
     @OneToMany(mappedBy = "passing", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<QuestionAnswer> answers;
+    private List<QuestionAnswer> answers = new ArrayList<>();
 
     @Override
     public int compareTo(QuizPassing o) {

@@ -16,7 +16,6 @@ import com.university.itis.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +39,6 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ValidationException(formErrorOrNull.get());
         }
         Question questionToSave = questionMapper.toQuestion(form);
-        questionToSave.setAnswers(Collections.emptyList());
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " not found"));
         if (quiz.getAuthor().getId().equals(user.getId()) == false) {
