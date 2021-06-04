@@ -1,7 +1,6 @@
 package com.university.itis.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +10,9 @@ import java.util.List;
 @Table(name = "quiz_passing")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuizPassing extends AbstractEntity implements Comparable<QuizPassing> {
 
     @ManyToOne

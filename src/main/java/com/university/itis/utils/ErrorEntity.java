@@ -41,6 +41,10 @@ public enum ErrorEntity {
 
     // Выгрузка картинки
     ONLY_IMAGES_AVAILABLE_TO_UPLOAD(460, "Выгружать можно только картинки"),
+
+    // Question answer
+    QUESTION_OPTION_REQUIRED(450, "option с id - Обязательное поле"),
+    QUESTION_REQUIRED(451, "question с id - Обязательное поле"),
     ;
 
     int status;

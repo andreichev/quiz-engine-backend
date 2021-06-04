@@ -1,5 +1,6 @@
 package com.university.itis.utils;
 
+import com.university.itis.dto.QuestionAnswerDto;
 import com.university.itis.dto.QuestionDto;
 import com.university.itis.dto.QuestionOptionDto;
 import com.university.itis.dto.UploadImageDto;
@@ -100,6 +101,16 @@ public class Validator {
         if (Objects.equals(uploadImageDto.getImage().getContentType(), MediaType.IMAGE_JPEG_VALUE) == false
                 && Objects.equals(uploadImageDto.getImage().getContentType(), MediaType.IMAGE_PNG_VALUE) == false) {
             return Optional.of(ErrorEntity.ONLY_IMAGES_AVAILABLE_TO_UPLOAD);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ErrorEntity> getQuestionAnswerError(QuestionAnswerDto answerDto) {
+        if (answerDto.getQuestion() == null || answerDto.getQuestion().getId() == null) {
+            return Optional.of(ErrorEntity.QUESTION_REQUIRED);
+        }
+        if(answerDto.getOption() == null || answerDto.getOption().getId() == null) {
+            return Optional.of(ErrorEntity.QUESTION_OPTION_REQUIRED);
         }
         return Optional.empty();
     }

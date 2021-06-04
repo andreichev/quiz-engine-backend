@@ -1,7 +1,6 @@
 package com.university.itis.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -12,6 +11,9 @@ import javax.persistence.Table;
 @Table(name = "question_answer")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class QuestionAnswer extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "question_id")
