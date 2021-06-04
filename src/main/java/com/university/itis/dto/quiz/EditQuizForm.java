@@ -1,6 +1,6 @@
 package com.university.itis.dto.quiz;
 
-import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.question.QuestionDto;
 import lombok.*;
 
 import java.util.List;

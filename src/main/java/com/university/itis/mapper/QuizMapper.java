@@ -1,6 +1,6 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.dto.quiz.QuizFullDto;
 import com.university.itis.dto.quiz.QuizShortDto;

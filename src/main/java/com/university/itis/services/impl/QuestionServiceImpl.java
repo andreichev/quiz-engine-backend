@@ -1,6 +1,6 @@
 package com.university.itis.services.impl;
 
-import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;

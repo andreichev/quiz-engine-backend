@@ -1,6 +1,6 @@
 package com.university.itis.services;
 
-import com.university.itis.dto.QuestionOptionDto;
+import com.university.itis.dto.question_option.QuestionOptionDto;
 import com.university.itis.model.User;
 
 import java.util.List;

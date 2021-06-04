@@ -1,4 +1,4 @@
-package com.university.itis.dto;
+package com.university.itis.dto.question_option;
 
 import lombok.*;
 

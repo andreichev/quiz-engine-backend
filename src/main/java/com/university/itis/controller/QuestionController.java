@@ -1,6 +1,6 @@
 package com.university.itis.controller;
 
-import com.university.itis.dto.QuestionDto;
+import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuestionService;
 import lombok.AllArgsConstructor;

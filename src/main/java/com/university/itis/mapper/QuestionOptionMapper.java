@@ -1,6 +1,7 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.QuestionOptionDto;
+import com.university.itis.dto.question_option.QuestionOptionDto;
+import com.university.itis.dto.question_option.QuestionOptionShortDto;
 import com.university.itis.model.QuestionOption;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,24 @@ public class QuestionOptionMapper {
                 .build();
     }
 
+    public QuestionOptionShortDto toShortDtoConvert(QuestionOption questionOption) {
+        return QuestionOptionShortDto.builder()
+                .id(questionOption.getId())
+                .text(questionOption.getText())
+                .build();
+    }
+
     public List<QuestionOptionDto> toListDtoConvert(List<QuestionOption> questionOptionList) {
         return questionOptionList
                 .stream()
                 .map(this::toDtoConvert)
+                .collect(Collectors.toList());
+    }
+
+    public List<QuestionOptionShortDto> toListShortDtoConvert(List<QuestionOption> questionOptionList) {
+        return questionOptionList
+                .stream()
+                .map(this::toShortDtoConvert)
                 .collect(Collectors.toList());
     }
 

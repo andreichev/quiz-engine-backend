@@ -1,6 +1,6 @@
 package com.university.itis.controller;
 
-import com.university.itis.dto.QuestionOptionDto;
+import com.university.itis.dto.question_option.QuestionOptionDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuestionOptionService;
 import lombok.AllArgsConstructor;

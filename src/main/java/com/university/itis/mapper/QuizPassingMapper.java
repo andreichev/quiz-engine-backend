@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class QuizPassingMapper {
     private final UserMapper userMapper;
     private final QuizMapper quizMapper;
+    private final QuestionMapper questionMapper;
     private final QuestionAnswerMapper questionAnswerMapper;
 
     public QuizPassingDto toDtoConvert(QuizPassing quizPassing) {
@@ -17,6 +18,7 @@ public class QuizPassingMapper {
                 .id(quizPassing.getId())
                 .user(userMapper.toViewDto(quizPassing.getUser()))
                 .quiz(quizMapper.toShortDtoConvert(quizPassing.getQuiz()))
+                .questions(questionMapper.toListShortDtoConvert(quizPassing.getQuiz().getQuestions()))
                 .answers(questionAnswerMapper.toListDtoConvert(quizPassing.getAnswers()))
                 .build();
     }

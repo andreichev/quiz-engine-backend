@@ -1,5 +1,6 @@
-package com.university.itis.dto;
+package com.university.itis.dto.question;
 
+import com.university.itis.dto.question_option.QuestionOptionDto;
 import lombok.*;
 
 import java.util.List;
