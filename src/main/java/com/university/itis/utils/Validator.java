@@ -23,7 +23,7 @@ public class Validator {
     public static final int MIN_PASSWORD_LENGTH = 4;
     public static final int MIN_TEXT_LENGTH = 1;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
-    private final Pattern fullNamePattern = Pattern.compile("^[a-zA-Z ,.'-]+$");
+    private final Pattern fullNamePattern = Pattern.compile("^[a-zA-Zа-яА-Я ,.'-]+$");
 
     private final UserRepository userRepository;
 
