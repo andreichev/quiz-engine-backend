@@ -1,6 +1,6 @@
 package com.university.itis.dto.quiz;
 
-import com.university.itis.dto.question.QuestionDto;
+import com.university.itis.dto.question.QuestionTextDto;
 import com.university.itis.dto.quiz_passing.QuizPassingParticipantDto;
 import com.university.itis.dto.user.UserShortDto;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuizFullDto {
+public class QuizPreviewDto {
     private String id;
     private String title;
     private UserShortDto author;
@@ -21,6 +21,6 @@ public class QuizFullDto {
     private Date startDate;
     private Boolean isAnyOrder;
     private Boolean isPublic;
-    private List<QuestionDto> questions;
+    private List<QuestionTextDto> questions;
     private List<QuizPassingParticipantDto> results;
 }

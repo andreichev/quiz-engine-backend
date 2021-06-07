@@ -2,8 +2,8 @@ package com.university.itis.controller;
 
 import com.university.itis.dto.ImageDto;
 import com.university.itis.dto.UploadImageDto;
-import com.university.itis.dto.UserDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
+import com.university.itis.dto.user.UserDto;
 import com.university.itis.mapper.UserMapper;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizPassingService;

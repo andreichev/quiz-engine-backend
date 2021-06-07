@@ -1,6 +1,7 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.UserDto;
+import com.university.itis.dto.user.UserDto;
+import com.university.itis.dto.user.UserShortDto;
 import com.university.itis.model.Role;
 import com.university.itis.model.User;
 import com.university.itis.repository.QuizPassingRepository;
@@ -21,9 +22,6 @@ public class UserMapper {
     private final QuizPassingRepository quizPassingRepository;
 
     public UserDto toViewDto(User user) {
-        if ( user == null ) {
-            return null;
-        }
         UserDto userDto = new UserDto();
         userDto.setId( user.getId() );
         userDto.setFullName( user.getFullName() );
@@ -42,10 +40,21 @@ public class UserMapper {
         return userDto;
     }
 
-    public List<UserDto> toListDtoConvert(List<User> users) {
+    public UserShortDto toShortDto(User user) {
+        UserShortDto userDto = new UserShortDto();
+        userDto.setId( user.getId() );
+        userDto.setFullName( user.getFullName() );
+        userDto.setEmail( user.getEmail() );
+        if (user.getImage() != null) {
+            userDto.setAvatar(imageMapper.toDtoConvert(user.getImage()));
+        }
+        return userDto;
+    }
+
+    public List<UserShortDto> toListShortDtoConvert(List<User> users) {
         return users
                 .stream()
-                .map(this::toViewDto)
+                .map(this::toShortDto)
                 .collect(Collectors.toList());
     }
 }

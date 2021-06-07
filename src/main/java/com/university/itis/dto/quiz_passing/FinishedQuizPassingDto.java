@@ -1,9 +1,9 @@
 package com.university.itis.dto.quiz_passing;
 
-import com.university.itis.dto.UserDto;
 import com.university.itis.dto.answer.QuestionAnswerDto;
 import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.dto.quiz.QuizShortDto;
+import com.university.itis.dto.user.UserShortDto;
 import lombok.*;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class FinishedQuizPassingDto {
     private Long id;
-    private UserDto user;
+    private UserShortDto user;
     private QuizShortDto quiz;
     private List<QuestionDto> questions;
     private List<QuestionAnswerDto> answers;

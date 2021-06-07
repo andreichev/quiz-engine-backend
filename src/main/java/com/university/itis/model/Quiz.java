@@ -42,7 +42,7 @@ public class Quiz implements Comparable<Quiz> {
     private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QuizPassing> participants = new ArrayList<>();
+    private List<QuizPassing> results = new ArrayList<>();
 
     @Override
     public int compareTo(Quiz o) {

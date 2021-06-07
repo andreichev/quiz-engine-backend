@@ -3,22 +3,29 @@ package com.university.itis.mapper;
 import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizPreviewDto;
 import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Question;
 import com.university.itis.model.Quiz;
-import com.university.itis.model.QuizPassing;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class QuizMapper {
     private final UserMapper userMapper;
     private final QuestionMapper questionMapper;
+
+    @Autowired
+    QuizPassingMapper quizPassingMapper;
+
+    public QuizMapper(UserMapper userMapper, QuestionMapper questionMapper) {
+        this.userMapper = userMapper;
+        this.questionMapper = questionMapper;
+    }
 
     public Quiz toQuiz(EditQuizForm form) {
         return toQuiz(form, new Quiz());
@@ -57,20 +64,30 @@ public class QuizMapper {
                 .build();
     }
 
-    public QuizFullDto toFullDtoConvert(Quiz quiz) {
-        return QuizFullDto.builder()
+    public QuizPreviewDto toPreviewDtoConvert(Quiz quiz) {
+        return QuizPreviewDto.builder()
                 .id(quiz.getId())
                 .title(quiz.getTitle())
-                .author(userMapper.toViewDto(quiz.getAuthor()))
+                .author(userMapper.toShortDto(quiz.getAuthor()))
                 .description(quiz.getDescription())
                 .startDate(quiz.getStartDate())
                 .isAnyOrder(quiz.isAnyOrder())
                 .isPublic(quiz.isPublic())
-                .participants(userMapper.toListDtoConvert(
-                        quiz.getParticipants().stream()
-                                .map(QuizPassing::getUser)
-                                .collect(Collectors.toList())
-                ))
+                .results(quizPassingMapper.toListParticipantDtoConvert(quiz.getResults()))
+                .questions(questionMapper.toListTextDtoConvert(quiz.getQuestions()))
+                .build();
+    }
+
+    public QuizFullDto toFullDtoConvert(Quiz quiz) {
+        return QuizFullDto.builder()
+                .id(quiz.getId())
+                .title(quiz.getTitle())
+                .author(userMapper.toShortDto(quiz.getAuthor()))
+                .description(quiz.getDescription())
+                .startDate(quiz.getStartDate())
+                .isAnyOrder(quiz.isAnyOrder())
+                .isPublic(quiz.isPublic())
+                .results(quizPassingMapper.toListParticipantDtoConvert(quiz.getResults()))
                 .questions(questionMapper.toListDtoConvert(quiz.getQuestions()))
                 .build();
     }

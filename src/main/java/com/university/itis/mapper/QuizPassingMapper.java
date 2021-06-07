@@ -2,6 +2,7 @@ package com.university.itis.mapper;
 
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
+import com.university.itis.dto.quiz_passing.QuizPassingParticipantDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
 import com.university.itis.model.QuizPassing;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class QuizPassingMapper {
     public FinishedQuizPassingDto toFinishedDtoConvert(QuizPassing quizPassing) {
         return FinishedQuizPassingDto.builder()
                 .id(quizPassing.getId())
-                .user(userMapper.toViewDto(quizPassing.getUser()))
+                .user(userMapper.toShortDto(quizPassing.getUser()))
                 .quiz(quizMapper.toShortDtoConvert(quizPassing.getQuiz()))
                 .questions(questionMapper.toListDtoConvert(quizPassing.getQuiz().getQuestions()))
                 .answers(questionAnswerMapper.toListDtoConvert(quizPassing.getAnswers()))
@@ -58,10 +59,26 @@ public class QuizPassingMapper {
                 .build();
     }
 
+
+    public QuizPassingParticipantDto toParticipantDtoConvert(QuizPassing quizPassing) {
+        return QuizPassingParticipantDto.builder()
+                .id(quizPassing.getId())
+                .startDate(quizPassing.getStartDate())
+                .user(userMapper.toShortDto(quizPassing.getUser()))
+                .build();
+    }
+
     public List<QuizPassingShortDto> toListShortDtoConvert(List<QuizPassing> list) {
         return list
                 .stream()
                 .map(this::toDtoShortConvert)
+                .collect(Collectors.toList());
+    }
+
+    public List<QuizPassingParticipantDto> toListParticipantDtoConvert(List<QuizPassing> list) {
+        return list
+                .stream()
+                .map(this::toParticipantDtoConvert)
                 .collect(Collectors.toList());
     }
 }

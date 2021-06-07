@@ -2,6 +2,7 @@ package com.university.itis.services.impl;
 
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizPreviewDto;
 import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
@@ -39,7 +40,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public QuizFullDto save(EditQuizForm form, User user) {
+    public QuizPreviewDto save(EditQuizForm form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
@@ -49,11 +50,11 @@ public class QuizServiceImpl implements QuizService {
         quizToSave.setStartDate(new Date());
         quizToSave.setId(UUID.randomUUID().toString());
         Quiz savedQuiz = quizRepository.save(quizToSave);
-        return quizMapper.toFullDtoConvert(savedQuiz);
+        return quizMapper.toPreviewDtoConvert(savedQuiz);
     }
 
     @Override
-    public QuizFullDto update(String id, EditQuizForm form, User user) {
+    public QuizPreviewDto update(String id, EditQuizForm form, User user) {
         Optional<ErrorEntity> formErrorOrNull = validator.getSaveQuizFormError(form);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
@@ -65,13 +66,23 @@ public class QuizServiceImpl implements QuizService {
         }
         Quiz quizToSave = quizMapper.toQuiz(form, quiz);
         Quiz savedQuiz = quizRepository.save(quizToSave);
-        return quizMapper.toFullDtoConvert(savedQuiz);
+        return quizMapper.toPreviewDtoConvert(savedQuiz);
     }
 
     @Override
-    public QuizFullDto getById(String id) {
+    public QuizPreviewDto getById(String id) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
+        return quizMapper.toPreviewDtoConvert(quiz);
+    }
+
+    @Override
+    public QuizFullDto getFullById(User user, String id) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Quiz with id " + id + " not found"));
+        if (quiz.getAuthor().getId().equals(user.getId()) == false) {
+            throw new InvalidTokenException("Forbidden");
+        }
         return quizMapper.toFullDtoConvert(quiz);
     }
 

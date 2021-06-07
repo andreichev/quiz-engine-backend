@@ -2,6 +2,7 @@ package com.university.itis.controller;
 
 import com.university.itis.dto.quiz.EditQuizForm;
 import com.university.itis.dto.quiz.QuizFullDto;
+import com.university.itis.dto.quiz.QuizPreviewDto;
 import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizService;
@@ -29,13 +30,13 @@ public class QuizController {
     }
 
     @PostMapping
-    QuizFullDto saveQuiz(ServletRequest request, @RequestBody EditQuizForm form) {
+    QuizPreviewDto saveQuiz(ServletRequest request, @RequestBody EditQuizForm form) {
         User user = (User) request.getAttribute("user");
         return quizService.save(form, user);
     }
 
     @PutMapping(value = "/{id}")
-    QuizFullDto updateQuiz(
+    QuizPreviewDto updateQuiz(
             ServletRequest request,
             @RequestBody EditQuizForm form,
             @PathVariable String id
@@ -45,8 +46,14 @@ public class QuizController {
     }
 
     @GetMapping(value = "/{id}")
-    QuizFullDto getQuizById(@PathVariable String id) {
+    QuizPreviewDto getQuizById(@PathVariable String id) {
         return quizService.getById(id);
+    }
+
+    @GetMapping(value = "/{id}/full")
+    QuizFullDto getFullQuizById(ServletRequest request, @PathVariable String id) {
+        User user = (User) request.getAttribute("user");
+        return quizService.getFullById(user, id);
     }
 
     @DeleteMapping(value = "/{id}")

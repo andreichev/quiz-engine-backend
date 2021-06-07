@@ -1,5 +1,6 @@
-package com.university.itis.dto;
+package com.university.itis.dto.user;
 
+import com.university.itis.dto.ImageDto;
 import com.university.itis.model.Role;
 import lombok.*;
 
