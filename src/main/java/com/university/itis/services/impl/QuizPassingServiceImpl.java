@@ -3,6 +3,7 @@ package com.university.itis.services.impl;
 import com.university.itis.dto.QuestionAnswerDto;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
+import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;
 import com.university.itis.mapper.QuestionAnswerMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -99,5 +101,10 @@ public class QuizPassingServiceImpl implements QuizPassingService {
             throw new ValidationException(ErrorEntity.QUIZ_PASSING_NOT_FINISHED);
         }
         return quizPassingMapper.toFinishedDtoConvert(quizPassing);
+    }
+
+    @Override
+    public List<QuizPassingShortDto> getHistory(User user) {
+        return quizPassingMapper.toListShortDtoConvert(quizPassingRepository.getByUser(user));
     }
 }
