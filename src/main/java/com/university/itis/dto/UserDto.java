@@ -3,6 +3,7 @@ package com.university.itis.dto;
 import com.university.itis.model.Role;
 import lombok.*;
 
+import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -17,4 +18,7 @@ public class UserDto {
     private String email;
     private Set<Role> roles;
     private Boolean isActive;
+    private Date registrationDate;
+    private Integer quizzesCount;
+    private Integer quizzesPassedCount;
 }

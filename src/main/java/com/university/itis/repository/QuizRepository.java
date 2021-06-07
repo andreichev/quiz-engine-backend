@@ -11,4 +11,5 @@ import java.util.List;
 public interface QuizRepository extends JpaRepository<Quiz, String> {
     List<Quiz> findAllByIsPublicIsTrue();
     List<Quiz> findAllByAuthor(User author);
+    Integer countByAuthor(User author);
 }
