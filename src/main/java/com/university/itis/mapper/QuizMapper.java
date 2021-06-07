@@ -31,7 +31,7 @@ public class QuizMapper {
         quiz.setAnyOrder(form.getIsAnyOrder());
         if (form.getQuestions() != null) {
             quiz.getQuestions().removeIf(question -> form.getQuestions().stream()
-                    .anyMatch(item -> item.getId().equals(question.getId())) == false);
+                    .anyMatch(item -> item.getId() != null && item.getId().equals(question.getId())) == false);
             for (QuestionDto questionDto : form.getQuestions()) {
                 if (questionDto.getId() != null) {
                     Question question = quiz.getQuestions().stream()
