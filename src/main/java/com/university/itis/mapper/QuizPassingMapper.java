@@ -1,10 +1,8 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.quiz.QuizShortDto;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
-import com.university.itis.model.Quiz;
 import com.university.itis.model.QuizPassing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +39,10 @@ public class QuizPassingMapper {
                 .answers(questionAnswerMapper.toListDtoConvert(quizPassing.getAnswers()))
                 .isFinished(quizPassing.getIsFinished())
                 .startDate(quizPassing.getStartDate())
+                .result(
+                        (float) quizPassing.getAnswers().stream().filter(item -> item.getOption().getIsCorrect()).count() /
+                                quizPassing.getQuiz().getQuestions().size()
+                )
                 .build();
     }
 

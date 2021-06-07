@@ -1,6 +1,6 @@
 package com.university.itis.controller;
 
-import com.university.itis.dto.QuestionAnswerDto;
+import com.university.itis.dto.answer.QuestionAnswerForm;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.model.User;
@@ -23,12 +23,12 @@ public class QuizPassingController {
     }
 
     @PostMapping("/{passingId}/answer")
-    QuestionAnswerDto giveAnswer(
+    void giveAnswer(
             ServletRequest request, @PathVariable String quizId,
-            @PathVariable Long passingId, @RequestBody QuestionAnswerDto answer
+            @PathVariable Long passingId, @RequestBody QuestionAnswerForm answer
     ) {
         User user = (User) request.getAttribute("user");
-        return quizPassingService.giveAnswer(user, answer, passingId, quizId);
+        quizPassingService.giveAnswer(user, answer, passingId, quizId);
     }
 
     @PostMapping("/{passingId}/finish")

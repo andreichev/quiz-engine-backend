@@ -1,7 +1,7 @@
 package com.university.itis.dto.quiz_passing;
 
-import com.university.itis.dto.QuestionAnswerDto;
 import com.university.itis.dto.UserDto;
+import com.university.itis.dto.answer.QuestionAnswerDto;
 import com.university.itis.dto.question.QuestionShortDto;
 import com.university.itis.dto.quiz.QuizShortDto;
 import lombok.*;

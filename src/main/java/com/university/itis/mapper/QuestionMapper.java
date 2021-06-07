@@ -2,6 +2,7 @@ package com.university.itis.mapper;
 
 import com.university.itis.dto.question.QuestionDto;
 import com.university.itis.dto.question.QuestionShortDto;
+import com.university.itis.dto.question.QuestionTextDto;
 import com.university.itis.dto.question_option.QuestionOptionDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Question;
@@ -61,6 +62,14 @@ public class QuestionMapper {
                 .build();
     }
 
+    public QuestionTextDto toTextDtoConvert(Question question) {
+        return QuestionTextDto.builder()
+                .id(question.getId())
+                .text(question.getText())
+                .build();
+    }
+
+
     public List<QuestionDto> toListDtoConvert(List<Question> questionList) {
         return questionList
                 .stream()
@@ -72,6 +81,13 @@ public class QuestionMapper {
         return questionList
                 .stream()
                 .map(this::toShortDtoConvert)
+                .collect(Collectors.toList());
+    }
+
+    public List<QuestionTextDto> toListTextDtoConvert(List<Question> questionList) {
+        return questionList
+                .stream()
+                .map(this::toTextDtoConvert)
                 .collect(Collectors.toList());
     }
 

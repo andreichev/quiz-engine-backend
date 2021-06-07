@@ -1,6 +1,6 @@
 package com.university.itis.services.impl;
 
-import com.university.itis.dto.QuestionAnswerDto;
+import com.university.itis.dto.answer.QuestionAnswerForm;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
@@ -49,13 +49,13 @@ public class QuizPassingServiceImpl implements QuizPassingService {
     }
 
     @Override
-    public QuestionAnswerDto giveAnswer(User user, QuestionAnswerDto answerDto, Long passingId, String quizId) {
-        Optional<ErrorEntity> formErrorOrNull = validator.getQuestionAnswerError(answerDto);
+    public void giveAnswer(User user, QuestionAnswerForm answerForm, Long passingId, String quizId) {
+        Optional<ErrorEntity> formErrorOrNull = validator.getQuestionAnswerError(answerForm);
         if (formErrorOrNull.isPresent()) {
             throw new ValidationException(formErrorOrNull.get());
         }
-        Long questionId = answerDto.getQuestion().getId();
-        Long optionId = answerDto.getOption().getId();
+        Long questionId = answerForm.getQuestion().getId();
+        Long optionId = answerForm.getOption().getId();
 
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + " not found"));
@@ -70,15 +70,14 @@ public class QuizPassingServiceImpl implements QuizPassingService {
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("QuestionOption with id " + optionId + " not found"));
         Optional<QuestionAnswer> answerOptional = questionAnswerRepository.findByPassingIdAndQuestionId(passingId, questionId);
-        QuestionAnswer answerToSave = answerOptional.orElseGet(() ->
+        QuestionAnswer answer = answerOptional.orElseGet(() ->
                 QuestionAnswer.builder()
                         .question(question)
                         .passing(quizPassing)
                     .build()
         );
-        answerToSave.setOption(option);
-        QuestionAnswer savedAnswer = questionAnswerRepository.save(answerToSave);
-        return questionAnswerMapper.toDtoConvert(savedAnswer);
+        answer.setOption(option);
+        questionAnswerRepository.save(answer);
     }
 
     @Override

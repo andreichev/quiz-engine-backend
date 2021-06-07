@@ -1,6 +1,6 @@
 package com.university.itis.services;
 
-import com.university.itis.dto.QuestionAnswerDto;
+import com.university.itis.dto.answer.QuestionAnswerForm;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface QuizPassingService {
     QuizPassingDto createPassing(User user, String quizId);
-    QuestionAnswerDto giveAnswer(User user, QuestionAnswerDto answerDto, Long passingId, String quizId);
+    void giveAnswer(User user, QuestionAnswerForm answerForm, Long passingId, String quizId);
     FinishedQuizPassingDto finishPassing(User user, String quizId, Long passingId);
     FinishedQuizPassingDto getFinishedQuizPassing(String quizId, Long passingId);
     List<QuizPassingShortDto> getHistory(User user);

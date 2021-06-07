@@ -1,7 +1,7 @@
 package com.university.itis.utils;
 
-import com.university.itis.dto.QuestionAnswerDto;
 import com.university.itis.dto.UploadImageDto;
+import com.university.itis.dto.answer.QuestionAnswerForm;
 import com.university.itis.dto.authorization.LoginForm;
 import com.university.itis.dto.authorization.RegisterForm;
 import com.university.itis.dto.question.QuestionDto;
@@ -105,11 +105,11 @@ public class Validator {
         return Optional.empty();
     }
 
-    public Optional<ErrorEntity> getQuestionAnswerError(QuestionAnswerDto answerDto) {
-        if (answerDto.getQuestion() == null || answerDto.getQuestion().getId() == null) {
+    public Optional<ErrorEntity> getQuestionAnswerError(QuestionAnswerForm answerForm) {
+        if (answerForm.getQuestion() == null || answerForm.getQuestion().getId() == null) {
             return Optional.of(ErrorEntity.QUESTION_REQUIRED);
         }
-        if(answerDto.getOption() == null || answerDto.getOption().getId() == null) {
+        if(answerForm.getOption() == null || answerForm.getOption().getId() == null) {
             return Optional.of(ErrorEntity.QUESTION_OPTION_REQUIRED);
         }
         return Optional.empty();
