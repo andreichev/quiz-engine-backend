@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,21 +14,22 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizPassing extends AbstractEntity implements Comparable<QuizPassing> {
+public class QuizPassing extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "passing", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<QuestionAnswer> answers = new ArrayList<>();
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
 
-    @Override
-    public int compareTo(QuizPassing o) {
-        return (int) (this.getId() - o.getId());
-    }
+    @Column(name = "is_finished", nullable = false)
+    private Boolean isFinished;
+
+    @OneToMany(mappedBy = "passing", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionAnswer> answers = new ArrayList<>();
 }

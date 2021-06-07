@@ -45,6 +45,10 @@ public enum ErrorEntity {
     // Question answer
     QUESTION_OPTION_REQUIRED(450, "option с id - Обязательное поле"),
     QUESTION_REQUIRED(451, "question с id - Обязательное поле"),
+
+    // Quiz passing
+    QUIZ_PASSING_ALREADY_FINISHED(450, "Тест уже закончен"),
+    QUIZ_PASSING_NOT_FINISHED(450, "Тест еще не закончен"),
     ;
 
     int status;

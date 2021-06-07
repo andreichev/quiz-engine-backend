@@ -16,14 +16,14 @@ import javax.persistence.Table;
 @Builder
 public class QuestionAnswer extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "option_id")
+    @JoinColumn(name = "option_id", nullable = false)
     private QuestionOption option;
 
     @ManyToOne
-    @JoinColumn(name = "passing_id")
+    @JoinColumn(name = "passing_id", nullable = false)
     private QuizPassing passing;
 }

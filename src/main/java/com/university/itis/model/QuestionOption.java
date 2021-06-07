@@ -9,20 +9,15 @@ import javax.persistence.*;
 @Table(name = "question_option")
 @Getter
 @Setter
-public class QuestionOption extends AbstractEntity implements Comparable<QuestionOption> {
+public class QuestionOption extends AbstractEntity {
 
     @Column(nullable = false)
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Column(name = "correct")
+    @Column(name = "correct", nullable = false)
     private Boolean isCorrect;
-
-    @Override
-    public int compareTo(QuestionOption o) {
-        return (int) (this.getId() - o.getId());
-    }
 }

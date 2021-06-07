@@ -18,11 +18,11 @@ public class Quiz implements Comparable<Quiz> {
     @Id
     private String id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @Column
@@ -38,10 +38,10 @@ public class Quiz implements Comparable<Quiz> {
     @Column(name = "is_public")
     private boolean isPublic;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizPassing> participants = new ArrayList<>();
 
     @Override

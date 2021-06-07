@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
                 .roles(Collections.singleton(Role.ROLE_USER))
                 .isActive(true)
                 .isEmailConfirmed(false)
+                .registrationDate(new Date())
                 .build();
         User savedUser = userRepository.save(user);
         return new TokenDto(jwtHelper.generateToken(savedUser));

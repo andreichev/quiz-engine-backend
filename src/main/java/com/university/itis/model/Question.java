@@ -11,23 +11,18 @@ import java.util.List;
 @Table(name = "question")
 @Getter
 @Setter
-public class Question extends AbstractEntity implements Comparable<Question> {
+public class Question extends AbstractEntity {
 
-    @Column
+    @Column(nullable = false)
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionAnswer> answers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> options = new ArrayList<>();
-
-    @Override
-    public int compareTo(Question o) {
-        return (int) (this.getId() - o.getId());
-    }
 }

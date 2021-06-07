@@ -1,7 +1,8 @@
 package com.university.itis.services.impl;
 
 import com.university.itis.dto.QuestionAnswerDto;
-import com.university.itis.dto.QuizPassingDto;
+import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
+import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;
 import com.university.itis.mapper.QuestionAnswerMapper;
@@ -17,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -37,6 +39,8 @@ public class QuizPassingServiceImpl implements QuizPassingService {
                 .quiz(quiz)
                 .user(user)
                 .answers(new ArrayList<>())
+                .startDate(new Date())
+                .isFinished(false)
                 .build();
         QuizPassing savedQuizPassing = quizPassingRepository.save(quizPassingToSave);
         return quizPassingMapper.toDtoConvert(savedQuizPassing);
@@ -73,5 +77,27 @@ public class QuizPassingServiceImpl implements QuizPassingService {
         answerToSave.setOption(option);
         QuestionAnswer savedAnswer = questionAnswerRepository.save(answerToSave);
         return questionAnswerMapper.toDtoConvert(savedAnswer);
+    }
+
+    @Override
+    public FinishedQuizPassingDto finishPassing(User user, String quizId, Long passingId) {
+        QuizPassing quizPassing = quizPassingRepository.findByIdAndQuizId(passingId, quizId)
+                .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + "QuizPassing with id " + passingId + " not found"));
+        if(quizPassing.getIsFinished()) {
+            throw new ValidationException(ErrorEntity.QUIZ_PASSING_ALREADY_FINISHED);
+        }
+        quizPassing.setIsFinished(true);
+        quizPassing = quizPassingRepository.save(quizPassing);
+        return quizPassingMapper.toFinishedDtoConvert(quizPassing);
+    }
+
+    @Override
+    public FinishedQuizPassingDto getFinishedQuizPassing(String quizId, Long passingId) {
+        QuizPassing quizPassing = quizPassingRepository.findByIdAndQuizId(passingId, quizId)
+                .orElseThrow(() -> new NotFoundException("Quiz with id " + quizId + "QuizPassing with id " + passingId + " not found"));
+        if(quizPassing.getIsFinished() == false) {
+            throw new ValidationException(ErrorEntity.QUIZ_PASSING_NOT_FINISHED);
+        }
+        return quizPassingMapper.toFinishedDtoConvert(quizPassing);
     }
 }

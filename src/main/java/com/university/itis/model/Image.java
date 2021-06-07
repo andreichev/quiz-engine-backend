@@ -16,6 +16,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image extends AbstractEntity {
-    @Column
+    @Column(nullable = false)
     private String name;
 }

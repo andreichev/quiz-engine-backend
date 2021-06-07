@@ -1,7 +1,8 @@
 package com.university.itis.controller;
 
 import com.university.itis.dto.QuestionAnswerDto;
-import com.university.itis.dto.QuizPassingDto;
+import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
+import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.model.User;
 import com.university.itis.services.QuizPassingService;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,19 @@ public class QuizPassingController {
     ) {
         User user = (User) request.getAttribute("user");
         return quizPassingService.giveAnswer(user, answer, passingId, quizId);
+    }
+
+    @PostMapping("/{passingId}/finish")
+    FinishedQuizPassingDto giveAnswer(
+            ServletRequest request, @PathVariable String quizId,
+            @PathVariable Long passingId
+    ) {
+        User user = (User) request.getAttribute("user");
+        return quizPassingService.finishPassing(user, quizId, passingId);
+    }
+
+    @GetMapping("/{passingId}")
+    FinishedQuizPassingDto get(@PathVariable String quizId, @PathVariable Long passingId) {
+        return quizPassingService.getFinishedQuizPassing(quizId, passingId);
     }
 }
