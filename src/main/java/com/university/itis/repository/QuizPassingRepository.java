@@ -11,4 +11,5 @@ public interface QuizPassingRepository extends JpaRepository<QuizPassing, Long> 
     Optional<QuizPassing> findByIdAndQuizId(Long id, String quizId);
     List<QuizPassing> getByUser(User user);
     Integer countByUser(User user);
+    List<QuizPassing> findAllByUserIdAndQuizId(Long userId, String quizId);
 }

@@ -1,6 +1,7 @@
 package com.university.itis.controller;
 
 import com.university.itis.dto.answer.QuestionAnswerForm;
+import com.university.itis.dto.quiz.QuizParticipantsDto;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.model.User;
@@ -43,5 +44,10 @@ public class QuizPassingController {
     @GetMapping("/{passingId}")
     FinishedQuizPassingDto get(@PathVariable String quizId, @PathVariable Long passingId) {
         return quizPassingService.getFinishedQuizPassing(quizId, passingId);
+    }
+
+    @GetMapping(value = "user/{userId}/results")
+    QuizParticipantsDto getQuizParticipantsById(@PathVariable Long userId, @PathVariable String quizId) {
+        return quizPassingService.getParticipants(userId, quizId);
     }
 }

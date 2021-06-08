@@ -1,9 +1,6 @@
 package com.university.itis.mapper;
 
-import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
-import com.university.itis.dto.quiz_passing.QuizPassingDto;
-import com.university.itis.dto.quiz_passing.QuizPassingParticipantDto;
-import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
+import com.university.itis.dto.quiz_passing.*;
 import com.university.itis.model.QuizPassing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,6 +65,15 @@ public class QuizPassingMapper {
                 .build();
     }
 
+    public QuizPassingSummaryDto toSummaryDtoConvert(QuizPassing quizPassing) {
+        return QuizPassingSummaryDto.builder()
+                .id(quizPassing.getId())
+                .startDate(quizPassing.getStartDate())
+                .questionsCount(quizPassing.getQuiz().getQuestions().size())
+                .correctAnswersCount((int) quizPassing.getAnswers().stream().filter(item -> item.getOption().getIsCorrect()).count())
+                .build();
+    }
+
     public List<QuizPassingShortDto> toListShortDtoConvert(List<QuizPassing> list) {
         return list
                 .stream()
@@ -79,6 +85,13 @@ public class QuizPassingMapper {
         return list
                 .stream()
                 .map(this::toParticipantDtoConvert)
+                .collect(Collectors.toList());
+    }
+
+    public List<QuizPassingSummaryDto> toListSummaryDtoConvert(List<QuizPassing> list) {
+        return list
+                .stream()
+                .map(this::toSummaryDtoConvert)
                 .collect(Collectors.toList());
     }
 }

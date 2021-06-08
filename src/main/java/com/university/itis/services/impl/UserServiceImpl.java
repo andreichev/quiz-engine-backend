@@ -10,7 +10,6 @@ import com.university.itis.exceptions.InvalidTokenException;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;
 import com.university.itis.mapper.ImageMapper;
-import com.university.itis.mapper.UserMapper;
 import com.university.itis.model.Image;
 import com.university.itis.model.Role;
 import com.university.itis.model.User;
@@ -35,7 +34,6 @@ public class UserServiceImpl implements UserService {
     private final Validator validator;
     private final JwtHelper jwtHelper;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final ImageRepository imageRepository;
     private final ImageFileService imageFileService;
     private final ImageMapper imageMapper;

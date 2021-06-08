@@ -1,17 +1,19 @@
 package com.university.itis.services.impl;
 
 import com.university.itis.dto.answer.QuestionAnswerForm;
+import com.university.itis.dto.quiz.QuizParticipantsDto;
 import com.university.itis.dto.quiz_passing.FinishedQuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingDto;
 import com.university.itis.dto.quiz_passing.QuizPassingShortDto;
 import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.exceptions.ValidationException;
-import com.university.itis.mapper.QuestionAnswerMapper;
+import com.university.itis.mapper.QuizParticipantsMapper;
 import com.university.itis.mapper.QuizPassingMapper;
 import com.university.itis.model.*;
 import com.university.itis.repository.QuestionAnswerRepository;
 import com.university.itis.repository.QuizPassingRepository;
 import com.university.itis.repository.QuizRepository;
+import com.university.itis.repository.UserRepository;
 import com.university.itis.services.QuizPassingService;
 import com.university.itis.utils.ErrorEntity;
 import com.university.itis.utils.Validator;
@@ -30,8 +32,9 @@ public class QuizPassingServiceImpl implements QuizPassingService {
     private final QuizRepository quizRepository;
     private final QuizPassingRepository quizPassingRepository;
     private final QuestionAnswerRepository questionAnswerRepository;
-    private final QuestionAnswerMapper questionAnswerMapper;
     private final QuizPassingMapper quizPassingMapper;
+    private final QuizParticipantsMapper quizParticipantsMapper;
+    private final UserRepository userRepository;
 
     @Override
     public QuizPassingDto createPassing(User user, String quizId) {
@@ -105,5 +108,13 @@ public class QuizPassingServiceImpl implements QuizPassingService {
     @Override
     public List<QuizPassingShortDto> getHistory(User user) {
         return quizPassingMapper.toListShortDtoConvert(quizPassingRepository.getByUser(user));
+    }
+
+    @Override
+    public QuizParticipantsDto getParticipants(Long userId, String quizId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
+        List<QuizPassing> results = quizPassingRepository.findAllByUserIdAndQuizId(userId, quizId);
+        return quizParticipantsMapper.toDtoConvert(user, results);
     }
 }
