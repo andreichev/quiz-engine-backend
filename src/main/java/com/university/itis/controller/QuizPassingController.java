@@ -47,7 +47,7 @@ public class QuizPassingController {
     }
 
     @GetMapping(value = "user/{userId}/results")
-    QuizParticipantsDto getQuizParticipantsById(@PathVariable Long userId, @PathVariable String quizId) {
+    QuizParticipantsDto getUserResults(@PathVariable Long userId, @PathVariable String quizId) {
         return quizPassingService.getParticipants(userId, quizId);
     }
 }
