@@ -1,6 +1,6 @@
 package com.university.itis.services.sparql;
 
-import com.university.itis.dto.TripleDto;
+import com.university.itis.dto.semantic.TripleDto;
 
 import java.util.List;
 

@@ -1,20 +1,15 @@
 {
-  "endpointUrl": "https://dbpedia.org/sparql",
+  "endpointUrl": "https://query.wikidata.org/sparql",
   "prefixes": {
-    "http://dbpedia.org/resource/": "dbr:",
-    "http://dbpedia.org/ontology/": "dbo:",
-    "http://dbpedia.org/property/": "dbp:",
-    "http://schema.org/": "so:",
-    "http://www.w3.org/2004/02/skos/core#": "skos:",
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#": "rdf:",
+    "http://www.wikidata.org/entity/": "wd:",
+    "http://www.wikidata.org/entity/statement/": "wds:",
+    "http://www.wikidata.org/value/": "wdv:",
+    "http://www.wikidata.org/prop/direct/": "wdt:",
+    "http://wikiba.se/ontology#": "wikibase:",
+    "http://www.wikidata.org/prop/": "p:",
+    "http://www.wikidata.org/prop/statement/": "ps:",
+    "http://www.wikidata.org/prop/qualifier/": "pq:",
     "http://www.w3.org/2000/01/rdf-schema#": "rdfs:",
-    "http://www.w3.org/2002/07/owl#": "owl:",
-    "http://www.w3.org/ns/prov#": "prov:",
-    "http://xmlns.com/foaf/0.1/": "foaf:",
-    "http://yago-knowledge.org/resource/": "yr:",
-    "http://purl.org/dc/terms/": "dct:",
-    "http://purl.org/dc/elements/": "dce:",
-    "http://www.w3.org/2003/01/geo/wgs84_pos#": "geopos:",
-    "http://www.georss.org/georss/": "georss:"
+    "http://www.bigdata.com/rdf#": "bd:"
   }
 }

@@ -1,5 +1,6 @@
 package com.university.itis.services.sparql.dbpedia_impl;
 
+import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
@@ -25,6 +26,11 @@ public class ClassesRequestsServiceDbpedia implements ClassesRequestsService {
 
     private final String LANGUAGE1 = "ru";
     private final String LANGUAGE2 = "en";
+
+    @Override
+    public List<EntityDto> searchForEntities(String query) {
+        return new ArrayList<>();
+    }
 
     public String selectEntity(String type, int offset) {
         final ParameterizedSparqlString queryString = new ParameterizedSparqlString(

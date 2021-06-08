@@ -1,6 +1,7 @@
 package com.university.itis.services.sparql.impl;
 
-import com.university.itis.dto.TripleDto;
+import com.university.itis.dto.semantic.EntityDto;
+import com.university.itis.dto.semantic.TripleDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.services.sparql.SparqlService;
@@ -22,17 +23,17 @@ public class SparqlServiceImpl implements SparqlService {
     private final Random random = new Random();
 
     @Override
+    public List<EntityDto> searchForEntities(String query) {
+        return findOntologyClassService.searchForEntities(query);
+    }
+
+    @Override
     public String selectEntityForQuestion(String type) {
         int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(type);
         if (countOfClasses == 0) {
             return "None";
         }
         return findOntologyClassService.selectEntity(type, random.nextInt(countOfClasses));
-    }
-
-    @Override
-    public String selectPlaceInRegion(String[] region) {
-        return findOntologyClassService.selectPlaceInRegion(region);
     }
 
     @Override

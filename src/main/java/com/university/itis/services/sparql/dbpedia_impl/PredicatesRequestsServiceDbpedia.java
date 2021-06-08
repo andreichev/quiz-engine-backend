@@ -1,6 +1,6 @@
 package com.university.itis.services.sparql.dbpedia_impl;
 
-import com.university.itis.dto.TripleDto;
+import com.university.itis.dto.semantic.TripleDto;
 import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
@@ -19,7 +19,6 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Primary
 public class PredicatesRequestsServiceDbpedia implements PredicatesRequestsService {
 
     private final PrefixesStorage prefixesStorage;
