@@ -182,6 +182,9 @@ public class PredicatesRequestsServiceWikidata implements PredicatesRequestsServ
                 object.setLabel(result.getLiteral("objectLabel").getLexicalForm());
 
                 TripleDto currentTriple = new TripleDto();
+                currentTriple.setSubject(subject);
+                currentTriple.setPredicate(predicate);
+                currentTriple.setObject(object);
                 results.add(currentTriple);
             }
         } catch (Exception e) {

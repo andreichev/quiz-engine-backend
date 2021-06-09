@@ -29,7 +29,6 @@ public class ClassesRequestsServiceWikidata implements ClassesRequestsService {
                         "SELECT DISTINCT ?object ?objectLabel\n" +
                         "WHERE\n" +
                         "{\n" +
-                        "    ?object wdt:P31 wd:Q5 .\n" +
                         "    SERVICE wikibase:mwapi {\n" +
                         "       bd:serviceParam wikibase:endpoint \"www.wikidata.org\";\n" +
                         "                      wikibase:api \"EntitySearch\";\n" +
