@@ -6,14 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TripleDto {
-    private int counter;
-
-    private String subjectUri;
-    private String subjectLabel;
-
-    private String predicateUri;
-    private String predicateLabel;
-
-    private String objectUri;
-    private String objectLabel;
+    private EntityDto subject;
+    private EntityDto predicate;
+    private EntityDto object;
 }

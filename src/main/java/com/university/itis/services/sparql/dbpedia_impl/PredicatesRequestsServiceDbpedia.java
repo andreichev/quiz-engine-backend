@@ -1,5 +1,6 @@
 package com.university.itis.services.sparql.dbpedia_impl;
 
+import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.dto.semantic.TripleDto;
 import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
@@ -11,7 +12,6 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,29 +75,35 @@ public class PredicatesRequestsServiceDbpedia implements PredicatesRequestsServi
             while (resultSet.hasNext()) {
                 QuerySolution result = resultSet.next();
 
-                TripleDto currentTriple = new TripleDto();
-                currentTriple.setSubjectUri(entityUri);
-                currentTriple.setSubjectLabel(result.getLiteral("subjectLabel").getLexicalForm());
+                EntityDto subject = new EntityDto();
+                subject.setUri(entityUri);
+                subject.setLabel(result.getLiteral("subjectLabel").getLexicalForm());
 
-                currentTriple.setPredicateUri(result.get("predicate").toString());
+                EntityDto predicate = new EntityDto();
+                predicate.setUri(result.get("predicate").toString());
 
-                if (uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
+                if (uriStorage.getBlackList().contains(predicate.getUri())) {
                     continue;
                 }
 
                 Literal predicateLabel = result.getLiteral("predicateLabel");
                 if (predicateLabel != null) {
-                    currentTriple.setPredicateLabel(predicateLabel.getLexicalForm());
+                    predicate.setLabel(predicateLabel.getLexicalForm());
                 }
 
-                currentTriple.setObjectUri(result.get("object").toString());
+                EntityDto object = new EntityDto();
+                object.setUri(result.get("object").toString());
                 RDFNode objectLabel = result.get("objectLabel");
                 if (objectLabel.isLiteral()) {
-                    currentTriple.setObjectLabel(objectLabel.asLiteral().getLexicalForm());
+                    object.setLabel(objectLabel.asLiteral().getLexicalForm());
                 } else {
-                    currentTriple.setObjectLabel(objectLabel.toString());
+                    object.setLabel(objectLabel.toString());
                 }
 
+                TripleDto currentTriple = new TripleDto();
+                currentTriple.setSubject(subject);
+                currentTriple.setPredicate(predicate);
+                currentTriple.setObject(object);
                 results.add(currentTriple);
             }
         } catch (Exception e) {
@@ -150,32 +156,36 @@ public class PredicatesRequestsServiceDbpedia implements PredicatesRequestsServi
         System.out.println(queryEngineHTTP.getQueryString());
 
         List<TripleDto> results = new ArrayList<>();
-        int counter = 0;
         try {
             ResultSet resultSet = queryEngineHTTP.execSelect();
 
             while (resultSet.hasNext()) {
                 QuerySolution result = resultSet.next();
 
-                TripleDto currentTriple = new TripleDto();
-                currentTriple.setCounter(counter++);
-                currentTriple.setObjectUri(result.get("subject").toString());
-                currentTriple.setSubjectLabel(result.getLiteral("subjectLabel").getLexicalForm());
+                EntityDto subject = new EntityDto();
+                subject.setUri(result.get("subject").toString());
+                subject.setLabel(result.getLiteral("subjectLabel").getLexicalForm());
 
-                currentTriple.setPredicateUri(result.get("predicate").toString());
+                EntityDto predicate = new EntityDto();
+                predicate.setUri(result.get("predicate").toString());
 
-                if (uriStorage.getBlackList().contains(currentTriple.getPredicateUri())) {
+                if (uriStorage.getBlackList().contains(predicate.getUri())) {
                     continue;
                 }
 
                 Literal predicateLabel = result.getLiteral("predicateLabel");
                 if (predicateLabel != null) {
-                    currentTriple.setPredicateLabel(predicateLabel.getLexicalForm());
+                    predicate.setLabel(predicateLabel.getLexicalForm());
                 }
 
-                currentTriple.setObjectUri(entityUri);
-                currentTriple.setObjectLabel(result.getLiteral("objectLabel").getLexicalForm());
+                EntityDto object = new EntityDto();
+                object.setUri(entityUri);
+                object.setLabel(result.getLiteral("objectLabel").getLexicalForm());
 
+                TripleDto currentTriple = new TripleDto();
+                currentTriple.setSubject(subject);
+                currentTriple.setPredicate(predicate);
+                currentTriple.setObject(object);
                 results.add(currentTriple);
             }
         } catch (Exception e) {
