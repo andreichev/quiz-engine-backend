@@ -57,5 +57,6 @@
   "http://dbpedia.org/property/imageSkyline",
   "http://dbpedia.org/property/imageName",
   "http://dbpedia.org/property/imageSize",
-  "http://www.wikidata.org/prop/direct/P138"
+  "http://www.wikidata.org/prop/direct/P138",
+  "http://www.wikidata.org/prop/direct/P971"
 ]
