@@ -58,5 +58,6 @@
   "http://dbpedia.org/property/imageName",
   "http://dbpedia.org/property/imageSize",
   "http://www.wikidata.org/prop/direct/P138",
-  "http://www.wikidata.org/prop/direct/P971"
+  "http://www.wikidata.org/prop/direct/P971",
+  "http://www.wikidata.org/prop/direct/P1889"
 ]

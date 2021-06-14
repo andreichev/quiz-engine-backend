@@ -6,25 +6,32 @@ import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
 import com.university.itis.utils.UriStorage;
-import lombok.AllArgsConstructor;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Primary
 public class PredicatesRequestsServiceWikidata implements PredicatesRequestsService {
     private final PrefixesStorage prefixesStorage;
     private final SparqlHttpClient sparqlHttpClient;
     private final UriStorage uriStorage;
+
+    public PredicatesRequestsServiceWikidata(
+            @Qualifier("PrefixesStorageWikidata") PrefixesStorage prefixesStorage,
+            @Qualifier("SparqlHttpClientWikidata") SparqlHttpClient sparqlHttpClient,
+            @Qualifier("configureUriStorage") UriStorage uriStorage
+    ) {
+        this.prefixesStorage = prefixesStorage;
+        this.sparqlHttpClient = sparqlHttpClient;
+        this.uriStorage = uriStorage;
+    }
 
     @Override
     public List<TripleDto> getSuitableTriplesStepOne(String entityUri) {

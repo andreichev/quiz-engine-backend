@@ -23,12 +23,12 @@ public class SparqlQueryConfig {
 
     private final ObjectMapper mapper;
 
-    @Bean
-    SparqlHttpClient configureSparqlHttpClient() {
+    @Bean(name = "SparqlHttpClientWikidata")
+    SparqlHttpClient configureSparqlHttpClientWikidata() {
         String endpointUrl;
         try {
             InputStream resource = new ClassPathResource(
-                    "configprops.json").getInputStream();
+                    "configprops_wikidata.json").getInputStream();
 
             JsonNode tree = mapper.readTree(resource);
             endpointUrl = tree.path("endpointUrl").asText();
@@ -40,13 +40,13 @@ public class SparqlQueryConfig {
         return new SparqlHttpClient(endpointUrl);
     }
 
-    @Bean
-    PrefixesStorage configurePrefixes() {
+    @Bean(name = "PrefixesStorageWikidata")
+    PrefixesStorage configurePrefixesWikidata() {
         TypeReference<LinkedHashMap<String, String>> typeReference = new TypeReference<LinkedHashMap<String, String>>(){};
         Map<String, String> prefixes;
         try {
             InputStream resource = new ClassPathResource(
-                    "configprops.json").getInputStream();
+                    "configprops_wikidata.json").getInputStream();
 
             JsonNode tree = mapper.readTree(resource);
             prefixes = mapper.readValue(tree.path("prefixes").toString(), typeReference);
@@ -58,7 +58,42 @@ public class SparqlQueryConfig {
         return new PrefixesStorage(prefixes);
     }
 
-    @Bean
+    @Bean(name = "SparqlHttpClientDBPedia")
+    SparqlHttpClient configureSparqlHttpClientDBPedia() {
+        String endpointUrl;
+        try {
+            InputStream resource = new ClassPathResource(
+                    "configprops_dbpedia.json").getInputStream();
+
+            JsonNode tree = mapper.readTree(resource);
+            endpointUrl = tree.path("endpointUrl").asText();
+        } catch (IOException e){
+            System.out.println("Unable to read config: " + e.getMessage());
+            return null;
+        }
+
+        return new SparqlHttpClient(endpointUrl);
+    }
+
+    @Bean(name = "PrefixesStorageDBPedia")
+    PrefixesStorage configurePrefixesDBPedia() {
+        TypeReference<LinkedHashMap<String, String>> typeReference = new TypeReference<LinkedHashMap<String, String>>(){};
+        Map<String, String> prefixes;
+        try {
+            InputStream resource = new ClassPathResource(
+                    "configprops_dbpedia.json").getInputStream();
+
+            JsonNode tree = mapper.readTree(resource);
+            prefixes = mapper.readValue(tree.path("prefixes").toString(), typeReference);
+        } catch (IOException e){
+            System.out.println("Unable to read config: " + e.getMessage());
+            return null;
+        }
+
+        return new PrefixesStorage(prefixes);
+    }
+
+    @Bean(name = "configureUriStorage")
     UriStorage configureUriStorage() {
         TypeReference<LinkedHashMap<String, String>> typeReferenceClasses = new TypeReference<LinkedHashMap<String, String>>(){};
         Map<String, String> classes;

@@ -5,23 +5,27 @@ import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
 import com.university.itis.utils.SparqlHttpClient;
-import lombok.AllArgsConstructor;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Primary
 public class ClassesRequestsServiceWikidata implements ClassesRequestsService {
     private final PrefixesStorage prefixesStorage;
     private final SparqlHttpClient sparqlHttpClient;
+
+    public ClassesRequestsServiceWikidata(
+            @Qualifier("PrefixesStorageWikidata") PrefixesStorage prefixesStorage,
+            @Qualifier("SparqlHttpClientWikidata") SparqlHttpClient sparqlHttpClient
+    ) {
+        this.prefixesStorage = prefixesStorage;
+        this.sparqlHttpClient = sparqlHttpClient;
+    }
 
     @Override
     public List<EntityDto> searchForEntities(String query) {
@@ -60,27 +64,42 @@ public class ClassesRequestsServiceWikidata implements ClassesRequestsService {
     }
 
     @Override
-    public String selectEntity(String type, int offset) {
-        return "entity";
-    }
-
-    @Override
-    public int getCountOfInstancesForClass(String ontologyClass) {
-        return 0;
-    }
-
-    @Override
     public List<EntityDto> selectPlacesInRegion(MapRegionDto region) {
-        return new ArrayList<>();
-    }
+        final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
+                PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
+                        "select ?place ?placeLabel where {\n" +
+                        "  ?place p:P625 ?statement .\n" +
+                        "  ?statement psv:P625 ?coordinate_node .\n" +
+                        "  ?coordinate_node wikibase:geoLatitude ?lat .\n" +
+                        "  ?coordinate_node wikibase:geoLongitude ?long .\n" +
+                        "\n" +
+                        "  FILTER (\n" +
+                        "    ?lat > " + region.getBottomRight().getLatitude() + " && \n" +
+                        "    ?lat < " + region.getTopLeft().getLatitude() + " && \n" +
+                        "    ?long > " + region.getTopLeft().getLongitude() + " && \n" +
+                        "    ?long < " + region.getBottomRight().getLongitude() + "\n" +
+                        "  )\n" +
+                        "  \n" +
+                        "  SERVICE wikibase:label {bd:serviceParam wikibase:language \"ru\".}\n" +
+                        "} LIMIT 1000"
+        );
 
-    @Override
-    public List<String> selectEntities(String type, int offset) {
-        return new ArrayList<>();
-    }
+        System.out.println(queryEngineHTTP.getQueryString());
 
-    @Override
-    public LinkedHashMap<String, String> findEntities(String type, String query) {
-        return new LinkedHashMap<>();
+        List<EntityDto> results = new ArrayList<>();
+        try {
+            ResultSet resultSet = queryEngineHTTP.execSelect();
+
+            while (resultSet.hasNext()) {
+                QuerySolution result = resultSet.next();
+
+                String place = result.get("place").toString();
+                String label = result.getLiteral("placeLabel").getLexicalForm();
+                results.add(new EntityDto(place, label));
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return results;
     }
 }

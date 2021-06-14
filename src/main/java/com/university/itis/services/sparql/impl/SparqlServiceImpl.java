@@ -2,85 +2,70 @@ package com.university.itis.services.sparql.impl;
 
 import com.university.itis.dto.map.MapRegionDto;
 import com.university.itis.dto.semantic.EntityDto;
+import com.university.itis.dto.semantic.GraphType;
 import com.university.itis.dto.semantic.TripleDto;
+import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.services.sparql.PredicatesRequestsService;
 import com.university.itis.services.sparql.SparqlService;
-import com.university.itis.services.sparql.dbpedia_impl.AlternativeAnswersHandlerDbpedia;
-import com.university.itis.services.sparql.dbpedia_impl.AnswerClass;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class SparqlServiceImpl implements SparqlService {
+    private final ClassesRequestsService findOntologyClassServiceDBPedia;
+    private final PredicatesRequestsService triplesServiceDBPedia;
+    private final ClassesRequestsService findOntologyClassServiceWikidata;
+    private final PredicatesRequestsService triplesServiceWikidata;
 
-    private final ClassesRequestsService findOntologyClassService;
-    private final PredicatesRequestsService triplesService;
-    private final AlternativeAnswersHandlerDbpedia alternativeAnswersHandler;
-
-    private final Random random = new Random();
-
-    @Override
-    public List<EntityDto> searchForEntities(String query) {
-        return findOntologyClassService.searchForEntities(query);
+    public SparqlServiceImpl(
+            @Qualifier("classesRequestsServiceDbpedia") ClassesRequestsService findOntologyClassServiceDBPedia,
+            @Qualifier("predicatesRequestsServiceDbpedia") PredicatesRequestsService triplesServiceDBPedia,
+            @Qualifier("classesRequestsServiceWikidata") ClassesRequestsService findOntologyClassServiceWikidata,
+            @Qualifier("predicatesRequestsServiceWikidata") PredicatesRequestsService triplesServiceWikidata
+    ) {
+        this.findOntologyClassServiceDBPedia = findOntologyClassServiceDBPedia;
+        this.triplesServiceDBPedia = triplesServiceDBPedia;
+        this.findOntologyClassServiceWikidata = findOntologyClassServiceWikidata;
+        this.triplesServiceWikidata = triplesServiceWikidata;
     }
 
     @Override
-    public String selectEntityForQuestion(String type) {
-        int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(type);
-        if (countOfClasses == 0) {
-            return "None";
+    public List<EntityDto> searchForEntities(String query, GraphType graphType) {
+        switch (graphType) {
+            case DBPEDIA:
+                return findOntologyClassServiceDBPedia.searchForEntities(query);
+            case WIKIDATA:
+                return findOntologyClassServiceWikidata.searchForEntities(query);
         }
-        return findOntologyClassService.selectEntity(type, random.nextInt(countOfClasses));
+        throw new NotFoundException("Graph type not determined");
     }
 
     @Override
-    public List<EntityDto> selectPlacesInRegion(MapRegionDto region) {
-        return findOntologyClassService.selectPlacesInRegion(region);
-    }
-
-    @Override
-    public List<String> selectEntitiesForQuestion(String type) {
-        int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(type);
-        if (countOfClasses == 0) {
-            return Collections.singletonList("None");
+    public List<EntityDto> selectPlacesInRegion(MapRegionDto region, GraphType graphType) {
+        switch (graphType) {
+            case DBPEDIA:
+                return findOntologyClassServiceDBPedia.selectPlacesInRegion(region);
+            case WIKIDATA:
+                return findOntologyClassServiceWikidata.selectPlacesInRegion(region);
         }
-        return findOntologyClassService.selectEntities(type, random.nextInt(countOfClasses));
+        throw new NotFoundException("Graph type not determined");
     }
 
     @Override
-    public LinkedHashMap<String, String> findEntities(String type, String query) {
-        return findOntologyClassService.findEntities(type, query);
-    }
-
-    @Override
-    public List<TripleDto> getSuitableTriples(String entityUri) {
+    public List<TripleDto> getSuitableTriples(String entityUri, GraphType graphType) {
         List<TripleDto> results = new ArrayList<>();
-        results.addAll(triplesService.getSuitableTriplesStepOne(entityUri));
-        results.addAll(triplesService.getSuitableTriplesStepTwo(entityUri));
+        switch (graphType) {
+            case DBPEDIA:
+                results.addAll(triplesServiceDBPedia.getSuitableTriplesStepOne(entityUri));
+                results.addAll(triplesServiceDBPedia.getSuitableTriplesStepTwo(entityUri));
+            case WIKIDATA:
+                results.addAll(triplesServiceWikidata.getSuitableTriplesStepOne(entityUri));
+                results.addAll(triplesServiceWikidata.getSuitableTriplesStepTwo(entityUri));
+        }
         return results;
-    }
-
-    @Override
-    public List<String> getAlternativeAnswers(String predicateUri, String correctAnswer) {
-        String typeUri = triplesService.getRangeOfPredicate(predicateUri);
-        if(typeUri == null) {
-            return null;
-        }
-        AnswerClass answerClass = alternativeAnswersHandler.extractAnswerClass(typeUri, correctAnswer);
-        if(answerClass.equals(AnswerClass.OTHER)) {
-            int countOfClasses = findOntologyClassService.getCountOfInstancesForClass(typeUri);
-            List<String> result = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                String label = findOntologyClassService.selectEntity(typeUri, random.nextInt(countOfClasses));
-                result.add(label);
-            }
-            return result;
-        } else {
-            return alternativeAnswersHandler.getAlternativeAnswersForClass(answerClass);
-        }
     }
 }
