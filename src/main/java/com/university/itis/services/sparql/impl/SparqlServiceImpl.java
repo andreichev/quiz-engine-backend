@@ -1,5 +1,6 @@
 package com.university.itis.services.sparql.impl;
 
+import com.university.itis.dto.map.MapRegionDto;
 import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.dto.semantic.TripleDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
@@ -37,7 +38,7 @@ public class SparqlServiceImpl implements SparqlService {
     }
 
     @Override
-    public LinkedHashMap<String, String> selectPlacesInRegion(String[] region) {
+    public List<EntityDto> selectPlacesInRegion(MapRegionDto region) {
         return findOntologyClassService.selectPlacesInRegion(region);
     }
 

@@ -1,13 +1,11 @@
 package com.university.itis.controller;
 
+import com.university.itis.dto.map.MapRegionDto;
 import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.dto.semantic.TripleDto;
 import com.university.itis.services.sparql.SparqlService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +16,13 @@ public class SemanticOperationsController {
     private final SparqlService sparqlService;
 
     @GetMapping("/search")
-    List<EntityDto> get(@RequestParam String query) {
+    List<EntityDto> getByQuery(@RequestParam String query) {
         return sparqlService.searchForEntities(query);
+    }
+
+    @GetMapping("/map")
+    List<EntityDto> getByMap(@RequestBody MapRegionDto region) {
+        return sparqlService.selectPlacesInRegion(region);
     }
 
     @GetMapping("/questions")

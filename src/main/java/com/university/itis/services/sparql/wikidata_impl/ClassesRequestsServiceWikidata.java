@@ -1,5 +1,6 @@
 package com.university.itis.services.sparql.wikidata_impl;
 
+import com.university.itis.dto.map.MapRegionDto;
 import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
@@ -69,8 +70,8 @@ public class ClassesRequestsServiceWikidata implements ClassesRequestsService {
     }
 
     @Override
-    public LinkedHashMap<String, String> selectPlacesInRegion(String[] region) {
-        return new LinkedHashMap<>();
+    public List<EntityDto> selectPlacesInRegion(MapRegionDto region) {
+        return new ArrayList<>();
     }
 
     @Override

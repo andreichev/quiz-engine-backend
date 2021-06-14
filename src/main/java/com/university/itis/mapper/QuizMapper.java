@@ -9,6 +9,7 @@ import com.university.itis.exceptions.NotFoundException;
 import com.university.itis.model.Question;
 import com.university.itis.model.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class QuizMapper {
     private final QuestionMapper questionMapper;
 
     @Autowired
+    @Lazy
     QuizPassingMapper quizPassingMapper;
 
     public QuizMapper(UserMapper userMapper, QuestionMapper questionMapper) {

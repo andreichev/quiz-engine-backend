@@ -1,5 +1,6 @@
 package com.university.itis.services.sparql.dbpedia_impl;
 
+import com.university.itis.dto.map.MapRegionDto;
 import com.university.itis.dto.semantic.EntityDto;
 import com.university.itis.services.sparql.ClassesRequestsService;
 import com.university.itis.utils.PrefixesStorage;
@@ -133,7 +134,7 @@ public class ClassesRequestsServiceDbpedia implements ClassesRequestsService {
         return "None";
     }
 
-    public LinkedHashMap<String, String> selectPlacesInRegion(String[] region) {
+    public List<EntityDto> selectPlacesInRegion(MapRegionDto region) {
         final QueryEngineHTTP queryEngineHTTP = new QueryEngineHTTP(sparqlHttpClient.getEndpointUrl(),
                 PrefixesStorage.generatePrefixQueryString(prefixesStorage.getReplaceMap()) +
                         "select ?place coalesce(?labelLang1, ?labelLang2) as ?label where {\n" +
@@ -149,10 +150,10 @@ public class ClassesRequestsServiceDbpedia implements ClassesRequestsService {
                         "  ?place rdfs:label ?labelLang2 .\n" +
                         "\n" +
                         "  FILTER (\n" +
-                        "    ?lat > " + region[0] + " && \n" +
-                        "    ?lat < " + region[2] + " && \n" +
-                        "    ?long > " + region[1] + " && \n" +
-                        "    ?long < " + region[3] + " && \n" +
+                        "    ?lat > " + region.getTopLeft().getLatitude() + " && \n" +
+                        "    ?lat < " + region.getBottomRight().getLatitude() + " && \n" +
+                        "    ?long > " + region.getTopLeft().getLongitude() + " && \n" +
+                        "    ?long < " + region.getTopLeft().getLongitude() + " && \n" +
                         "    lang(?labelLang2) = \"en\"\n" +
                         "  )\n" +
                         "} LIMIT 1000"
@@ -160,7 +161,7 @@ public class ClassesRequestsServiceDbpedia implements ClassesRequestsService {
 
         System.out.println(queryEngineHTTP.getQueryString());
 
-        LinkedHashMap<String, String> results = new LinkedHashMap<>();
+        List<EntityDto> results = new ArrayList<>();
         try {
             ResultSet resultSet = queryEngineHTTP.execSelect();
 
@@ -169,7 +170,7 @@ public class ClassesRequestsServiceDbpedia implements ClassesRequestsService {
 
                 String place = result.get("place").toString();
                 String label = result.getLiteral("label").getLexicalForm();
-                results.put(place, label);
+                results.add(new EntityDto(place, label));
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
