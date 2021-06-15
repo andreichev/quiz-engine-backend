@@ -16,17 +16,17 @@ import java.util.List;
 public class SemanticOperationsController {
     private final SparqlService sparqlService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     List<EntityDto> getByQuery(@RequestParam String query, @RequestParam GraphType graphType) {
         return sparqlService.searchForEntities(query, graphType);
     }
 
-    @GetMapping("/map")
+    @PostMapping("/map")
     List<EntityDto> getByMap(@RequestBody MapRegionDto region, @RequestParam GraphType graphType) {
         return sparqlService.selectPlacesInRegion(region, graphType);
     }
 
-    @GetMapping("/questions")
+    @PostMapping("/questions")
     List<TripleDto> getQuestions(@RequestParam String entityUri, @RequestParam GraphType graphType) {
         return sparqlService.getSuitableTriples(entityUri, graphType);
     }
